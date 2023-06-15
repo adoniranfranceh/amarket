@@ -1,0 +1,26 @@
+<div class="float-end"><%= link_to 'Adicionar novo', new_admin_template_customer_path, class: 'btn btn-success' %></div>
+<div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="col-1">Id</th>
+        <th class="col-10">Nome</th>
+        <th class="col-1"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @customers.each do |customer| %>   
+      <tr>
+        <td class="row"><%= customer.id %></td>
+        <td><%= customer.name %></td>
+        <td>
+          <%= link_to admin_template_customers_path(customer), class: "btn btn-green" do  %>
+            <i class="bi bi-eye-fill"></i>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
