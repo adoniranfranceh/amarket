@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   devise_for :admins
+  namespace :admintemplate do
+    resources :admins
+  end
 
-  root 'home#index'
+  root 'admin_template/home#index'
 end
