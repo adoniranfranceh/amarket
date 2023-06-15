@@ -11,6 +11,9 @@
   </head>
 
   <body>
+    <% if signed_in? %>
+      <%= render 'layouts/navbar' %>
+    <% end %>
     <%= yield %>
   </body>
 </html>
