@@ -10,6 +10,14 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
+ *= require bootstrap
  *= require_tree .
  *= require_self
  */
+.disabled-form {
+  pointer-events:none;
+}
+.btn-green {
+  background: #3cb371;
+  color: #fff;
+}

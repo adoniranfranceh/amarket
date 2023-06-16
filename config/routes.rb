@@ -1,3 +1,9 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  devise_for :admins
+  namespace :admin_template do
+    resources :admins
+    resources :customers
+  end
+
+  root 'admin_template/home#index'
 end
