@@ -1,4 +1,4 @@
-<%= form_with(model: @customer, url: admin_template_customers_path) do |form| %>
+<%= form_with(model: @customer, url: admin_template_customer_path) do |form| %>
   <div class="<%= fieldset_disabled %>">
     <div class="mb-3">
       <%= form.label :name, class: 'form-label' %>
@@ -40,19 +40,16 @@
     </div>
   </div>
 
-  <% if action_name == 'show'  %>
-    <%= link_to new_customer_rent_path(@customer), class:'btn btn-success float-left' do %>
-      <i class="">Registrar pagamento</i>
-    <% end %>
-    <div class="float-end">
-      <%= link_to edit_customer_path(@customer), class:'btn btn-primary' do %>
-        <i class="bi bi-pencil-square">Editar</i>
-      <% end %>
-      <%= link_to customer_path(@customer), method: :delete, class:'btn btn-danger', data: {confirm: "Você quer excluir #{@customer.name}?"} do %>
-        <i class="bi bi-trash-fill">Excluir</i>
-      <% end %>
-    </div>
-  <% else %>
-    <%= form.submit 'Salvar', class: 'btn btn-primary' %>
-  <% end %>
+  <%= form.submit 'Salvar', class: 'btn btn-primary' %>
 <% end %>
+
+<div class="float-end">
+  <% if action_name == 'show' %>
+    <%= link_to edit_admin_template_customer_path(@customer), class:'btn btn-primary' do %>
+      <i class="bi bi-pencil-square">Editar</i>
+    <% end %>
+    <%= link_to admin_template_customer_path(@customer), method: :delete, class:'btn btn-danger', data:{confirm: "Você quer excluir #{@customer.name}?"} do %>
+      <i class="bi bi-trash-fill">Excluir</i>
+      <% end %>
+  <% end %>
+</div>

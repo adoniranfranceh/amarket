@@ -14,3 +14,10 @@
  *= require_tree .
  *= require_self
  */
+.disabled-form {
+  pointer-events:none;
+}
+.btn-green {
+  background: #3cb371;
+  color: #fff;
+}
