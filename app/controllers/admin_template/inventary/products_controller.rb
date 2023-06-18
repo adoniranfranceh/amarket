@@ -48,7 +48,7 @@ class AdminTemplate::Inventary::ProductsController < AdminTemplate::InventaryCon
       @product = Product.find(params[:id])
       @category = @product.category
     end
-    @products = current_admin.products
+    @products = current_admin.products.where('quantity > ?', 0)
   end
 
   def product_params
