@@ -18,12 +18,11 @@ class AdminTemplate::Inventary::ProductsController < AdminTemplate::InventaryCon
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @product.update(product_params)
-      redirect_to admin_template_product_url, notice: 'Categoria atualizado'
+      redirect_to admin_template_inventary_products_path, notice: 'Categoria atualizado'
     else
       render :edit
       flash[:error] = 'Existem campos inválidos'
@@ -42,14 +41,12 @@ class AdminTemplate::Inventary::ProductsController < AdminTemplate::InventaryCon
 
   def set_categories
     @categories = current_admin.categories
-
-    
   end
 
   def set_product
     if action_name != 'index'
       @product = Product.find(params[:id])
-      @category = @product.category.name
+      @category = @product.category
     end
     @products = current_admin.products
   end
