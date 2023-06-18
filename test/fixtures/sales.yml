@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  product: one
+  quantity: 1
+  total_price: 1.5
+  payment_method: MyString
+  completed_at: 2023-06-18 13:35:35
+  status: MyString
+  comments: MyString
+  admin: one
+
+two:
+  product: two
+  quantity: 1
+  total_price: 1.5
+  payment_method: MyString
+  completed_at: 2023-06-18 13:35:35
+  status: MyString
+  comments: MyString
+  admin: two

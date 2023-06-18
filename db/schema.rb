@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_18_151424) do
+ActiveRecord::Schema.define(version: 2023_06_18_163535) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -63,8 +63,25 @@ ActiveRecord::Schema.define(version: 2023_06_18_151424) do
     t.index ["category_id"], name: "index_products_on_category_id"
   end
 
+  create_table "sales", force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.integer "quantity"
+    t.float "total_price"
+    t.string "payment_method"
+    t.datetime "completed_at"
+    t.string "status"
+    t.string "comments"
+    t.integer "admin_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["admin_id"], name: "index_sales_on_admin_id"
+    t.index ["product_id"], name: "index_sales_on_product_id"
+  end
+
   add_foreign_key "categories", "admins"
   add_foreign_key "customers", "admins"
   add_foreign_key "products", "admins"
   add_foreign_key "products", "categories"
+  add_foreign_key "sales", "admins"
+  add_foreign_key "sales", "products"
 end
