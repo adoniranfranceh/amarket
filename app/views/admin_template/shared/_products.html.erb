@@ -1,0 +1,23 @@
+<div class="float-end"><%= link_to 'Adicionar novo', new_admin_template_inventary_product_path, class: 'btn btn-success' %></div>
+<div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="col-1">Id</th>
+        <th class="col-10">Nome</th>
+        <th class="col-1"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @products.each do |product| %>   
+      <tr>
+        <td class="row" style="padding-bottom: 37px;"><%= product.id %></td>
+        <td><%= product.name %></td>
+        <td><%= link_to 'ver', admin_template_inventary_product_path(product), class: "btn btn-green " %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

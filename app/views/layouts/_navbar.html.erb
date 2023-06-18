@@ -14,6 +14,13 @@
           <%= link_to 'Clientes', admin_template_customers_path, class: 'nav-link' %>
         </li>
         <li class="nav-item">
+          <%= link_to 'Inventário', admin_template_inventary_index_path, class: 'nav-link' %>
+        </li>
+
+        <li class="nav-item">
+          <%= link_to 'Produtos', admin_template_products_path, class: 'nav-link' %>
+        </li>
+        <li class="nav-item">
           <a class="nav-link disabled">Disabled</a>
         </li>
         <li class="nav-item dropdown">
@@ -25,6 +32,7 @@
           </ul>
         </li>
       </ul>
+
       <form role="search">
         <input class="form-control" type="search" placeholder="Search" aria-label="Search">
       </form>

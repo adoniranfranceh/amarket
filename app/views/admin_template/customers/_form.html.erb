@@ -39,17 +39,16 @@
       <%= form.text_field :cpf, class: 'form-control' %>
     </div>
   </div>
-
-  <%= form.submit 'Salvar', class: 'btn btn-primary' %>
-<% end %>
-
-<div class="float-end">
-  <% if action_name == 'show' %>
-    <%= link_to edit_admin_template_customer_path(@customer), class:'btn btn-primary' do %>
-      <i class="bi bi-pencil-square">Editar</i>
-    <% end %>
-    <%= link_to admin_template_customer_path(@customer), method: :delete, class:'btn btn-danger', data:{confirm: "Você quer excluir #{@customer.name}?"} do %>
-      <i class="bi bi-trash-fill">Excluir</i>
+  <div>
+    <% if action_name == 'show' %>
+      <%= link_to edit_admin_template_customer_path(@customer), class:'btn btn-primary' do %>
+        <i class="bi bi-pencil-square">Editar</i>
       <% end %>
-  <% end %>
-</div>
+      <%= link_to admin_template_customer_path(@customer), method: :delete, class:'btn btn-danger', data:{confirm: "Você quer excluir #{@customer.name}?"} do %>
+        <i class="bi bi-trash-fill">Excluir</i>
+      <% end %>
+    <% else %>
+      <%= form.submit 'Salvar', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+<% end %>
