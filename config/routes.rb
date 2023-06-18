@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     resources :customers
     namespace :inventary do
       resources :categories
+      resources :products
     end
     resources :inventary
   end

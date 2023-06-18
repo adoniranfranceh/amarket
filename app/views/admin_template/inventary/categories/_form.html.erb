@@ -1,4 +1,4 @@
-<%= form_with(model: @category, url: admin_template_categories_path) do |form| %>
+<%= form_with(model: @category, url: admin_template_inventary_categories_path) do |form| %>
   <div class="<%= fieldset_disabled %>">
     <div class="mb-3">
       <%= form.label :name, class: 'form-label' %>
@@ -9,16 +9,17 @@
       <%= form.label :descryption, class: 'form-label' %>
       <%= form.text_field :descryption, class: 'form-control' %>
     </div>
-  <%= form.submit 'Salvar', class: 'btn btn-primary' %>
-<% end %>
-
-<div class="float-end">
-  <% if action_name == 'show' %>
-    <%= link_to edit_admin_template_category_path(@category), class:'btn btn-primary' do %>
-      <i class="bi bi-pencil-square">Editar</i>
-    <% end %>
-    <%= link_to admin_template_category_path(@category), method: :delete, class:'btn btn-danger', data:{confirm: "Você quer excluir #{@category.name}?"} do %>
-      <i class="bi bi-trash-fill">Excluir</i>
+  </div>
+  <div>
+    <% if action_name == 'show' %>
+      <%= link_to edit_admin_template_inventary_category_path(@category), class:'btn btn-primary' do %>
+        <i class="bi bi-pencil-square">Editar</i>
       <% end %>
-  <% end %>
-</div>
+      <%= link_to admin_template_inventary_category_path(@category), method: :delete, class:'btn btn-danger', data:{confirm: "Você quer excluir #{@category.name}?"} do %>
+        <i class="bi bi-trash-fill">Excluir</i>
+      <% end %>
+    <% else %>
+      <%= form.submit 'Salvar', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+<% end %>

@@ -13,8 +13,8 @@
       <% @categories.each do |category| %>   
       <tr>
         <td class="row" style="padding-bottom: 37px;"><%= category.id %></td>
-        <td><%= custegory.name %></td>
-        <td><%= link_to 'ver', admin_template_category_path(category), class: "btn btn-green " %>
+        <td><%= category.name %></td>
+        <td><%= link_to 'ver', admin_template_inventary_category_path(category), class: "btn btn-green " %>
         </td>
       </tr>
       <% end %>

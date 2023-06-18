@@ -1,0 +1,55 @@
+<%= form_with(model: @product, url: admin_template_inventary_products_path) do |form| %>
+  <div class="<%= fieldset_disabled %>">
+    <div class="mb-3">
+      <%= form.label :name, class: 'form-label' %>
+      <%= form.text_field :name, class: 'form-control' %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :descryption, class: 'form-label' %>
+      <%= form.text_field :descryption, class: 'form-control' %>
+    </div>
+    <% if action_name == 'show' %>
+      <div class="mb-3">
+        <%= form.label :category, class: 'form-label' %>
+        <%= form.text_field :category, value: @category, class: 'form-control' %>
+      </div>
+    <% else %>
+      <div class="form-floating">
+        <%= form.collection_select(:category_id, @categories, :id, :name, { prompt: 'Nenhuma' }, { class: 'form-select' }) %>
+        <label for="product_category_id">Selecione a categoria</label>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= form.label :purchase_price, class: 'form-label' %>
+      <%= form.number_field :purchase_price, class: 'form-control', step: 0.01 %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :sale_price, class: 'form-label' %>
+      <%= form.number_field :sale_price, class: 'form-control', step: 0.01 %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :quantity, class: 'form-label' %>
+      <%= form.number_field :quantity, class: 'form-control' %>
+    </div>
+
+
+
+
+  </div>
+  <div>
+    <% if action_name == 'show' %>
+      <%= link_to edit_admin_template_inventary_product_path(@product), class:'btn btn-primary' do %>
+        <i class="bi bi-pencil-square">Editar</i>
+      <% end %>
+      <%= link_to admin_template_inventary_product_path(@product), method: :delete, class:'btn btn-danger', data:{confirm: "Você quer excluir #{@product.name}?"} do %>
+        <i class="bi bi-trash-fill">Excluir</i>
+      <% end %>
+    <% else %>
+      <%= form.submit 'Salvar', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+<% end %>
