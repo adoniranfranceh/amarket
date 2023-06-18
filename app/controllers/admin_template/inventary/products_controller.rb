@@ -33,7 +33,7 @@ class AdminTemplate::Inventary::ProductsController < AdminTemplate::InventaryCon
 
   def destroy
     if @product.destroy
-      redirect_to admin_template_products_path, notice: "Categoria #{@product.name} excluído"
+      redirect_to admin_template_inventary_products_path, notice: "Categoria #{@product.name} excluído"
     end
   end
 

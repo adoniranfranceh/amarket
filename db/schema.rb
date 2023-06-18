@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_17_175136) do
+ActiveRecord::Schema.define(version: 2023_06_18_151424) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -51,7 +51,7 @@ ActiveRecord::Schema.define(version: 2023_06_17_175136) do
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.string "descryption"
-    t.integer "category_id", null: false
+    t.integer "category_id"
     t.string "brand"
     t.float "purchase_price"
     t.float "sale_price"
