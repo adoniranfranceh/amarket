@@ -12,10 +12,10 @@
   </div>
   <div>
     <% if action_name == 'show' %>
-      <%= link_to edit_admin_template_inventary_category_path(@category), class:'btn btn-primary' do %>
+      <%= link_to edit_admin_template_category_path(@category), class:'btn btn-primary' do %>
         <i class="bi bi-pencil-square">Editar</i>
       <% end %>
-      <%= link_to admin_template_inventary_category_path(@category), method: :delete, class:'btn btn-danger', data:{confirm: "Você quer excluir #{@category.name}?"} do %>
+      <%= link_to admin_template_category_path(@category), method: :delete, class:'btn btn-danger', data:{confirm: "Você quer excluir #{@category.name}?"} do %>
         <i class="bi bi-trash-fill">Excluir</i>
       <% end %>
     <% else %>

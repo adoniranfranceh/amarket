@@ -1,4 +1,4 @@
-class AdminTemplate::Inventary::CategoriesController < AdminTemplate::InventaryController
+class AdminTemplate::CategoriesController < AdminTemplate::InventaryController
   before_action :set_category, only: [:index, :edit, :update, :show, :destroy]
   def index; end
 

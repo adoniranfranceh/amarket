@@ -10,13 +10,18 @@
         <li class="nav-item">
           <%= link_to'Home', root_path, class: 'nav-link active' %>
         </li>
+         <li class="nav-item">
+          <%= link_to 'Vendas', admin_template_sales_path, class: 'nav-link' %>
+        </li>
         <li class="nav-item">
           <%= link_to 'Clientes', admin_template_customers_path, class: 'nav-link' %>
         </li>
         <li class="nav-item">
-          <%= link_to 'Inventário', admin_template_inventary_index_path, class: 'nav-link' %>
+          <%= link_to 'Estoque', admin_template_inventary_index_path, class: 'nav-link' %>
         </li>
-
+        <li class="nav-item">
+          <%= link_to 'Categorias', admin_template_categories_path, class: 'nav-link' %>
+        </li>
         <li class="nav-item">
           <%= link_to 'Produtos', admin_template_products_path, class: 'nav-link' %>
         </li>
