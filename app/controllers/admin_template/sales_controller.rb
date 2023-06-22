@@ -1,4 +1,5 @@
 class AdminTemplate::SalesController < AdminTemplateController
+
   def index
     @sales = current_admin.sales
   end
@@ -9,5 +10,16 @@ class AdminTemplate::SalesController < AdminTemplateController
   end
 
   def create
+  end
+
+  private
+  def sale_params
+    params.require(:sale).permit(:customer_id,
+                                 :products_id,
+                                 :total_price,
+                                 :payment_at,
+                                 :status,
+                                 :completed_at
+                                )
   end
 end
