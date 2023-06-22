@@ -60,6 +60,10 @@ $(function() {
     updateTotal();
   });
 
+  $('#discount-input').on('input', function() {
+    updateTotal();
+  });
+
   function updateTotal() {
     var total = 0;
     $('#product-table tbody tr').each(function() {
@@ -71,6 +75,13 @@ $(function() {
       }
     });
 
+    var discount = parseFloat($('#discount-input').val());
+    if (!isNaN(discount)) {
+      var discountAmount = total * (discount / 100);
+      total -= discountAmount;
+    }
+
+    $('#total-price-input').val(total.toFixed(2));
     $('tfoot .row-total span').text('R$' + total.toFixed(2));
   }
 });
