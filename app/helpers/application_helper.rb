@@ -4,7 +4,7 @@ module ApplicationHelper
       when 'admin_template/products'
         action_name == 'new' ? admin_template_products_path : admin_template_product_path
       when 'admin_template/categories'
-        action_name == 'new' ? admin_template_inventary_categories_path : admin_template_inventary_category_path
+        action_name == 'new' ? admin_template_categories_path : admin_template_category_path
       when 'admin_template/customers'
         action_name == 'new' ? admin_template_customers_path : admin_template_customer_path
     end

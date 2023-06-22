@@ -38,10 +38,10 @@
   </div>
   <div>
     <% if action_name == 'show' %>
-      <%= link_to edit_admin_template_inventary_product_path(@product), class:'btn btn-primary' do %>
+      <%= link_to edit_admin_template_product_path(@product), class:'btn btn-primary' do %>
         <i class="bi bi-pencil-square">Editar</i>
       <% end %>
-      <%= link_to admin_template_inventary_product_path(@product), method: :delete, class:'btn btn-danger', data:{confirm: "Você quer excluir #{@product.name}?"} do %>
+      <%= link_to admin_template_product_path(@product), method: :delete, class:'btn btn-danger', data:{confirm: "Você quer excluir #{@product.name}?"} do %>
         <i class="bi bi-trash-fill">Excluir</i>
       <% end %>
     <% else %>

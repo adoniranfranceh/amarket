@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     resources :admins
     resources :customers
     namespace :inventary do
-      resources :products
+      resources :products, :only => [:edit]
     end
     resources :categories
     resources :products
@@ -14,4 +14,5 @@ Rails.application.routes.draw do
   end
 
   root 'admin_template/home#index'
+  get '/search', to: 'admin_template/products#search'
 end

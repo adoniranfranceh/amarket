@@ -1,54 +1,62 @@
-<%= form_with(model: @sale, url: admin_template_sale_path) do |form| %>
+<%= form_with(model: @sale, url: admin_template_sales_path) do |form| %>
   <div class="<%= fieldset_disabled %>">
     <div class="mb-3">
-      <%= form.label :name, class: 'form-label' %>
-      <%= form.text_field :name, class: 'form-control' %>
+      <%= form.label :customer, class: 'form-label' %>
+      <%= form.collection_select(:customer_id, @customers, :id, :name, { include_blank: 'Selecione o cliente' }, { class: 'form-select' }) %>
     </div>
 
-    <div class="mb-3">
-      <%= form.label :phone, class: 'form-label' %>
-      <%= form.phone_field :phone, class: 'form-control' %>
+   <form>
+    <div class="card">
+      <div class="mb-3">
+        <label for="product_product_id" class="form-label">Product</label>
+        <input type="text" id="product-search" class="form-control" placeholder="Digite o nome do produto">
+      </div>
+      <div id="search-results"></div>
+      <input type="hidden" id="product-data" value="<%= json_escape(@products.to_json) %>">
     </div>
+  </form>
 
-    <div class="mb-3">
-      <%= form.label :email, class: 'form-label' %>
-      <%= form.text_field :email, class: 'form-control' %>
-    </div>
-
-    <div class="mb-3">
-      <%= form.label :city, class: 'form-label' %>
-      <%= form.text_field :city, class: 'form-control' %>
-    </div>
-
-    <div class="mb-3">
-      <%= form.label :neighborhood, class: 'form-label' %>
-      <%= form.text_field :neighborhood, class: 'form-control' %>
-    </div>
-
-    <div class="mb-3">
-      <%= form.label :andress, class: 'form-label' %>
-      <%= form.text_field :andress, class: 'form-control' %>
-    </div>
-    <div class="mb-3">
-      <%= form.label :house_number, class: 'form-label' %>
-      <%= form.number_field :house_number, class: 'form-control' %>
-    </div>
-
-    <div class="mb-3">
-      <%= form.label :cpf, class: 'form-label' %>
-      <%= form.text_field :cpf, class: 'form-control' %>
-    </div>
-  </div>
   <div>
-    <% if action_name == 'show' %>
-      <%= link_to edit_admin_template_customer_path(@customer), class:'btn btn-primary' do %>
-        <i class="bi bi-pencil-square">Editar</i>
+    <table class="table" id="product-table">
+      <thead>
+        <tr>
+          <th class="col-1">Id</th>
+          <th class="col-6">Nome</th>
+          <th class="col-2">Preço</th>
+          <th class="col-2">Quantidade</th>
+          <th class="col-1"></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4" class="row-total">
+            <strong>Total</strong>
+            <span>R$0,00</span>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+    <div>
+      <% if action_name == 'show' %>
+        <%= link_to edit_admin_template_customer_path(@customer), class: 'btn btn-primary' do %>
+          <i class="bi bi-pencil-square">Editar</i>
+        <% end %>
+        <%= link_to admin_template_customer_path(@customer), method: :delete, class: 'btn btn-danger', data: { confirm: "Você quer excluir #{@customer.name}?" } do %>
+          <i class="bi bi-trash-fill">Excluir</i>
+        <% end %>
+      <% else %>
+        <%= form.submit 'Salvar', class: 'btn btn-primary' %>
       <% end %>
-      <%= link_to admin_template_customer_path(@customer), method: :delete, class:'btn btn-danger', data:{confirm: "Você quer excluir #{@customer.name}?"} do %>
-        <i class="bi bi-trash-fill">Excluir</i>
-      <% end %>
-    <% else %>
-      <%= form.submit 'Salvar', class: 'btn btn-primary' %>
-    <% end %>
+    </div>
   </div>
 <% end %>
+t.integer "product_id", null: false
+    t.integer "quantity"
+    t.float "total_price"
+    t.string "payment_method"
+    t.datetime "completed_at"
+    t.string "status"
+    t.string "comments"
