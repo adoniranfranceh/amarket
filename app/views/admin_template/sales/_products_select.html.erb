@@ -1,0 +1,33 @@
+ <form>
+  <div class="card">
+    <div class="mb-3">
+      <label for="product_product_id" class="form-label">Product</label>
+      <input type="text" id="product-search" class="form-control" placeholder="Digite o nome do produto">
+    </div>
+    <div id="search-results"></div>
+    <input type="hidden" id="product-data" value="<%= json_escape(@products.to_json) %>">
+  </div>
+</form>
+
+<div>
+  <table class="table" id="product-table">
+    <thead>
+      <tr>
+        <th class="col-1">Id</th>
+        <th class="col-6">Nome</th>
+        <th class="col-2">Preço</th>
+        <th class="col-2">Quantidade</th>
+        <th class="col-1"></th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4" class="row-total">
+          <strong>Total</strong>
+          <span>R$0,00</span>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

@@ -60,8 +60,43 @@ $(function() {
     updateTotal();
   });
 
+  var originalQuantities = {}; // Armazena as quantidades originais de cada produto
+
+  $('#quantity-duplicate').on('input', function() {
+    var duplicateQuantity = parseInt($(this).val());
+    if (isNaN(duplicateQuantity) || duplicateQuantity <= 0) {
+      return;
+    }
+
+    var $productRows = $('#product-table tbody tr');
+
+    $productRows.each(function() {
+      var $quantityInput = $(this).find('.quantity');
+      var productName = $(this).find('td:nth-child(2)').text();
+      var originalQuantity = originalQuantities[productName];
+      if (originalQuantity === undefined) {
+        originalQuantity = parseFloat($quantityInput.val());
+        originalQuantities[productName] = originalQuantity;
+      }
+      var newQuantity = originalQuantity * duplicateQuantity;
+      var $rowTotalSpan = $(this).find('.row-total span');
+
+      $quantityInput.val(newQuantity);
+      $rowTotalSpan.text('R$' + (newQuantity * parseFloat($(this).find('td:nth-child(3)').text().replace('R$', '').trim())).toFixed(2));
+    });
+
+    updateTotal();
+  });
+
   $('#discount-input').on('input', function() {
     updateTotal();
+  });
+
+  // Atualiza a quantidade dos itens ao carregar a página
+  $('#product-table tbody tr').each(function() {
+    var productName = $(this).find('td:nth-child(2)').text();
+    var quantity = parseFloat($(this).find('.quantity').val());
+    originalQuantities[productName] = quantity;
   });
 
   function updateTotal() {
