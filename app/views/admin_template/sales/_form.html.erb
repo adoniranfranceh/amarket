@@ -51,8 +51,17 @@
 
     <div class="mb-3">
       <%= form.label :payment_at, class: 'form-label' %>
-      <%= form.number_field :payment_at, class: 'form-control' %>
+      <%= form.collection_select :payment_method, available_payment_methods, :itself, :itself, { include_blank: 'Selecione um método de pagamento' }, { class: 'form-control' } %>
     </div>
+
+    <div class="mb-3">
+      <%= form.label :status, class: 'form-label' %>
+      <%= form.collection_select :status, Sale::STATUS_OPTIONS.values, :to_s, ->(status) { status.to_s.humanize }, { include_blank: 'Selecione um status' }, class: 'form-control' %>
+    </div>
+
+
+
+
 
     <div>
       <% if action_name == 'show' %>
@@ -70,7 +79,5 @@
 <% end %>
 
     t.integer "quantity"
-    t.string "payment_method"
     t.datetime "completed_at"
-    t.string "status"
     t.string "comments"
