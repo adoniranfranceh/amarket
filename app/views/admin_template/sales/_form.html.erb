@@ -4,6 +4,18 @@
       <%= form.label :customer, class: 'form-label' %>
       <%= form.collection_select(:customer_id, @customers, :id, :name, { include_blank: 'Selecione o cliente' }, { class: 'form-select' }) %>
     </div>
+    <div>
+      <div class="card">
+        <div class="mb-3">
+          <label for="product_product_id" class="form-label">Product</label>
+          <input type="text" id="product-search" class="form-control" placeholder="Digite o nome do produto">
+        </div>
+        <div id="search-results"></div>
+        <input type="hidden" id="product-data" value="<%= json_escape(@products.to_json) %>">
+        <%= form.hidden_field :product_id, id: 'product-id-list' %>
+      </div>
+    </div>
+
 
     <%= render 'products_select' %>
 

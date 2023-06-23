@@ -15,7 +15,10 @@ $(function() {
         productList.empty();
 
         $.each(data, function(index, product) {
-          var listItem = $('<div>').text(product.name).data('price', product.sale_price);
+          var listItem = $('<div>').text(product.name).data({
+            id: product.id,
+            price: product.sale_price
+          });
           productList.append(listItem);
         });
       },
@@ -27,6 +30,7 @@ $(function() {
 
   $('#search-results').on('click', 'div', function() {
     var productName = $(this).text();
+    var productId = $(this).data('id');
     var productPrice = $(this).data('price');
 
     var card = $('<div>').addClass('product-card');
@@ -36,17 +40,25 @@ $(function() {
     card.append($('<button>').text('Remover').addClass('remove-btn'));
 
     var row = $('<tr>');
-    row.append($('<td>').text(''));
+    row.append($('<td>').text(productId));
     row.append($('<td>').text(productName));
     row.append($('<td>').text('R$' + productPrice));
     row.append($('<td>').append(card));
 
     $('#product-table tbody').append(row);
 
+    // Adicionar o ID do produto à lista de IDs
+    addProductId(productId);
+
     updateTotal();
   });
 
   $('#product-table').on('click', '.remove-btn', function() {
+    var productId = $(this).closest('tr').find('td:first-child').text();
+    
+    // Remover o ID do produto da lista de IDs
+    removeProductId(productId);
+
     $(this).closest('tr').remove();
     updateTotal();
   });
@@ -118,5 +130,35 @@ $(function() {
 
     $('#total-price-input').val(total.toFixed(2));
     $('tfoot .row-total span').text('R$' + total.toFixed(2));
+  }
+
+  function addProductId(productId) {
+    var productIds = getProductIds();
+    if (!productIds.includes(productId)) {
+      productIds.push(productId);
+      updateProductIds(productIds);
+    }
+  }
+
+  function removeProductId(productId) {
+    var productIds = getProductIds();
+    var index = productIds.indexOf(productId);
+    if (index !== -1) {
+      productIds.splice(index, 1);
+      updateProductIds(productIds);
+    }
+  }
+
+  function getProductIds() {
+    var productIds = [];
+    var productIdsValue = $('#product-id-list').val();
+    if (productIdsValue) {
+      productIds = productIdsValue.split(',');
+    }
+    return productIds;
+  }
+
+  function updateProductIds(productIds) {
+    $('#product-id-list').val(productIds.join(','));
   }
 });
