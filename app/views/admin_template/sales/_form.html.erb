@@ -4,18 +4,13 @@
       <%= form.label :customer, class: 'form-label' %>
       <%= form.collection_select(:customer_id, @customers, :id, :name, { include_blank: 'Selecione o cliente' }, { class: 'form-select' }) %>
     </div>
-    <div>
-      <div class="card">
-        <div class="mb-3">
-          <label for="product_product_id" class="form-label">Product</label>
-          <input type="text" id="product-search" class="form-control" placeholder="Digite o nome do produto">
-        </div>
-        <ul id="search-results" class="list-group"></ul>
-        <input type="hidden" id="product-data" value="<%= json_escape(@products.to_json) %>">
-        <%= form.hidden_field :product_id, id: 'product-id-list' %>
-      </div>
-    </div>
 
+    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Launch demo modal
+    </button>
+
+    <%= render 'modal_sale'%>
+    <%= form.hidden_field :product_id, id: 'product-id-list' %>
     <%= render 'products_select' %>
 
     <div class="mb-3">

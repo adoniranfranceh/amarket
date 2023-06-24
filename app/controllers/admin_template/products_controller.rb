@@ -42,8 +42,17 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
 
     products = Product.where("LOWER(name) LIKE ?", "%#{term}%")
 
+    products_data = products.map do |product|
+      data = {
+        id: product.id,
+        name: product.name,
+        sale_price: product.sale_price
+      }
+      data[:image_url] = product.image.url if product.image.attached?
+      data
+    end
 
-    render json: products
+    render json: products_data
   end
 
   private

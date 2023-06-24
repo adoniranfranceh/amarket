@@ -13,42 +13,79 @@ $(function() {
       success: function(data) {
         var productList = $('#search-results');
         productList.empty();
-
         $.each(data, function(index, product) {
-          var listItem = $('<li class="list-group-item">').text(product.name).data({
+          var productRow = $('<tr>');
+          var productId = $('<td>').text(product.id);
+          var productName = $('<td>').text(product.name);
+          var productPrice = $('<td>').text('R$' + product.sale_price);
+          var productImage = $('<td>');
+          if (product.image_url) {
+            var imageTag = $('<img class="image-t">').attr('src', product.image_url);
+            productImage.append(imageTag);
+          } else {
+            var defaultImage = $('<img class="image-t">').attr('src', '/assets/no_image-d69820241ecbe31d0cb4eb23f503b82956340cea7fe0fc6d74ebdfe45bd326d3.png');
+            productImage.append(defaultImage);
+          }
+
+          var addButton = $('<td>').append($('<button>').addClass('btn btn-success').text('Add').attr('type', 'button').data('price', product.sale_price).data('image', product.image_url));
+
+          productRow.append(productId ,productName, productPrice, productImage, addButton);
+          productRow.data({
             id: product.id,
             price: product.sale_price
           });
-          productList.append(listItem);
+
+          productList.append(productRow);
         });
+
       },
       error: function() {
       }
     });
   });
 
-  $('#search-results').on('click', 'li', function() {
-    var productName = $(this).text();
-    var productId = $(this).data('id');
-    var productPrice = $(this).data('price');
+  $('#search-results').on('click', 'button', function() {
+    var productName = $(this).closest('tr').find('td:nth-child(2)').text();
+    var productId = $(this).closest('tr').data('id');
+    var productPrice = $(this).closest('tr').data('price');
+    var productImageURL = $(this).data('image');
 
+    var cardQuantityInput = $('<input>').attr('type', 'number').addClass('quantity').val(1);
     var card = $('<div>').addClass('product-card');
     card.append($('<h4>').text(productName));
     card.append($('<p>').text('Preço: R$' + productPrice));
-    card.append($('<input>').attr('type', 'number').addClass('quantity').val(1));
+    card.append(cardQuantityInput);
     card.append($('<button>').text('Remover').addClass('remove-btn btn btn-danger'));
 
     var row = $('<tr>');
     row.append($('<td>').text(productId));
     row.append($('<td>').text(productName));
+    row.append(productImageURL ? $('<td>').append($('<img class="image-t">').attr('src', productImageURL)) : $('<td>').append($('<img class="image-t">').attr('src', '/assets/no_image-d69820241ecbe31d0cb4eb23f503b82956340cea7fe0fc6d74ebdfe45bd326d3.png')));
     row.append($('<td>').text('R$' + productPrice));
     row.append($('<td>').append(card));
 
     $('#product-table tbody').append(row);
     addProductId(productId);
 
+    cardQuantityInput.on('input', function() {
+      var quantity = $(this).val();
+      var totalPrice = parseFloat(productPrice) * parseInt(quantity);
+      card.find('p').text('Preço: R$' + totalPrice.toFixed(2));
+      updateTotal();
+    });
+
     updateTotal();
   });
+
+  function appendProductImage(container, imageUrl) {
+    if (imageUrl) {
+      var imageTag = $('<img class="image-t">').attr('src', imageUrl);
+      container.append(imageTag);
+    } else {
+      var defaultImage = $('<img class="image-t">').attr('src', '/assets/no_image-d69820241ecbe31d0cb4eb23f503b82956340cea7fe0fc6d74ebdfe45bd326d3.png');
+      container.append(defaultImage);
+    }
+  }
 
   $('#product-table').on('click', '.remove-btn', function() {
     var productId = $(this).closest('tr').find('td:first-child').text();
@@ -109,7 +146,7 @@ $(function() {
     var total = 0;
     $('#product-table tbody tr').each(function() {
       var quantity = parseFloat($(this).find('.quantity').val());
-      var price = parseFloat($(this).find('td:nth-child(3)').text().replace('R$', '').trim());
+      var price = parseFloat($(this).find('td:nth-child(4)').text().replace('R$', '').trim());
       var subtotal = quantity * price;
       if (!isNaN(subtotal)) {
         total += subtotal;
@@ -125,6 +162,7 @@ $(function() {
     $('#total-price-input').val(total.toFixed(2));
     $('tfoot .row-total span').text('R$' + total.toFixed(2));
   }
+
 
   function addProductId(productId) {
     var productIds = getProductIds();
