@@ -15,7 +15,7 @@ $(function() {
         productList.empty();
 
         $.each(data, function(index, product) {
-          var listItem = $('<div>').text(product.name).data({
+          var listItem = $('<li class="list-group-item">').text(product.name).data({
             id: product.id,
             price: product.sale_price
           });
@@ -23,12 +23,11 @@ $(function() {
         });
       },
       error: function() {
-        // Tratar erros, se necessário
       }
     });
   });
 
-  $('#search-results').on('click', 'div', function() {
+  $('#search-results').on('click', 'li', function() {
     var productName = $(this).text();
     var productId = $(this).data('id');
     var productPrice = $(this).data('price');
@@ -37,7 +36,7 @@ $(function() {
     card.append($('<h4>').text(productName));
     card.append($('<p>').text('Preço: R$' + productPrice));
     card.append($('<input>').attr('type', 'number').addClass('quantity').val(1));
-    card.append($('<button>').text('Remover').addClass('remove-btn'));
+    card.append($('<button>').text('Remover').addClass('remove-btn btn btn-danger'));
 
     var row = $('<tr>');
     row.append($('<td>').text(productId));
@@ -46,8 +45,6 @@ $(function() {
     row.append($('<td>').append(card));
 
     $('#product-table tbody').append(row);
-
-    // Adicionar o ID do produto à lista de IDs
     addProductId(productId);
 
     updateTotal();
@@ -55,8 +52,6 @@ $(function() {
 
   $('#product-table').on('click', '.remove-btn', function() {
     var productId = $(this).closest('tr').find('td:first-child').text();
-    
-    // Remover o ID do produto da lista de IDs
     removeProductId(productId);
 
     $(this).closest('tr').remove();
@@ -68,11 +63,10 @@ $(function() {
     var price = $(this).closest('tr').find('td:nth-child(3)').text().replace('R$', '').trim();
     var totalPrice = parseFloat(quantity) * parseFloat(price);
     $(this).closest('tr').find('.row-total span').text('R$' + totalPrice.toFixed(2));
-
     updateTotal();
   });
 
-  var originalQuantities = {}; // Armazena as quantidades originais de cada produto
+  var originalQuantities = {};
 
   $('#quantity-duplicate').on('input', function() {
     var duplicateQuantity = parseInt($(this).val());

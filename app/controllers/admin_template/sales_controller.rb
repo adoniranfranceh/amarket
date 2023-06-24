@@ -10,6 +10,13 @@ class AdminTemplate::SalesController < AdminTemplateController
 
   def create
     @sale = current_admin.sales.build(sale_params)
+    products_ids = params[:sale][:product_id].split(',')
+
+    products_ids.each do |product_id|
+      product = Product.find(product_id)
+      @sale.products << product if product
+    end
+
     if @sale.save
       redirect_to admin_template_sales_path, notice: 'Nova Venda!'
     else

@@ -10,12 +10,11 @@
           <label for="product_product_id" class="form-label">Product</label>
           <input type="text" id="product-search" class="form-control" placeholder="Digite o nome do produto">
         </div>
-        <div id="search-results"></div>
+        <ul id="search-results" class="list-group"></ul>
         <input type="hidden" id="product-data" value="<%= json_escape(@products.to_json) %>">
         <%= form.hidden_field :product_id, id: 'product-id-list' %>
       </div>
     </div>
-
 
     <%= render 'products_select' %>
 
@@ -41,7 +40,7 @@
 
     <div class="mb-3">
       <%= form.label :quantity, class: 'form-label' %>
-      <%= form.number_field :quantity, id: 'quantity-duplicate', class: 'form-control',value: '1' %>
+      <%= form.number_field :quantity, id: 'quantity-duplicate', class: 'form-control', value: '1' %>
     </div>
 
     <div class="mb-3">

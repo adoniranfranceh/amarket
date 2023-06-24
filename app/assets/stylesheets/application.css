@@ -14,10 +14,22 @@
  *= require_tree .
  *= require_self
  */
+.container-lx {
+  background: blue;
+}
 .disabled-form {
   pointer-events:none;
 }
 .btn-green {
   background: #3cb371;
   color: #fff;
+}
+#search-results li:hover {
+  cursor: pointer;
+  background: #708090;
+  color: white;
+}
+.image-t{
+  width: 150px;
+  height: 200px;
 }

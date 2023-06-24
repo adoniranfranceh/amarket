@@ -1,5 +1,5 @@
 class Sale < ApplicationRecord
-  before_save :set_completed_at if
+  before_save :set_completed_at
   has_and_belongs_to_many :products
   belongs_to :admin
   belongs_to :customer

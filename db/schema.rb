@@ -10,7 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_22_224140) do
+ActiveRecord::Schema.define(version: 2023_06_24_004708) do
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -63,6 +91,13 @@ ActiveRecord::Schema.define(version: 2023_06_22_224140) do
     t.index ["category_id"], name: "index_products_on_category_id"
   end
 
+  create_table "products_sales", id: false, force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.integer "sale_id", null: false
+    t.index ["product_id", "sale_id"], name: "index_products_sales_on_product_id_and_sale_id"
+    t.index ["sale_id", "product_id"], name: "index_products_sales_on_sale_id_and_product_id"
+  end
+
   create_table "sales", force: :cascade do |t|
     t.integer "product_id", null: false
     t.integer "quantity"
@@ -81,6 +116,8 @@ ActiveRecord::Schema.define(version: 2023_06_22_224140) do
     t.index ["product_id"], name: "index_sales_on_product_id"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "categories", "admins"
   add_foreign_key "customers", "admins"
   add_foreign_key "products", "admins"

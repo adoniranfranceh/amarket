@@ -67,7 +67,8 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
                                     :brand,
                                     :purchase_price,
                                     :sale_price,
-                                    :quantity
+                                    :quantity,
+                                    :image
                                     )
   end
 end

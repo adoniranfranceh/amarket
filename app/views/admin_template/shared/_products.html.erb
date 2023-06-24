@@ -4,7 +4,8 @@
     <thead>
       <tr>
         <th class="col-1">Id</th>
-        <th class="col-10">Nome</th>
+        <th class="col-2">Nome</th>
+        <th class="col-4"></th>
         <th class="col-1"></th>
       </tr>
     </thead>
@@ -12,8 +13,9 @@
     <tbody>
       <% @products.each do |product| %>   
       <tr>
-        <td class="row" style="padding-bottom: 37px;"><%= product.id %></td>
+        <td  style="padding-bottom: 37px;"><%= product.id %></td>
         <td><%= product.name %></td>
+        <td  class="rounded float-end"><%= image(product) %></td>
         <td><%= link_to 'ver', admin_template_product_path(product), class: "btn btn-green " %>
         </td>
       </tr>
