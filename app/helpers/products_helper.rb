@@ -9,11 +9,9 @@ module ProductsHelper
 
   def image(product)
     if product.image.attached?
-      image_tag url_for(product.image), class: 'image-t'
+      image_tag url_for(product.image), class: 'image-t', value: product.id
     else
-      form_with(model: product, url: admin_template_products_path) do |form|
-        form.file_field :image
-      end
+      image_tag('no_image.png',  class: 'image-t no_image', value: product.id)
     end
   end
 end

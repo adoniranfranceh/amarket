@@ -9,16 +9,16 @@
         <th class="col-1"></th>
       </tr>
     </thead>
-
     <tbody>
       <% @products.each do |product| %>   
       <tr>
         <td  style="padding-bottom: 37px;"><%= product.id %></td>
         <td><%= product.name %></td>
-        <td  class="rounded float-end"><%= image(product) %></td>
-        <td><%= link_to 'ver', admin_template_product_path(product), class: "btn btn-green " %>
+        <td  class="rounded float-end"><%= link_to(image(product), '#', "data-bs-toggle":"modal", "data-bs-target":"#staticBackdrop")%></td>
+        <td><%= link_to 'ver', admin_template_product_path(product), class: "btn btn-green" %>
         </td>
       </tr>
+        <%= render "admin_template/products/model_image" %>
       <% end %>
     </tbody>
   </table>
