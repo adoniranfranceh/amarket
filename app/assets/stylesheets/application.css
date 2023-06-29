@@ -14,9 +14,6 @@
  *= require_tree .
  *= require_self
  */
-.container-lx {
-  background: blue;
-}
 .disabled-form {
   pointer-events:none;
 }
