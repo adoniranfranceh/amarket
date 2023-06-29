@@ -1,0 +1,59 @@
+<%= form_with(model: @sale, url: admin_template_sales_path) do |form| %>
+  <div class="<%= fieldset_disabled %>">
+    <div class="mb-3">
+      <%= form.label :customer, class: 'form-label' %>
+      <%= form.collection_select(:customer_id, @customers, :id, :name, { include_blank: 'Selecione o cliente' }, { class: 'form-select' }) %>
+    </div>
+
+    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Launch demo modal
+    </button>
+
+    <%= render 'modal_sale'%>
+    <%= form.hidden_field :product_id, id: 'product-id-list' %>
+    <%= render 'products_select' %>
+
+    <div class="mb-3">
+      <%= form.label :discount, class: 'form-label' %>
+      <%= form.number_field :discount, step: 0.01, id: 'discount-input', class: 'form-control' %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :total_price, class: 'form-label' %>
+      <%= form.number_field :total_price, step: 0.01,  id: 'total-price-input', class: 'form-control' %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :payment_at, class: 'form-label' %>
+      <%= form.collection_select :payment_method, available_payment_methods, :itself, :itself, { include_blank: 'Selecione um método de pagamento' }, { class: 'form-control' } %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :status, class: 'form-label' %>
+      <%= form.collection_select :status, Sale::STATUS_OPTIONS.values, :to_s, ->(status) { status.to_s.humanize }, { include_blank: 'Selecione um status' }, class: 'form-control' %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :quantity, class: 'form-label' %>
+      <%= form.number_field :quantity, id: 'quantity-duplicate', class: 'form-control', value: '1' %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :comments, class: 'form-label' %>
+      <%= form.text_area :comments, class: 'form-control', rows: 3 %>
+    </div>
+
+    <div>
+      <% if action_name == 'show' %>
+        <%= link_to edit_admin_template_customer_path(@customer), class: 'btn btn-primary' do %>
+          <i class="bi bi-pencil-square">Editar</i>
+        <% end %>
+        <%= link_to admin_template_customer_path(@customer), method: :delete, class: 'btn btn-danger', data: { confirm: "Você quer excluir #{@customer.name}?" } do %>
+          <i class="bi bi-trash-fill">Excluir</i>
+        <% end %>
+      <% else %>
+        <%= form.submit 'Salvar', class: 'btn btn-primary' %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

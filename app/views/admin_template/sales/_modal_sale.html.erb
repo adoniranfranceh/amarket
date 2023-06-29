@@ -1,0 +1,35 @@
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <div class="card">
+            <div class="mb-3">
+              <label for="product_product_id" class="form-label">Product</label>
+              <input type="text" id="product-search" class="form-control" placeholder="Digite o nome do produto">
+            </div>
+            <table class="table">
+              <thead>
+                <th>Id</th>
+                <th>Nome</th>
+                <th>Preço</th>
+                <th>Image</th>
+                <th></th>
+              </thead>
+              <tbody id="search-results">
+              </tbody>
+            </table>
+            <input type="hidden" id="product-data" value="<%= json_escape(@products.to_json) %>">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

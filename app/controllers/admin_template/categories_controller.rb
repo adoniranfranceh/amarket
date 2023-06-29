@@ -1,4 +1,4 @@
-class AdminTemplate::Inventary::CategoriesController < AdminTemplate::InventaryController
+class AdminTemplate::CategoriesController < AdminTemplateController
   before_action :set_category, only: [:index, :edit, :update, :show, :destroy]
   def index; end
 
@@ -9,7 +9,7 @@ class AdminTemplate::Inventary::CategoriesController < AdminTemplate::InventaryC
   def create
     @category = current_admin.categories.build(category_params)
     if @category.save
-       redirect_to admin_template_inventary_categories_path, notice: 'Categoria salvo com sucesso'
+       redirect_to admin_template_categories_path, notice: 'Categoria salvo com sucesso'
     else
       render :new
       flash[:error] = 'Existem campos inválidos'

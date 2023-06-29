@@ -6,4 +6,5 @@ class Admin < ApplicationRecord
   has_many :customers
   has_many :categories
   has_many :products
+  has_many :sales
 end

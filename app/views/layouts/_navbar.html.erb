@@ -4,19 +4,23 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExampleXxl" aria-controls="navbarsExampleXxl" aria-expanded="true" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
-    <div class="navbar-collapse collapse show" id="navbarsExampleXxl" style="">
+    <div class="navbar-collapse collapse" id="navbarsExampleXxl" style="">
       <ul class="navbar-nav me-auto mb-2 mb-xl-0">
         <li class="nav-item">
-          <%= link_to'Home', root_path, class: 'nav-link active' %>
+          <%= link_to'Home', root_path, class: 'nav-link' %>
+        </li>
+         <li class="nav-item">
+          <%= link_to 'Vendas', admin_template_sales_path, class: 'nav-link' %>
         </li>
         <li class="nav-item">
           <%= link_to 'Clientes', admin_template_customers_path, class: 'nav-link' %>
         </li>
         <li class="nav-item">
-          <%= link_to 'Inventário', admin_template_inventary_index_path, class: 'nav-link' %>
+          <%= link_to 'Estoque', admin_template_inventary_index_path, class: 'nav-link' %>
         </li>
-
+        <li class="nav-item">
+          <%= link_to 'Categorias', admin_template_categories_path, class: 'nav-link' %>
+        </li>
         <li class="nav-item">
           <%= link_to 'Produtos', admin_template_products_path, class: 'nav-link' %>
         </li>
