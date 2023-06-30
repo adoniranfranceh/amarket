@@ -4,7 +4,7 @@
       <%= form.label :name, class: 'form-label' %>
       <%= form.text_field :name, class: 'form-control' %>
     </div>
-    <div class="mb-3">
+    <div class="mb-3 ">
       <%= form.label :descryption, class: 'form-label' %>
       <%= form.text_field :descryption, class: 'form-control' %>
     </div>
@@ -27,6 +27,15 @@
       <%= form.label :sale_price, class: 'form-label' %>
       <%= form.number_field :sale_price, class: 'form-control', step: 0.01 %>
     </div>
+
+    <h3>Variação</h3>
+    <div id="variations">
+      <%= form.fields_for :variations do |variation| %>
+        <%= render partial: 'variation_fields', locals: {f: variation} %>
+      <% end %>
+      <%= link_to_add_association 'Adicionar variação', form, :variations, class: 'btn btn-success'%>
+    </div>
+
     <div class="mb-3">
       <%= form.label :quantity, class: 'form-label' %>
       <%= form.number_field :quantity, class: 'form-control' %>

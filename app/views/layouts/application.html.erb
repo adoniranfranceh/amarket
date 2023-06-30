@@ -11,6 +11,7 @@
     <% if params[:controller] == 'admin_template/sales' && action_name == 'new'%>
       <%= javascript_pack_tag 'sale', 'data-turbolinks-track': 'reload', async:true %>
     <% end %>
+     <%= javascript_pack_tag 'product', 'data-turbolinks-track': 'reload', async: true %>
   </head>
 
   <body>
