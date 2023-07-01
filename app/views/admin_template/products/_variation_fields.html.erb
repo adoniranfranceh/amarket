@@ -9,6 +9,8 @@
   <%= f.text_field :color, class: 'form-control' %>
 
   <% if action_name != 'show' %>
+    <%= f.label :photo, class: 'form-label' %>
+    <%= f.file_field :photo, class: 'form-control' %>
 
     <%= link_to_remove_association('Remover', f, class: 'btn btn-danger') %>
   <% end %>
