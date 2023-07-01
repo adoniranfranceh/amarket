@@ -11,9 +11,10 @@
     <% if params[:controller] == 'admin_template/sales' && action_name == 'new'%>
       <%= javascript_pack_tag 'sale', 'data-turbolinks-track': 'reload', async:true %>
     <% end %>
+    <%= javascript_pack_tag 'admin', 'data-turbolinks-track': 'reload', async: true %>
   </head>
 
-  <body>
+  <body class="hold-transition sidebar-mini layout-fixed" >
     <% if signed_in? %>
       <%= render 'layouts/navbar' %>
     <% end %>
