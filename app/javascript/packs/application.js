@@ -9,8 +9,7 @@ import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 import "bootstrap"
 import "jquery"
-import "jquery-ui"
-
+import "@nathanvda/cocoon"
 
 Rails.start()
 Turbolinks.start()

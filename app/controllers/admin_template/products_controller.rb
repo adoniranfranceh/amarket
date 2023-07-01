@@ -77,7 +77,8 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
                                     :purchase_price,
                                     :sale_price,
                                     :quantity,
-                                    :image
+                                    :image,
+                                    variations_attributes:[:id, :name, :type, :color, :photo, :_destroy]
                                     )
   end
 end
