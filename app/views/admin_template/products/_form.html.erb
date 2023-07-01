@@ -39,9 +39,9 @@
         <h3>Sem variações</h3>
       <% end %>
     <% else %>
+    <div id="variations">
       <%= link_to_add_association 'Adicionar variação', form, :variations, class: 'btn btn-success'%>
     <% end %>
-    <div id="variations">
       <%= form.fields_for :variations do |variation| %>
         <%= render partial: 'variation_fields', locals: {f: variation} %>
       <% end %>
