@@ -11,7 +11,6 @@ import "bootstrap"
 import "jquery"
 import "@nathanvda/cocoon"
 
-
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()

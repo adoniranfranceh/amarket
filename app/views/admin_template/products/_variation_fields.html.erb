@@ -8,5 +8,8 @@
   <%= f.label :color, class: 'form-label' %>
   <%= f.text_field :color, class: 'form-control' %>
 
-  <%= link_to_remove_association('Remover', f, class: 'btn btn-danger') %>
+  <% if action_name != 'show' %>
+
+    <%= link_to_remove_association('Remover', f, class: 'btn btn-danger') %>
+  <% end %>
 </div>

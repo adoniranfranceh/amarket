@@ -1,4 +1,4 @@
-<%= form_with(model: @product, url: url_new_edit) do |form| %>
+<%= form_with(model: [ :admin_template, @product ]) do |form| %>
   <div class="<%= fieldset_disabled %>">
     <div class="mb-3 ">
       <%= form.label :name, class: 'form-label' %>
@@ -28,12 +28,19 @@
       <%= form.number_field :sale_price, class: 'form-control', step: 0.01 %>
     </div>
 
-    <h3>Variação</h3>
+    <% if action_name == 'show' %>
+      <% if @product.variations.present? %>
+        <h3>Variação</h3>
+      <% else %>
+        <h3>Sem variações</h3>
+      <% end %>
+    <% else %>
+      <%= link_to_add_association 'Adicionar variação', form, :variations, class: 'btn btn-success'%>
+    <% end %>
     <div id="variations">
       <%= form.fields_for :variations do |variation| %>
         <%= render partial: 'variation_fields', locals: {f: variation} %>
       <% end %>
-      <%= link_to_add_association 'Adicionar variação', form, :variations, class: 'btn btn-success'%>
     </div>
 
     <div class="mb-3">
