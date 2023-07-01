@@ -132,15 +132,8 @@
       </li>
     </ul>
   </nav>
-  <!-- /.navbar -->
 
-  <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
-      <span class="brand-text font-weight-light">Amarket</span>
-    </a>
-
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
@@ -169,61 +162,47 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link ">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Dashboard
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-          </li>
-          <li class="nav-item menu-open">
+          <li class="nav-item menu-open mb-3">
             <%= link_to root_path, class: 'nav-link' do %>
-              <p>Home</p>
+              <i class="bi bi-speedometer"></i>
+              <p>Dashboard</p>
             <% end %>
           </li>
-           <li class="nav-item menu-open">
+           <li class="nav-item menu-open mb-3">
             <%= link_to admin_template_sales_path, class: 'nav-link' do %>
+              <i class="bi bi-coin"></i>
               <p>Vendas</p>
             <% end %>
           </li>
-          <li class="nav-item menu-open">
+          <li class="nav-item menu-open mb-3">
             <%= link_to admin_template_customers_path, class: 'nav-link' do %>
+              <i class="bi bi-person-lines-fill"></i>
               <p>Clientes</p>
             <% end %>
           </li>
-          <li class="nav-item menu-open">
+          <li class="nav-item menu-open mb-3">
             <%= link_to admin_template_inventary_index_path, class: 'nav-link' do %>
+              <i class="bi bi-database"></i>
               <p>Estoque</p>
             <% end %>
           </li>
-          <li class="nav-item menu-open">
+          <li class="nav-item menu-open mb-3">
             <%= link_to admin_template_categories_path, class: 'nav-link' do %>
+              <i class="bi bi-tags"></i>
               <p>Categorias</p>
             <% end %>
           </li>
-          <li class="nav-item menu-open">
+          <li class="nav-item menu-open mb-3">
             <%= link_to admin_template_products_path, class: 'nav-link' do %>
+              <i class="bi bi-box-fill"></i>
               <p>Produtos</p>
             <% end %>
           </li>
         </ul>
       </nav>
     </div>
-  <!-- /.content-wrapper -->
-  <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.2.0
-    </div>
-  </footer>
 
-  <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
   </aside>
-  <!-- /.control-sidebar -->
+
 </div>
-<!-- ./wrapper -->
