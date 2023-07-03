@@ -9,9 +9,9 @@
     </div>
 
     <% if action_name == 'show' %>
-      <div class="mb-3">
-        <%= form.label :category, class: 'form-label' %>
-        <%= form.text_field :category, value: category_name, class: 'form-control' %>
+      <%= form.label :category, class: 'form-label' %>
+      <div class="mb-3 row">
+        <%= form.text_field :category, value: category_name, class: 'form-control col-10' %>
       </div>
     <% else %>
       <label for="product_category_id">Selecione a categoria</label>
