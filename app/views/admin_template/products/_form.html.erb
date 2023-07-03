@@ -1,35 +1,33 @@
 <%= form_with(model: [ :admin_template, @product ]) do |form| %>
   <div class="<%= fieldset_disabled %>">
-    <div class="mb-3 ">
-      <%= form.label :name, class: 'form-label' %>
-      <%= form.text_field :name, class: 'form-control' %>
+    <div class="mb-3 row">
+      <%= form.text_field :name, placeholder: :name, class: 'form-control col-10'%>
     </div>
-    <div class="mb-3">
-      <%= form.label :descryption, class: 'form-label' %>
-      <%= form.text_field :descryption, class: 'form-control' %>
+
+    <div class="mb-3 row">
+      <%= form.text_field :brand, placeholder: :brand, class: 'form-control col-10' %>
     </div>
-    <div class="mb-3">
-      <%= form.label :brand, class: 'form-label' %>
-      <%= form.text_field :brand, class: 'form-control' %>
-    </div>
+
     <% if action_name == 'show' %>
-      <div class="mb-3">
-        <%= form.label :category, class: 'form-label' %>
-        <%= form.text_field :category, value: category_name, class: 'form-control' %>
+      <%= form.label :category, class: 'form-label' %>
+      <div class="mb-3 row">
+        <%= form.text_field :category, value: category_name, class: 'form-control col-10' %>
       </div>
     <% else %>
-      <div class="form-floating">
-        <%= form.collection_select(:category_id, @categories, :id, :name, { include_blank: 'Nenhuma' }, { class: 'form-select' }) %>
-        <label for="product_category_id">Selecione a categoria</label>
+      <label for="product_category_id">Selecione a categoria</label>
+      <div class="form-floating row mb-3">
+        <%= form.collection_select(:category_id, @categories, :id, :name, { include_blank: 'Nenhuma' }, { class: 'form-control select2 select2-hidden-accessible col-10' }) %>
       </div>
     <% end %>
-    <div class="mb-3">
-      <%= form.label :purchase_price, class: 'form-label' %>
-      <%= form.number_field :purchase_price, class: 'form-control', step: 0.01 %>
+    <div class="mb-3 row">
+      <%= form.label :purchase_price, class: 'form-label mr-3' %>
+      <%= form.number_field :purchase_price, class: 'form-control col-3 mr-4', step: 0.01 %>
+      <%= form.label :sale_price, class: 'form-label mr-3' %>
+      <%= form.number_field :sale_price, class: 'form-control col-3 mr-4', step: 0.01 %>
     </div>
-    <div class="mb-3">
-      <%= form.label :sale_price, class: 'form-label' %>
-      <%= form.number_field :sale_price, class: 'form-control', step: 0.01 %>
+    <div class="mb-3 row">
+      <%= form.label :quantity, class: 'form-label mr-3' %>
+      <%= form.number_field :quantity, class: 'form-control col-3' %>
     </div>
 
     <% if action_name == 'show' %>
@@ -39,17 +37,16 @@
         <h3>Sem variações</h3>
       <% end %>
     <% else %>
-      <%= link_to_add_association 'Adicionar variação', form, :variations, class: 'btn btn-success'%>
-    <% end %>
     <div id="variations">
+      <%= link_to_add_association 'Adicionar variação', form, :variations, class: 'btn btn-success mb-3'%>
+    <% end %>
       <%= form.fields_for :variations do |variation| %>
         <%= render partial: 'variation_fields', locals: {f: variation} %>
       <% end %>
     </div>
-
     <div class="mb-3">
-      <%= form.label :quantity, class: 'form-label' %>
-      <%= form.number_field :quantity, class: 'form-control' %>
+      <%= form.label :descryption, class: 'form-label' %>
+      <%= form.text_area :descryption, class: 'form-control col-10', row: 4 %>
     </div>
   </div>
   <div>
@@ -61,9 +58,9 @@
         <i class="bi bi-trash-fill">Excluir</i>
       <% end %>
     <% else %>
-      <div class="mb-3">
-        <%= form.label :image, class: 'form-label' %>
-        <%= form.file_field :image, class: 'form-control' %>
+      <div class="custom-file">
+        <%= form.file_field :image, class: 'custom-file-input', id: 'exampleInputFile' %>
+        <%= form.label 'Escolha uma imagem', class: 'custom-file-label col-6', id: 'exampleInputFile' %>
       </div>
       <%= form.submit 'Salvar', class: 'btn btn-primary' %>
     <% end %>

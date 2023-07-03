@@ -5,8 +5,8 @@
       <%= form.collection_select(:customer_id, @customers, :id, :name, { include_blank: 'Selecione o cliente' }, { class: 'form-select' }) %>
     </div>
 
-    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#exampleModal">
-      Launch demo modal
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+      Adicionar Produto
     </button>
 
     <%= render 'modal_sale'%>

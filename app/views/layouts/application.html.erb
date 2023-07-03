@@ -11,14 +11,30 @@
     <% if params[:controller] == 'admin_template/sales' && action_name == 'new'%>
       <%= javascript_pack_tag 'sale', 'data-turbolinks-track': 'reload', async:true %>
     <% end %>
+    <%= javascript_pack_tag 'admin', 'data-turbolinks-track': 'reload', async: true %>
   </head>
 
-  <body>
-    <% if signed_in? %>
-      <%= render 'layouts/navbar' %>
-    <% end %>
-    <div class="container-xxl mt-3">
-      <%= yield %>
+  <body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+      <% if signed_in? %>
+        <%= render 'layouts/navbar' %>
+      <% end %>
+
+      <div class="content-wrapper">
+        <section class="content">
+          <div class="container-fluid">
+            <%= yield %>
+          </div>
+        </section>
+      </div>
+
+      <footer class="main-footer">
+        <div class="float-right d-none d-sm-inline-block">
+          <b>Version</b> 3.2.0
+        </div>
+        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+        All rights reserved.
+      </footer>
     </div>
   </body>
 </html>
