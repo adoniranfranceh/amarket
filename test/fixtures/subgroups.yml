@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  size: MyString
+  number: 1.5
+  quantity: 1
+  variation: one
+
+two:
+  size: MyString
+  number: 1.5
+  quantity: 1
+  variation: two
