@@ -32,6 +32,7 @@
 
     <div id="variations">
       <h3><%= is_present?(@product.variations, 'Variação' ,form, :variations, 'btn btn-success mb-3') %></h3>
+    <% end %>
       <%= form.fields_for :variations do |variation| %>
         <%= render partial: 'variation_fields', locals: {f: variation} %> 
       <% end %>
