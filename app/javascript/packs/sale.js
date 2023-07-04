@@ -16,7 +16,7 @@ $(function() {
         $.each(data, function(index, product) {
           var productRow = $('<tr>');
           var productId = $('<td>').text(product.id);
-          var productName = $('<td>').text(product.name);
+          var productName = $('<td>').text(product.name + (product.brand ? : '' + product.brand : ''));
           var productPrice = $('<td>').text('R$' + product.sale_price);
           var productImage = $('<td>');
           if (product.image_url) {
