@@ -30,16 +30,8 @@
       <%= form.number_field :quantity, class: 'form-control col-3' %>
     </div>
 
-    <% if action_name == 'show' %>
-      <% if @product.variations.present? %>
-        <h3>Variação</h3>
-      <% else %>
-        <h3>Sem variações</h3>
-      <% end %>
-    <% else %>
     <div id="variations">
-      <%= link_to_add_association 'Adicionar variação', form, :variations, class: 'btn btn-success mb-3'%>
-    <% end %>
+      <h3><%= is_present?(@product.variations, 'Variação' ,form, :variations, 'btn btn-success mb-3') %></h3>
       <%= form.fields_for :variations do |variation| %>
         <%= render partial: 'variation_fields', locals: {f: variation} %> 
       <% end %>
