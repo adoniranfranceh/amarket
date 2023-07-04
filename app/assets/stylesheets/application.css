@@ -50,3 +50,7 @@ i {
   height: 25%;
   text-align: center;
 }
+
+.div-center {
+  margin: 0 auto;
+}

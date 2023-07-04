@@ -1,7 +1,7 @@
 class AdminTemplate::ProductsController < AdminTemplate::InventaryController
   before_action :set_product, only: [:index, :edit, :update, :show, :destroy]
   before_action :set_categories, only: [:edit, :new]
-  before_action :set_variation, only: [:show]
+  before_action :set_subgroups, only: [:show]
 
   def index; end
 
