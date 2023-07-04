@@ -1,6 +1,7 @@
 class AdminTemplate::ProductsController < AdminTemplate::InventaryController
   before_action :set_product, only: [:index, :edit, :update, :show, :destroy]
   before_action :set_categories, only: [:edit, :new]
+  before_action :set_subgroups, only: [:show]
 
   def index; end
 
@@ -22,7 +23,7 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
 
   def update
     if @product.update(product_params)
-      redirect_to admin_template_products_path, notice: 'Categoria atualizado'
+      redirect_to admin_template_product_path(@product), notice: 'Categoria atualizado'
     else
       render :edit
       flash[:error] = 'Existem campos inválidos'
@@ -61,6 +62,12 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
     @categories = current_admin.categories
   end
 
+  def set_subgroups
+    Variation.all.each do |variation|
+      @subgroups = variation.subgroups
+    end
+  end
+
   def set_product
     if action_name != 'index'
       @product = Product.find(params[:id])
@@ -70,15 +77,30 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
   end
 
   def product_params
-    params.require(:product).permit(:name,
-                                    :descryption,
-                                    :category_id,
-                                    :brand,
-                                    :purchase_price,
-                                    :sale_price,
-                                    :quantity,
-                                    :image,
-                                    variations_attributes:[:id, :name, :type, :color, :photo, :_destroy]
+     params.require(:product).permit(
+                                      :name,
+                                      :descryption,
+                                      :category_id,
+                                      :brand,
+                                      :purchase_price,
+                                      :sale_price,
+                                      :quantity,
+                                      :image,
+                                      variations_attributes: [
+                                        :id,
+                                        :name,
+                                        :type,
+                                        :color,
+                                        :photo,
+                                        :_destroy,
+                                        subgroups_attributes: [
+                                          :id,
+                                          :size,
+                                          :number,
+                                          :quantity,
+                                          :_destroy
+                                        ]
+                                      ]
                                     )
-  end
+    end
 end

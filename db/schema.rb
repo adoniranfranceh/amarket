@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_29_192447) do
+ActiveRecord::Schema.define(version: 2023_07_03_204150) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -116,6 +116,16 @@ ActiveRecord::Schema.define(version: 2023_06_29_192447) do
     t.index ["product_id"], name: "index_sales_on_product_id"
   end
 
+  create_table "subgroups", force: :cascade do |t|
+    t.string "size"
+    t.float "number"
+    t.integer "quantity"
+    t.integer "variation_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["variation_id"], name: "index_subgroups_on_variation_id"
+  end
+
   create_table "variations", force: :cascade do |t|
     t.string "name"
     t.string "color"
@@ -135,5 +145,6 @@ ActiveRecord::Schema.define(version: 2023_06_29_192447) do
   add_foreign_key "sales", "admins"
   add_foreign_key "sales", "customers"
   add_foreign_key "sales", "products"
+  add_foreign_key "subgroups", "variations"
   add_foreign_key "variations", "products"
 end

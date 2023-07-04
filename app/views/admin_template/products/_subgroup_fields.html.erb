@@ -1,0 +1,18 @@
+<div class="col-md-9 div-center">
+  <div class="nested-fields card card-primary">
+    <div class="card-header">
+      <h3 class="card-title">Subgrupo</h3>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <%= f.text_field :size, placeholder: :size, class: 'form-control col-3 mr-3' %>
+        <%= f.number_field :number, placeholder: :number, class: 'form-control col-3 mr-3' %>
+        <%= f.number_field :quantity, placeholder: :quantity, class: 'form-control col-3 ' %>
+      </div>
+      <br>
+      <% if action_name != 'show' %>
+        <%= link_to_remove_association('Remover', f, class: 'btn btn-danger') %>
+      <% end %>
+    </div>
+  </div>
+</div>
