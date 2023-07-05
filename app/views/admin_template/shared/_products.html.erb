@@ -14,11 +14,30 @@
       <tr>
         <td  style="padding-bottom: 37px;"><%= product.id %></td>
         <td><%= product.full_name %></td>
-        <td  class="rounded float-end"><%= link_to(image(product), '#', "data-bs-toggle":"modal", "data-bs-target":"#staticBackdrop")%></td>
+        <td  class="rounded float-end"><%= link_to(image(product), '#', "data-toggle":"modal", "data-target":"#exampleModal")%></td>
         <td><%= link_to 'ver', admin_template_product_path(product), class: "btn btn-success" %>
         </td>
       </tr>
       <% end %>
     </tbody>
   </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Imagem</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img class='img-modal' src="">
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
 </div>

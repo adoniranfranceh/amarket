@@ -16,7 +16,7 @@ $(function() {
         $.each(data, function(index, product) {
           var productRow = $('<tr>');
           var productId = $('<td>').text(product.id);
-          var productName = $('<td>').text(product.name + (product.brand ? : '' + product.brand : ''));
+          var productName = $('<td>').text(product.name + (product.brand ? '' + product.brand : ''));
           var productPrice = $('<td>').text('R$' + product.sale_price);
           var productImage = $('<td>');
           if (product.image_url) {
@@ -27,8 +27,12 @@ $(function() {
             productImage.append(defaultImage);
           }
 
-          var addButton = $('<td>').append($('<button>').addClass('btn btn-success').text('Add').attr('type', 'button').data('price', product.sale_price).data('image', product.image_url));
-
+          var addButton;
+          if (product.quantity > 0) {
+            addButton = $('<td>').append($('<button>').addClass('btn btn-success').text('Add').attr('type', 'button').data('price', product.sale_price).data('image', product.image_url).data('quantity', product.quantity));
+          } else {
+            addButton = $('<td>').text('Produto não disponível');
+          }
           productRow.append(productId ,productName, productPrice, productImage, addButton);
           productRow.data({
             id: product.id,
@@ -50,7 +54,11 @@ $(function() {
     var productPrice = $(this).closest('tr').data('price');
     var productImageURL = $(this).data('image');
 
-    var cardQuantityInput = $('<input>').attr('type', 'number').addClass('quantity').val(1);
+    var cardQuantityInput = $('<input>').prop({
+      type: 'number',
+      min: 1,
+      max: $(this).data('quantity')
+    }).addClass('quantity').val(1);
     var card = $('<div>').addClass('product-card');
     card.append($('<h4>').text(productName));
     card.append($('<p>').text('Preço: R$' + productPrice));

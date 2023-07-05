@@ -54,4 +54,18 @@ $(document).ready(function() {
       $('.variation-quantity').show();
     }
   });
+
+  $('a[data-toggle="modal"]').click(function() {
+    var imageUrl = $(this).find('img').attr('src');
+    $('#exampleModal').find('img').attr('src', imageUrl);
+
+     $('#exampleModal').on('shown.bs.modal', function() {
+      $(this).find('.img-modal').attr('src', imageUrl);
+    });
+
+    $('#exampleModal').on('hidden.bs.modal', function() {
+      $(this).find('.img-modal').attr('src', '');
+    });
+  });
+
 });

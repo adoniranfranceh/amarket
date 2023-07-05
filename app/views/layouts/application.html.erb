@@ -12,7 +12,9 @@
       <%= javascript_pack_tag 'sale', 'data-turbolinks-track': 'reload', async:true %>
     <% end %>
     <%= javascript_pack_tag 'admin', 'data-turbolinks-track': 'reload', async: true %>
-    <%= javascript_pack_tag 'product', 'data-turbolinks-track': 'reload', async: true %>
+    <% if params[:controller] == 'admin_template/products' %>
+      <%= javascript_pack_tag 'product', 'data-turbolinks-track': 'reload', async: true  %>
+    <% end %>
 
   </head>
 

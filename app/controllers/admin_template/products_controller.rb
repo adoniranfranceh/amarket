@@ -48,8 +48,9 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
       data = {
         id: product.id,
         name: product.name,
-        brand: "- #{product.brand}",
-        sale_price: product.sale_price
+        brand: " - #{product.brand}",
+        sale_price: product.sale_price,
+        quantity: product.quantity
       }
       data[:image_url] = product.image.url if product.image.attached?
       data

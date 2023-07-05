@@ -54,3 +54,10 @@ i {
 .div-center {
   margin: 0 auto;
 }
+
+.img-modal {
+  width: 60%;
+  height: 60%;
+  margin: auto;
+  display: block;
+}
