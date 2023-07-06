@@ -16,18 +16,19 @@
     <% else %>
       <label for="product_category_id">Selecione a categoria</label>
       <div class="form-floating row mb-3">
-        <%= form.collection_select(:category_id, @categories, :id, :name, { include_blank: 'Nenhuma' }, { class: 'form-control select2 select2-hidden-accessible col-10' }) %>
+        <%= form.collection_select(:category_id, @categories.to_a, :id, :name, { include_blank: 'Nenhuma', selected: nil }, { class: 'form-control select2 select2-hidden-accessible col-10' })%>
       </div>
     <% end %>
     <div class="mb-3 row">
-      <%= form.label :purchase_price, class: 'form-label mr-3' %>
-      <%= form.number_field :purchase_price, class: 'form-control col-3 mr-4', step: 0.01 %>
+      <%= form.label :purchase_price, value: 'R$', class: 'form-label mr-3' %>
+      <%= form.text_field :purchase_price, placeholder:'Digite o preço de compra', class: 'form-control col-3 price-input mr-4', step: 0.01 %>
       <%= form.label :sale_price, class: 'form-label mr-3' %>
-      <%= form.number_field :sale_price, class: 'form-control col-3 mr-4', step: 0.01 %>
+      <%= form.text_field :sale_price, placeholder:'Digite o preço de venda', class: 'form-control col-3 mr-4 price-input', step: 0.01 %>
+
     </div>
     <div class="mb-3 row">
       <%= form.label :quantity, class: 'form-label mr-3' %>
-      <%= form.number_field :quantity, value: 0, class: 'form-control col-3', id:'product-quantity' %>
+      <%= form.number_field :quantity, class: 'form-control col-3', id:'product-quantity' %>
     </div>
 
     <div id="variations">

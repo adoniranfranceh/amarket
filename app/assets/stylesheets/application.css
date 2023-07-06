@@ -61,3 +61,8 @@ i {
   margin: auto;
   display: block;
 }
+
+.number {
+  font-size: 30px;
+  text-align: center;
+}

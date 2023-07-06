@@ -67,5 +67,4 @@ $(document).ready(function() {
       $(this).find('.img-modal').attr('src', '');
     });
   });
-
 });
