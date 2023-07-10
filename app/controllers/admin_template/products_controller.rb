@@ -12,7 +12,7 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
   def create
     @product = current_admin.products.build(product_params)
     if @product.save
-       redirect_to admin_template_products_path, notice: 'Categoria salvo com sucesso'
+       redirect_to admin_template_products_path, notice: 'Produto salvo com sucesso'
     else
       render :new
       flash[:error] = 'Existem campos inválidos'
@@ -23,7 +23,7 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
 
   def update
     if @product.update(product_params)
-      redirect_to admin_template_product_path(@product), notice: 'Categoria atualizado'
+      redirect_to admin_template_product_path(@product), notice: 'Produto atualizado'
     else
       render :edit
       flash[:error] = 'Existem campos inválidos'
@@ -34,7 +34,7 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
 
   def destroy
     if @product.destroy
-      redirect_to admin_template_products_path, notice: "Categoria #{@product.name} excluído"
+      redirect_to admin_template_products_path, notice: "Produto #{@product.name} excluído"
     end
   end
 

@@ -11,14 +11,16 @@ import "bootstrap"
 import "bootstrap-icons/font/bootstrap-icons.css"
 import $ from 'jquery';
 import 'jquery-mask-plugin';
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+import 'sweetalert2/src/sweetalert2.scss'
+window.Swal = Swal
 import "@nathanvda/cocoon"
 
 $(document).ready(function() {
   $('.price-input').mask("#.##0,00", {reverse: true});
   $('.phone').mask('(00) 0 0000-0000');
-  $('.cpf').mask('000-000.000-00');
+  $('.cpf-input').mask('000-000.000-00');
 });
-
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
