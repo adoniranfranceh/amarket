@@ -1,5 +1,7 @@
 class AdminTemplate::SalesController < AdminTemplateController
   before_action :set_customers_and_products, only: [:new]
+  skip_before_action :verify_authenticity_token, only: [:create]
+
   def index
     @sales = current_admin.sales
   end
@@ -13,16 +15,25 @@ class AdminTemplate::SalesController < AdminTemplateController
     products_ids = params[:sale][:product_id].split(',')
 
     products_ids.each do |product_id|
-      product = Product.find(product_id)
+      product = Product.find_by(id: product_id)
       @sale.products << product if product
     end
 
-    if @sale.save
-      redirect_to admin_template_sales_path, notice: 'Nova Venda!'
-    else
-      render :new
-      flash[:error] = 'Existem campos inválidos'
+    respond_to do |format|
+      if @sale.save
+        format.html { redirect_to admin_template_sales_path, notice: 'Nova venda feita com sucesso!' }
+        format.json { render json: @sale, status: :created }
+      else
+        puts @sale.errors.full_messages
+        format.html { render :new }
+        format.json { render json: { errors: @sale.errors.full_messages }, status: 422 }
+      end
     end
+  end
+
+
+  def show
+    @sale = Sale.find(params[:id])
   end
 
   private

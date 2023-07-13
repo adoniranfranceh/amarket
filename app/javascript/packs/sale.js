@@ -1,4 +1,4 @@
-$(function() {
+$(document).ready(function() {
   var products = JSON.parse($('#product-data').val());
 
   $('#product-search').on('input', function() {
@@ -29,9 +29,10 @@ $(function() {
 
           var addButton;
           if (product.quantity > 0) {
-            addButton = $('<td>').append($('<button>').addClass('btn btn-success').text('Add').attr('type', 'button').data('price', product.sale_price).data('image', product.image_url).data('quantity', product.quantity));
+            addButton = $('<td>').append($('<button>').addClass('btn btn-success add-btn').text('Add').attr('type', 'button').data('id', product.id).data('price', product.sale_price).data('image', product.image_url).data('quantity', product.quantity));
+
           } else {
-            addButton = $('<td>').text('Produto não disponível');
+            addButton = $('<td>').append($('<button>').addClass('btn btn-secondary').text('Produto não disponível').attr('type', 'button', 'disabled', 'disabled'));
           }
           productRow.append(productId ,productName, productPrice, productImage, addButton);
           productRow.data({
@@ -48,9 +49,31 @@ $(function() {
     });
   });
 
-  $('#search-results').on('click', 'button', function() {
+  $('#search-results').on('click', '.add-btn', function() {
+    var productId = $(this).data('id');
+    var existingRow = $('#product-table tbody').find('tr[data-id="' + productId + '"]');
+    if (existingRow.length > 0) {
+      var quantityInput = existingRow.find('.quantity');
+      var newQuantity = parseInt(quantityInput.val()) + 1;
+      var maxQuantity = parseInt(quantityInput.attr('max'));
+
+      if (newQuantity > maxQuantity) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Limite excedido',
+          text: 'A quantidade disponível em estoque é ' + maxQuantity
+        });
+
+        newQuantity = maxQuantity;
+      }
+
+      quantityInput.val(newQuantity);
+      var totalPrice = parseFloat(existingRow.find('td:nth-child(4)').text().replace('R$', '').trim()) * newQuantity;
+      existingRow.find('.row-total span').text('R$' + totalPrice.toFixed(2));
+      updateTotal();
+      return;
+    }
     var productName = $(this).closest('tr').find('td:nth-child(2)').text();
-    var productId = $(this).closest('tr').data('id');
     var productPrice = $(this).closest('tr').data('price');
     var productImageURL = $(this).data('image');
 
@@ -65,7 +88,7 @@ $(function() {
     card.append(cardQuantityInput);
     card.append($('<button>').text('Remover').addClass('remove-btn btn btn-danger'));
 
-    var row = $('<tr>');
+    var row = $('<tr>').attr('data-id', productId);
     row.append($('<td>').text(productId));
     row.append($('<td>').text(productName));
     row.append(productImageURL ? $('<td>').append($('<img class="image-t">').attr('src', productImageURL)) : $('<td>').append($('<img class="image-t">').attr('src', '/assets/no_image-d69820241ecbe31d0cb4eb23f503b82956340cea7fe0fc6d74ebdfe45bd326d3.png')));
@@ -85,15 +108,6 @@ $(function() {
     updateTotal();
   });
 
-  function appendProductImage(container, imageUrl) {
-    if (imageUrl) {
-      var imageTag = $('<img class="image-t">').attr('src', imageUrl);
-      container.append(imageTag);
-    } else {
-      var defaultImage = $('<img class="image-t">').attr('src', '/assets/no_image-d69820241ecbe31d0cb4eb23f503b82956340cea7fe0fc6d74ebdfe45bd326d3.png');
-      container.append(defaultImage);
-    }
-  }
 
   $('#product-table').on('click', '.remove-btn', function() {
     var productId = $(this).closest('tr').find('td:first-child').text();
@@ -177,6 +191,7 @@ $(function() {
     if (!productIds.includes(productId)) {
       productIds.push(productId);
       updateProductIds(productIds);
+      updateHiddenProductIds(productIds)
     }
   }
 
@@ -186,6 +201,7 @@ $(function() {
     if (index !== -1) {
       productIds.splice(index, 1);
       updateProductIds(productIds);
+      updateHiddenProductIds(productIds)
     }
   }
 
@@ -199,6 +215,10 @@ $(function() {
   }
 
   function updateProductIds(productIds) {
+    $('#product-id-list').val(productIds.join(','));
+  }
+
+  function updateHiddenProductIds(productIds) {
     $('#product-id-list').val(productIds.join(','));
   }
 });

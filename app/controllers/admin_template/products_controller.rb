@@ -52,7 +52,7 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
         sale_price: product.sale_price,
         quantity: product.quantity
       }
-      data[:image_url] = product.image.url if product.image.attached?
+      data[:image_url] = product.image_url
       data
     end
 

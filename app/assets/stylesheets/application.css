@@ -66,3 +66,11 @@ i {
   font-size: 30px;
   text-align: center;
 }
+
+.required-field-error {
+  border: solid red 1px;
+}
+
+.colored-toast.swal2-icon-error {
+  background-color: #f27474 !important;
+}

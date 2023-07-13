@@ -1,59 +1,49 @@
-<%= form_with(model: [ :admin_template, @sale ]) do |form| %>
+<%= simple_form_for [:admin_template, @sale], remote: false, authenticity_token: true, html: { class: 'YourFormClass' } do |form| %>
   <div class="<%= fieldset_disabled %>">
     <div class="mb-3">
-      <%= form.label :customer, class: 'form-label' %>
-      <%= form.collection_select(:customer_id, @customers, :id, :name, { include_blank: 'Selecione o cliente' }, { class: 'form-select' }) %>
-    </div>
-
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-      Adicionar Produto
-    </button>
-
-    <%= render 'modal_sale'%>
-    <%= form.hidden_field :product_id, id: 'product-id-list' %>
-    <%= render 'products_select' %>
-
-    <div class="mb-3">
-      <%= form.label :discount, class: 'form-label' %>
-      <%= form.number_field :discount, step: 0.01, id: 'discount-input', class: 'form-control' %>
+      <%= form.input :customer_id, as: :select, collection: @customers, label: 'Selecione o cliente', include_blank: true, input_html: { class: 'form-control select2 required-field', id: 'sale_customer_id' } %>
+      <div class="error-message"></div>
     </div>
 
     <div class="mb-3">
-      <%= form.label :total_price, class: 'form-label' %>
-      <%= form.number_field :total_price, step: 0.01,  id: 'total-price-input', class: 'form-control' %>
+      <div class="mb-3">
+        <%= render 'modal_sale' %>
+      </div>
+
+      <div class="mb-3">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+          Adicionar Produto
+        </button>
+        <div class="error-message"></div>
+        <%= form.hidden_field :product_id, id: 'product-id-list', class: 'required-field' %>
+        <%= render 'products_select' %>
+      </div>
+    <div class="mb-3">
+      <%= form.input :discount, input_html: { step: 0.01, id: 'discount-input', class: 'form-control' } %>
     </div>
 
     <div class="mb-3">
-      <%= form.label :payment_at, class: 'form-label' %>
+      <%= form.input :total_price, input_html: { step: 0.01, id: 'total-price-input', class: 'form-control' } %>
+    </div>
+
+    <div class="mb-3">
       <%= form.collection_select :payment_method, available_payment_methods, :itself, :itself, { include_blank: 'Selecione um método de pagamento' }, { class: 'form-control' } %>
     </div>
 
     <div class="mb-3">
-      <%= form.label :status, class: 'form-label' %>
       <%= form.collection_select :status, Sale::STATUS_OPTIONS.values, :to_s, ->(status) { status.to_s.humanize }, { include_blank: 'Selecione um status' }, class: 'form-control' %>
     </div>
 
     <div class="mb-3">
-      <%= form.label :quantity, class: 'form-label' %>
-      <%= form.number_field :quantity, id: 'quantity-duplicate', class: 'form-control', value: '1' %>
+      <%= form.input :quantity, input_html: { id: 'quantity-duplicate', class: 'form-control', value: '1' } %>
     </div>
 
     <div class="mb-3">
-      <%= form.label :comments, class: 'form-label' %>
-      <%= form.text_area :comments, class: 'form-control', rows: 3 %>
+      <%= form.text_area :comments, class: 'form-control required-field', rows: 3 %>
     </div>
 
     <div>
-      <% if action_name == 'show' %>
-        <%= link_to edit_admin_template_customer_path(@customer), class: 'btn btn-primary' do %>
-          <i class="bi bi-pencil-square">Editar</i>
-        <% end %>
-        <%= link_to admin_template_customer_path(@customer), method: :delete, class: 'btn btn-danger', data: { confirm: "Você quer excluir #{@customer.name}?" } do %>
-          <i class="bi bi-trash-fill">Excluir</i>
-        <% end %>
-      <% else %>
-        <%= form.submit 'Salvar', class: 'btn btn-primary' %>
-      <% end %>
+      <%= form.button :submit, 'Salvar', id: 'submit-button', class: 'btn btn-primary' %>
     </div>
   </div>
 <% end %>

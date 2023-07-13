@@ -12,4 +12,12 @@ class Product < ApplicationRecord
   def full_name
     self.brand.present? ? [self.name, self.brand].join(' - ') : self.name
   end
+
+  def image_url
+    if image.attached?
+      image.url
+    else
+      'no_image.png'
+    end
+  end
 end
