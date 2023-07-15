@@ -1,0 +1,81 @@
+<!-- Modal -->
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title h4" id="myExtraLargeModalLabel">Modal extra grande</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class=" div-center">
+          <div class="card card-success">
+            <div class="card-header">
+              <h3 class="card-title">Variação</h3>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div style="width: 1000px;">
+                  <table class="table table-bordered dataTable dtr-inline">
+                    <thead>
+                      <tr>
+                        <th class="col-1">Id</th>
+                        <th class="col-2">Nome</th>
+                        <th class="col-2">Image</th>
+                        <th class="col-1">Cor</th>
+                        <th class="col-4">Subgrupos</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% product.variations.each do |variation| %>
+                      <tr>
+                        <td><%= variation.id %></td>
+                        <td><%= variation.name %></td>
+                        <td  class="rounded float-end"><%= link_to(image(variation), '#', "data-toggle":"modal", "data-target":"#exampleModal")%></td>
+                        <td><%= variation.color %></td>
+                        <td>
+                          <%= link_to do %>
+                            
+                          <% end %>
+                          <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample<%= variation.id %>" role="button" aria-expanded="false" aria-controls="collapseExample<%= variation.id %>" data-toggle="dropdown">
+                            <i class="bi bi-collection"></i>
+                          </a>
+                          <div class="card card-body">
+                            <div class="collapse " id="collapseExample<%= variation.id %>">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th>Tamanho</th>
+                                    <th>Número</th>
+                                    <th>Quantidade</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                <% variation.subgroups.each do |subgroup| %>  
+                                  <tr>
+                                    <td><%= subgroup.size %></td>
+                                    <td><%= subgroup.number %></td>
+                                    <td><%= subgroup.quantity %></td>
+                                  </tr>
+                                <% end %>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </td>
+                       </tr>
+                     <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>

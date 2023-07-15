@@ -53,6 +53,8 @@ i {
 
 .div-center {
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
 }
 
 .img-modal {
@@ -71,6 +73,21 @@ i {
   border: solid red 1px;
 }
 
-.colored-toast.swal2-icon-error {
-  background-color: #f27474 !important;
+.error-message {
+  color: red;
+}
+
+.input-number {
+  font-size: 18px;
+  font-weight: bold;
+  height: 70px;
+  width: 70px;
+}
+
+.input-group-text{
+  height: 70px;
+}
+
+.input-group {
+  width: 180px;
 }

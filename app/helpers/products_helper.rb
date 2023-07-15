@@ -7,10 +7,6 @@ module ProductsHelper
     end
   end
 
-  def image(product)
-    image_tag url_for(product.image_url), class: 'image-t', value: product.id
-  end
-
   def is_present?(model, text , form, attribute,class_name)
     if action_name == 'show'
       model.present? ? text.titleize : "Sem #{text}"

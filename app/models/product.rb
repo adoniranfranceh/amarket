@@ -17,7 +17,7 @@ class Product < ApplicationRecord
     if image.attached?
       image.url
     else
-      'no_image.png'
+      '/assets/no_image.png'
     end
   end
 end

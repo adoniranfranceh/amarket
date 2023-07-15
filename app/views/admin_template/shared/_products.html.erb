@@ -30,6 +30,12 @@
           <%= link_to edit_admin_template_product_path(product), data: { turbolinks: false }, class: "btn btn-primary" do %>
             <i class="bi bi-pencil-square"></i>
           <% end %>
+          <% if product.variations.present? %>
+            <button class="btn btn-warning" data-toggle="modal" data-target=".bd-example-modal-xl">
+              <i class="bi bi-diagram-3-fill"></i>
+            </button>
+            <%= render partial: 'admin_template/shared/modal_product', locals: {product: product} %>
+          <% end %>
         </td>
       </tr>
       <% end %>

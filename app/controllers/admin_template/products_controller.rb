@@ -30,7 +30,7 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
     end
   end
 
-  def show;end
+  def show; end
 
   def destroy
     if @product.destroy
@@ -43,19 +43,17 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
 
     products = Product.where("LOWER(name) LIKE ? OR LOWER(brand) LIKE ?", "%#{term.downcase}%", "%#{term.downcase}%")
 
-
     products_data = products.map do |product|
       data = {
         id: product.id,
         name: product.name,
-        brand: " - #{product.brand}",
+        brand: "#{product.brand}",
         sale_price: product.sale_price,
         quantity: product.quantity
       }
       data[:image_url] = product.image_url
       data
     end
-
     render json: products_data
   end
 
@@ -66,7 +64,7 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
   end
 
   def set_subgroups
-    Variation.all.each do |variation|
+    @product.variations.each do |variation|
       @subgroups = variation.subgroups
     end
   end
@@ -92,7 +90,7 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
                                       variations_attributes: [
                                         :id,
                                         :name,
-                                        :type,
+                                        :variation_type,
                                         :color,
                                         :photo,
                                         :_destroy,

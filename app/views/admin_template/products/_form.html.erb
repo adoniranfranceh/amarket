@@ -1,9 +1,4 @@
 <%= form_with(model: [ :admin_template, @product ]) do |form| %>
-  <% if @product.errors.any? %>
-    <% @product.errors.full_messages.each do |message| %>
-      <h1><%= message %></h1>
-    <% end %>
-  <% end %>
   <div class="<%= fieldset_disabled %>">
     <div class="mb-3 row">
       <%= form.text_field :name, placeholder: :name, class: 'form-control col-10'%>
@@ -29,13 +24,11 @@
       <%= form.text_field :purchase_price, placeholder:'Digite o preço de compra', class: 'form-control col-3 price-input mr-4', step: 0.01, value: number_with_precision(@product.purchase_price, precision: 2, delimiter: '.', separator: ',') %>
       <%= form.label :sale_price, class: 'form-label mr-3' %>
       <%= form.text_field :sale_price, placeholder:'Digite o preço de venda', class: 'form-control col-3 mr-4 price-input', step: 0.01, value: number_with_precision(@product.sale_price, precision: 2, delimiter: '.', separator: ',') %>
-
     </div>
     <div class="mb-3 row">
       <%= form.label :quantity, class: 'form-label mr-3' %>
       <%= form.number_field :quantity, class: 'form-control col-3', id:'product-quantity' %>
     </div>
-
     <div id="variations">
       <h3><%= is_present?(@product.variations, 'Variação' ,form, :variations, 'btn btn-success mb-3 add-variation') %></h3>
       <%= form.fields_for :variations do |variation| %>

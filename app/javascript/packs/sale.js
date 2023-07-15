@@ -16,15 +16,12 @@ $(document).ready(function() {
         $.each(data, function(index, product) {
           var productRow = $('<tr>');
           var productId = $('<td>').text(product.id);
-          var productName = $('<td>').text(product.name + (product.brand ? '' + product.brand : ''));
+          var productName = $('<td>').text(product.name + (product.brand ? ' - ' + product.brand : ''));
           var productPrice = $('<td>').text('R$' + product.sale_price);
           var productImage = $('<td>');
           if (product.image_url) {
             var imageTag = $('<img class="image-t">').attr('src', product.image_url);
             productImage.append(imageTag);
-          } else {
-            var defaultImage = $('<img class="image-t">').attr('src', '/assets/no_image-d69820241ecbe31d0cb4eb23f503b82956340cea7fe0fc6d74ebdfe45bd326d3.png');
-            productImage.append(defaultImage);
           }
 
           var addButton;
@@ -32,7 +29,7 @@ $(document).ready(function() {
             addButton = $('<td>').append($('<button>').addClass('btn btn-success add-btn').text('Add').attr('type', 'button').data('id', product.id).data('price', product.sale_price).data('image', product.image_url).data('quantity', product.quantity));
 
           } else {
-            addButton = $('<td>').append($('<button>').addClass('btn btn-secondary').text('Produto não disponível').attr('type', 'button', 'disabled', 'disabled'));
+            addButton = $('<td>').append($('<button>').addClass('btn btn-secondary').text('Produto não disponível').attr('disabled', 'disabled'));
           }
           productRow.append(productId ,productName, productPrice, productImage, addButton);
           productRow.data({
@@ -81,7 +78,7 @@ $(document).ready(function() {
       type: 'number',
       min: 1,
       max: $(this).data('quantity')
-    }).addClass('quantity').val(1);
+    }).addClass('quantity form-control input-number').val(1);
     var card = $('<div>').addClass('product-card');
     card.append($('<h4>').text(productName));
     card.append($('<p>').text('Preço: R$' + productPrice));
@@ -91,7 +88,7 @@ $(document).ready(function() {
     var row = $('<tr>').attr('data-id', productId);
     row.append($('<td>').text(productId));
     row.append($('<td>').text(productName));
-    row.append(productImageURL ? $('<td>').append($('<img class="image-t">').attr('src', productImageURL)) : $('<td>').append($('<img class="image-t">').attr('src', '/assets/no_image-d69820241ecbe31d0cb4eb23f503b82956340cea7fe0fc6d74ebdfe45bd326d3.png')));
+    row.append($('<td>').append($('<img class="image-t">').attr('src', productImageURL)));
     row.append($('<td>').text('R$' + productPrice));
     row.append($('<td>').append(card));
 
@@ -127,32 +124,6 @@ $(document).ready(function() {
 
   var originalQuantities = {};
 
-  $('#quantity-duplicate').on('input', function() {
-    var duplicateQuantity = parseInt($(this).val());
-    if (isNaN(duplicateQuantity) || duplicateQuantity <= 0) {
-      return;
-    }
-
-    var $productRows = $('#product-table tbody tr');
-
-    $productRows.each(function() {
-      var $quantityInput = $(this).find('.quantity');
-      var productName = $(this).find('td:nth-child(2)').text();
-      var originalQuantity = originalQuantities[productName];
-      if (originalQuantity === undefined) {
-        originalQuantity = parseFloat($quantityInput.val());
-        originalQuantities[productName] = originalQuantity;
-      }
-      var newQuantity = originalQuantity * duplicateQuantity;
-      var $rowTotalSpan = $(this).find('.row-total span');
-
-      $quantityInput.val(newQuantity);
-      $rowTotalSpan.text('R$' + (newQuantity * parseFloat($(this).find('td:nth-child(3)').text().replace('R$', '').trim())).toFixed(2));
-    });
-
-    updateTotal();
-  });
-
   $('#discount-input').on('input', function() {
     updateTotal();
   });
@@ -173,12 +144,23 @@ $(document).ready(function() {
       if (!isNaN(subtotal)) {
         total += subtotal;
       }
+
+     var totalQuantity = 0; // Variável para armazenar a quantidade total de itens
+
+    $('#product-table tbody tr').each(function() {
+      var quantity = parseFloat($(this).find('.quantity').val());
+      if (!isNaN(quantity)) {
+        totalQuantity += quantity; // Adiciona a quantidade do item à quantidade total
+      }
     });
 
-    var discount = parseFloat($('#discount-input').val());
-    if (!isNaN(discount)) {
-      var discountAmount = total * (discount / 100);
-      total -= discountAmount;
+    $('#total-quantity-input').val(totalQuantity);
+      });
+
+      var discount = parseFloat($('#discount-input').val());
+      if (!isNaN(discount)) {
+        var discountAmount = total * (discount / 100);
+        total -= discountAmount;
     }
 
     $('#total-price-input').val(total.toFixed(2));
