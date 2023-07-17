@@ -44,16 +44,37 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
     products = Product.where("LOWER(name) LIKE ? OR LOWER(brand) LIKE ?", "%#{term.downcase}%", "%#{term.downcase}%")
 
     products_data = products.map do |product|
+      variations = product.variations.map do |variation|
+        subgroups = variation.subgroups.map do |subgroup|
+          {
+            size: subgroup.size,
+            number: subgroup.number,
+            quantity: subgroup.quantity
+          }
+        end
+
+        {
+          id: variation.id,
+          name: variation.name,
+          color: variation.color,
+          photo: variation.image_url,
+          subgroups: subgroups
+        }
+      end
+
       data = {
         id: product.id,
         name: product.name,
-        brand: "#{product.brand}",
+        brand: product.brand,
         sale_price: product.sale_price,
-        quantity: product.quantity
+        quantity: product.quantity,
+        variations: variations
       }
+
       data[:image_url] = product.image_url
       data
     end
+
     render json: products_data
   end
 

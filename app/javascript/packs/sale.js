@@ -4,46 +4,116 @@ $(document).ready(function() {
   $('#product-search').on('input', function() {
     var searchTerm = $(this).val();
 
-    $.ajax({
-      url: '/search',
-      method: 'GET',
-      data: {
-        term: searchTerm
-      },
-      success: function(data) {
-        var productList = $('#search-results');
-        productList.empty();
-        $.each(data, function(index, product) {
-          var productRow = $('<tr>');
-          var productId = $('<td>').text(product.id);
-          var productName = $('<td>').text(product.name + (product.brand ? ' - ' + product.brand : ''));
-          var productPrice = $('<td>').text('R$' + product.sale_price);
-          var productImage = $('<td>');
-          if (product.image_url) {
-            var imageTag = $('<img class="image-t">').attr('src', product.image_url);
-            productImage.append(imageTag);
-          }
+      $.ajax({
+        url: '/search',
+        method: 'GET',
+        data: {
+          term: searchTerm
+        },
+        success: function(data) {
+          var productList = $('#search-results');
+          productList.empty();
+          $.each(data, function(index, product) {
+            var productRow = $('<tr>');
+            var productId = $('<td>').text(product.id);
+            var productName = $('<td>').text(product.name + (product.brand ? ' - ' + product.brand : ''));
+            var productPrice = $('<td>').text('R$' + product.sale_price);
+            var productImage = $('<td>');
+            if (product.image_url) {
+              var imageTag = $('<img class="image-t">').attr('src', product.image_url);
+              productImage.append(imageTag);
+            }
 
-          var addButton;
-          if (product.quantity > 0) {
-            addButton = $('<td>').append($('<button>').addClass('btn btn-success add-btn').text('Add').attr('type', 'button').data('id', product.id).data('price', product.sale_price).data('image', product.image_url).data('quantity', product.quantity));
+            var addButton;
+            if (product.quantity > 0) {
+              var addBtn = $('<button>').addClass('btn btn-success add-btn').attr('type', 'button').data('id', product.id).data('price', product.sale_price).data('image', product.image_url).data('quantity', product.quantity).append('<i class="bi bi-bag-plus-fill"></i>');
+              if (product.variations.length > 0) {
+                var modalBtn = $('<button>').addClass('btn btn-warning modal-btn').attr('type', 'button').attr('data-toggle', 'modal').attr('data-target', '.bd-example-modal-xl').append('<i class="bi bi-diagram-3-fill"></i>');
+                addButton = $('<td>').append(modalBtn, addBtn);
+                addButton.data('variations', product.variations);
 
-          } else {
-            addButton = $('<td>').append($('<button>').addClass('btn btn-secondary').text('Produto não disponível').attr('disabled', 'disabled'));
-          }
-          productRow.append(productId ,productName, productPrice, productImage, addButton);
-          productRow.data({
-            id: product.id,
-            price: product.sale_price
+                modalBtn.on('click', function() {
+                  console.log("Botão modal clicado!");
+                  var variations = $(this).closest('td').data('variations');
+                  console.log(variations);
+                  var tbody = $('.bd-example-modal-xl').find('table tbody');
+                  tbody.empty();
+
+                  $.each(variations, function(index, variation) {
+                    var variationRow = $('<tr>');
+                    variationRow.append($('<td>').text(variation.id));
+                    variationRow.append($('<td>').text(variation.name));
+                    console.log(variation.subgroups);
+
+                    var imageCell = $('<td>').addClass('rounded float-end');
+                    if (variation.photo) {
+                      var imageLink = $('<a>').attr({
+                        'href': '#',
+                        'data-toggle': 'modal',
+                        'data-target': '#exampleModal'
+                      });
+                      var imageTag = $('<img>').attr('src', variation.photo).addClass('image-t');
+                      imageLink.append(imageTag);
+                      imageCell.append(imageLink);
+                    }
+                    variationRow.append(imageCell);
+
+                    variationRow.append($('<td>').text(variation.color));
+
+                    var subgroupsCell = $('<td>');
+                    var subgroupsContainer = $('<div>').addClass('card card-body collapse').attr('id', 'collapseExample' + variation.id);
+                    var subgroupsTable = $('<table>').addClass('table');
+                    var subgroupsTbody = $('<tbody>');
+
+                    $.each(variation.subgroups, function(index, subgroup) {
+                      var subgroupRow = $('<tr>');
+                      subgroupRow.append($('<td>').text(subgroup.size));
+                      subgroupRow.append($('<td>').text(subgroup.number));
+                      subgroupRow.append($('<td>').text(subgroup.quantity));
+                      subgroupsTbody.append(subgroupRow);
+                    });
+
+                    subgroupsTable.append(subgroupsTbody);
+                    subgroupsContainer.append(subgroupsTable);
+
+                    var collapseLink = $('<a>').addClass('btn btn-primary').attr({
+                      'data-toggle': 'collapse',
+                      'href': '#collapseExample' + variation.id,
+                      'role': 'button',
+                      'aria-expanded': 'false',
+                      'aria-controls': 'collapseExample' + variation.id
+                    }).append($('<i>').addClass('bi bi-collection'));
+
+                    subgroupsCell.append(collapseLink, subgroupsContainer);
+                    variationRow.append(subgroupsCell);
+
+                    var thead = $('<thead>').append($('<tr>').append($('<th>').text('Tamanho'), $('<th>').text('Número'), $('<th>').text('Quantidade')));
+                    subgroupsTable.prepend(thead);
+
+                    tbody.append(variationRow);
+                  });
+                });
+              }
+              else {
+                addButton = $('<td>').append(addBtn);
+              }
+            }
+            else {
+              addButton = $('<td>').append($('<button>').addClass('btn btn-secondary').text('Produto não disponível').attr('disabled', 'disabled'));
+            }
+            productRow.append(productId, productName, productPrice, productImage, addButton);
+            productRow.data({
+              id: product.id,
+              price: product.sale_price
+            });
+
+            productList.append(productRow);
           });
 
-          productList.append(productRow);
-        });
-
-      },
-      error: function() {
-      }
-    });
+        },
+        error: function() {
+        }
+      });
   });
 
   $('#search-results').on('click', '.add-btn', function() {
@@ -104,7 +174,6 @@ $(document).ready(function() {
 
     updateTotal();
   });
-
 
   $('#product-table').on('click', '.remove-btn', function() {
     var productId = $(this).closest('tr').find('td:first-child').text();

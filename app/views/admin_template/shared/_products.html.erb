@@ -31,7 +31,7 @@
             <i class="bi bi-pencil-square"></i>
           <% end %>
           <% if product.variations.present? %>
-            <button class="btn btn-warning" data-toggle="modal" data-target=".bd-example-modal-xl">
+            <button class="btn btn-warning" data-toggle="modal" data-target=".bd-example-modal-xl<%= product.id %>">
               <i class="bi bi-diagram-3-fill"></i>
             </button>
             <%= render partial: 'admin_template/shared/modal_product', locals: {product: product} %>
