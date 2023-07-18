@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_13_214824) do
+ActiveRecord::Schema.define(version: 2023_07_17_173336) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -133,6 +133,8 @@ ActiveRecord::Schema.define(version: 2023_07_13_214824) do
     t.integer "product_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "quantity_variation"
+    t.integer "variation_quantity"
     t.index ["product_id"], name: "index_variations_on_product_id"
   end
 

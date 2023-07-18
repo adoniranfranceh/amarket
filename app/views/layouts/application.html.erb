@@ -8,13 +8,12 @@
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload', as: 'style' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'product', 'data-turbolinks-track': 'reload'%>
     <% if params[:controller] == 'admin_template/sales' && action_name == 'new'%>
       <%= javascript_pack_tag 'sale', 'data-turbolinks-track': 'reload'%>
     <% end %>
     <%= javascript_pack_tag 'admin', 'data-turbolinks-track': 'reload'%>
-    <% if params[:controller] == 'admin_template/products' %>
-      <%= javascript_pack_tag 'product', 'data-turbolinks-track': 'reload' %>
-    <% end %>
+   
 
 
   </head>

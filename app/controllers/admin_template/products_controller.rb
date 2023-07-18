@@ -114,6 +114,7 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
                                         :variation_type,
                                         :color,
                                         :photo,
+                                        :variation_quantity,
                                         :_destroy,
                                         subgroups_attributes: [
                                           :id,
