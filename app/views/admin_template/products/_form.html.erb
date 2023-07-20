@@ -3,7 +3,6 @@
     <div class="mb-3 row">
       <%= form.text_field :name, placeholder: :name, class: 'form-control col-10'%>
     </div>
-
     <div class="mb-3 row">
       <%= form.text_field :brand, placeholder: :brand, class: 'form-control col-10' %>
     </div>
@@ -48,7 +47,7 @@
       <%= link_to edit_admin_template_product_path(@product), data: { turbolinks: false }, class:'btn btn-primary' do %>
         <i class="bi bi-pencil-square">Editar</i>
       <% end %>
-      <%= link_to admin_template_product_path(@product), method: :delete, class:'btn btn-danger delete-confirm-link', data:{confirm: "Você quer excluir #{@product.name}?"} do %>
+      <%= link_to admin_template_product_path(@product), method: :delete, class:'btn btn-danger delete-confirm-link' do %>
         <i class="bi bi-trash-fill">Excluir</i>
       <% end %>
     <% else %>

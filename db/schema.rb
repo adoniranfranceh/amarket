@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_17_173336) do
+ActiveRecord::Schema.define(version: 2023_07_20_171752) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -116,6 +116,18 @@ ActiveRecord::Schema.define(version: 2023_07_17_173336) do
     t.index ["product_id"], name: "index_sales_on_product_id"
   end
 
+  create_table "secondaryproducts", force: :cascade do |t|
+    t.string "name"
+    t.integer "quantity"
+    t.integer "product_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "admin_id"
+    t.integer "sale_price"
+    t.integer "purchase_price"
+    t.index ["product_id"], name: "index_secondaryproducts_on_product_id"
+  end
+
   create_table "subgroups", force: :cascade do |t|
     t.string "size"
     t.float "number"
@@ -133,7 +145,6 @@ ActiveRecord::Schema.define(version: 2023_07_17_173336) do
     t.integer "product_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "quantity_variation"
     t.integer "variation_quantity"
     t.index ["product_id"], name: "index_variations_on_product_id"
   end
@@ -147,6 +158,8 @@ ActiveRecord::Schema.define(version: 2023_07_17_173336) do
   add_foreign_key "sales", "admins"
   add_foreign_key "sales", "customers"
   add_foreign_key "sales", "products"
+  add_foreign_key "secondaryproducts", "admins"
+  add_foreign_key "secondaryproducts", "products"
   add_foreign_key "subgroups", "variations"
   add_foreign_key "variations", "products"
 end

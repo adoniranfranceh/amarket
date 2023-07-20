@@ -4,11 +4,10 @@ Rails.application.routes.draw do
   namespace :admin_template do
     resources :admins
     resources :customers
-    namespace :inventary do
-      resources :products, :only => [:edit]
-    end
+    resources :inventary
     resources :categories
     resources :products
+    resources :secondary_products, only: [:index]
     resources :inventary
     resources :sales
   end

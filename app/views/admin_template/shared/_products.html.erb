@@ -1,5 +1,8 @@
 <div class="float-end"><%= link_to 'Adicionar novo', new_admin_template_product_path, class: 'btn btn-success' %></div>
 <div>
+<div class="float-end"><%= link_to 'Variações dos produtos', admin_template_secondary_products_path, class: 'btn btn-primary' %>
+</div>
+<div>
   <table class="table table-bordered dataTable dtr-inline">
     <thead>
       <tr>
@@ -43,21 +46,4 @@
   </table>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Imagem</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <img class='img-modal' src="">
-      </div>
-      <div class="modal-footer">
-      </div>
-    </div>
-  </div>
-</div>
+<%= render partial: 'admin_template/shared/image_modal' %>

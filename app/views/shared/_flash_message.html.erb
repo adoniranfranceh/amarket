@@ -2,16 +2,20 @@
   <% if flash[:success].present? %>
     <% @icon = 'success' %>
     <% @title = 'Tudo certo!' %>
-    <% @message = flash[:sucess] %>
+    <% @message = flash[:success] %> <!-- Corrigido "sucess" para "success" -->
 
   <% elsif flash[:error].present? %>
     <% @icon = 'error' %>
     <% @title = 'Erro' %>
     <% @message = flash[:error] %>
-  <% else %>
-    <% @icon = 'success' %>
+  <% elsif flash[:alert] %>
+    <% @icon = 'warning' %>
     <% @title = 'Alerta!' %>
     <% @message = flash[:notice] %>
+  <% elsif flash[:notice].present?  %>
+    <% @icon = 'success' %>
+    <% @title = 'Tudo certo!' %>
+    <% @message = flash[:success] %>
   <% end %>
 
   <%= javascript_tag do %>
@@ -21,5 +25,28 @@
       icon: '<%= "#{@icon}" %>',
       confirmButtonText: 'Ok!'
     })
+  <% end %>
+<% end %>
+
+<% if @message.present? %>
+  <%= javascript_tag do %>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Exibir a caixa de diálogo personalizada com o SweetAlert
+      Swal.fire({
+        title: "Confirmação",
+        text: "<%= @message %>",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sim",
+        cancelButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Se o usuário confirmar, prosseguir com a ação de exclusão
+          window.location.href = "<%= admin_template_product_path(@product) %>";
+        }
+      });
+    });
   <% end %>
 <% end %>

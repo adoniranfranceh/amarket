@@ -16,8 +16,8 @@
           <%= f.file_field :photo, class: 'custom-file-input', id: 'exampleInputFile' %>
           <%= f.label :photo, class: 'custom-file-label', id: 'exampleInputFile' %>
         </div>
-        <%= link_to_remove_association('Remover', f, class: 'btn btn-danger remove remove-variation') %>
-      <% end %>
+          <%= link_to_remove_association('Remover', f, class: 'btn btn-danger remove remove-variation') %>
+        <% end %>
       <div id="subgroups">
         <h3><%= is_present?(@subgroups, 'Subgrupo', f, :subgroups,'btn btn-primary mb-3 add-subgroup') %></h3>
         <%= f.fields_for :subgroups do |subgroup| %>
