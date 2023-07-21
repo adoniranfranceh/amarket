@@ -22,12 +22,4 @@ class Sale < ApplicationRecord
     self.completed_at = Time.zone.now if status == 'Concluído' && status_changed?
   end
 
-  def product_from_inventary_to_sale
-    self.products.each do |product|
-      product_model = Product.find(self.product_id)
-      total = product_model.quantity - product.quantity
-      product_model.quantity = total
-      product_model.save
-    end
-  end
 end

@@ -127,42 +127,39 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
   end
 
   def create_secondary_records(product)
-    Secondaryproduct.destroy_all
-    if product.variations.present?
+    Secondaryproduct.transaction do
+      Secondaryproduct.where(product_id: product.id).destroy_all
       product.variations.each do |variation|
-        secondary_name = "#{product.full_name} #{variation.name} - #{variation.variation_type} - #{variation.color}"
-        secondary = Secondaryproduct.find_or_initialize_by(
-                                            admin_id: product.admin_id,
-                                            product_id: product.id,
-                                            name: "#{secondary_name}"
-                                          )
-
         if variation.subgroups.present?
           variation.subgroups.each do |subgroup|
             subgroup_secondary_name = "#{product.full_name} #{variation.name} - #{variation.variation_type} - #{variation.color} - #{subgroup.size}"
-            subgroup_secondary = Secondaryproduct.find_or_initialize_by(
-                                                             admin_id: product.admin_id,
-                                                             product_id: product.id,
-                                                             name: "#{subgroup_secondary_name}"
-                                                           )
-            subgroup_secondary.update(
-                                      quantity: subgroup.quantity,
-                                      image: variation.photo.blob,
-                                      sale_price: product.sale_price,
-                                      purchase_price: product.purchase_price
-                                      )
-            subgroup_secondary.save
-            next
+            secondary_attributes(product, subgroup_secondary_name, subgroup.quantity, variation.photo.blob)
           end
         else
-          secondary.update(
-                           quantity: variation.variation_quantity,
-                           image: variation.photo.blob,
-                           sale_price: product.sale_price,
-                           purchase_price: product.purchase_price
-                           )
+          secondary_name = "#{product.full_name} #{variation.name} - #{variation.variation_type} - #{variation.color}"
+          secondary_attributes(product, secondary_name, variation.variation_quantity, variation.photo.blob)
         end
       end
+
+      # Create secondaryproduct for the main product if no variations are present
+      if product.variations.blank?
+        secondary_product = "#{product.full_name}"
+        secondary_attributes(product, secondary_product, product.quantity, product.image.blob)
+      end
     end
+  end
+
+  def secondary_attributes(product, name, quantity, image)
+    secondary = Secondaryproduct.find_or_initialize_by(
+      admin_id: product.admin_id,
+      product_id: product.id,
+      name: name
+    )
+    secondary.update(
+      quantity: quantity,
+      image: image,
+      sale_price: product.sale_price,
+      purchase_price: product.purchase_price
+    )
   end
 end
