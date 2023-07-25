@@ -11,16 +11,18 @@ class AdminTemplate::SalesController < AdminTemplateController
   end
 
   def create
+    logger.info "Received params: #{params.inspect} <<<<<<<<<<<<<<<<<<<<,"
     @sale = current_admin.sales.build(sale_params)
-    products_ids = params[:sale][:product_id].split(',')
+    secondary_ids = params[:sale][:secondaryproduct_ids].split(',')
 
-    products_ids.each do |product_id|
-      product = Product.find_by(id: product_id)
-      @sale.products << product if product
+    secondary_ids.each do |secondary_id|
+      secondary = Secondaryproduct.find_by(id: secondary_id)
+      @sale.secondaryproducts << secondary if secondary
     end
 
     respond_to do |format|
       if @sale.save
+        update_product_quantities(@sale)
         format.html { redirect_to admin_template_sales_path, notice: 'Nova venda feita com sucesso!' }
         format.json { render json: @sale, status: :created }
       else
@@ -44,7 +46,7 @@ class AdminTemplate::SalesController < AdminTemplateController
 
   def sale_params
     params.require(:sale).permit(:customer_id,
-                                 :product_id,
+                                 :secondaryproduct_ids,
                                  :total_price,
                                  :payment_method,
                                  :status,
@@ -53,5 +55,13 @@ class AdminTemplate::SalesController < AdminTemplateController
                                  :quantity,
                                  :comments
                                 )
+  end
+
+  def update_product_quantities(sale)
+    sale.secondaryproducts.each do |product|
+      quantity_sold = params["quantity_for_product#{product.id}"].to_i
+      total = product.quantity - quantity_sold
+      product.update(quantity: total)
+    end
   end
 end

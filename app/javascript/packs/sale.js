@@ -1,5 +1,6 @@
 $(document).ready(function() {
   var products = JSON.parse($('#product-data').val());
+  var quantities = [];
 
   $('#product-search').on('input', function() {
     var searchTerm = $(this).val();
@@ -78,7 +79,7 @@ $(document).ready(function() {
       type: 'number',
       min: 1,
       max: $(this).data('quantity')
-    }).addClass('quantity form-control input-number').val(1);
+    }).addClass('quantity form-control input-number').val(1).attr('name', 'quantity_for_product' + productId);
     var card = $('<div>').addClass('product-card');
     card.append($('<h4>').text(productName));
     card.append($('<p>').text('Preço: R$' + productPrice));
@@ -94,8 +95,12 @@ $(document).ready(function() {
 
     $('#product-table tbody').append(row);
     addProductId(productId);
+    var quantityInput = cardQuantityInput;
+    var quantity = parseInt(quantityInput.val());
+    quantities[productId] = quantity;
 
     cardQuantityInput.on('input', function() {
+      quantities[productId] = parseInt($(this).val());
       var quantity = $(this).val();
       var totalPrice = parseFloat(productPrice) * parseInt(quantity);
       card.find('p').text('Preço: R$' + totalPrice.toFixed(2));
@@ -111,6 +116,7 @@ $(document).ready(function() {
     removeProductId(productId);
 
     $(this).closest('tr').remove();
+    delete quantities[productId];
     updateTotal();
   });
 

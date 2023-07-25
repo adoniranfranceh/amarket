@@ -45,22 +45,7 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
   def search
     term = params[:term]
 
-    products = Product.where("LOWER(name) LIKE ? OR LOWER(brand) LIKE ?", "%#{term.downcase}%", "%#{term.downcase}%")
     secondaryproducts = Secondaryproduct.where("LOWER(name) LIKE ?", "%#{term.downcase}%")
-
-    search_results = products.or(secondaryproducts)
-
-    products_data = products.map do |product|
-      data = {
-        id: product.id,
-        name: product.name,
-        brand: product.brand.present? ? " - #{product.brand}" : "",
-        sale_price: product.sale_price,
-        quantity: product.quantity
-      }
-      data[:image_url] = product.image_url
-      data
-    end
 
     secondaryproducts_data = secondaryproducts.map do |secondaryproduct|
       data = {
@@ -74,7 +59,7 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
       data
     end
 
-    all_results = products_data + secondaryproducts_data
+    all_results = secondaryproducts_data
 
     render json: all_results
   end
@@ -94,7 +79,12 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
       @product = Product.find(params[:id])
       @category = @product.category
     end
-    @products = current_admin.products
+    @products = current_admin.products.includes(:variations,
+                                                :image_attachment,
+                                                :secondaryproducts,
+                                                variations: [:subgroups]
+                                                ).order(:name)
+
   end
 
   def product_params
@@ -133,23 +123,36 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
         if variation.subgroups.present?
           variation.subgroups.each do |subgroup|
             subgroup_secondary_name = "#{product.full_name} #{variation.name} - #{variation.variation_type} - #{variation.color} - #{subgroup.size}"
-            secondary_attributes(product, subgroup_secondary_name, subgroup.quantity, variation.photo.blob)
+            secondary_attributes(
+                                 product,
+                                 subgroup_secondary_name,
+                                 subgroup.quantity,
+                                 variation.id,
+                                 subgroup.id
+                                 )
           end
         else
           secondary_name = "#{product.full_name} #{variation.name} - #{variation.variation_type} - #{variation.color}"
-          secondary_attributes(product, secondary_name, variation.variation_quantity, variation.photo.blob)
+          secondary_attributes(
+                               product, secondary_name,
+                               variation.variation_quantity,
+                                variation.id
+                                )
         end
       end
 
-      # Create secondaryproduct for the main product if no variations are present
       if product.variations.blank?
         secondary_product = "#{product.full_name}"
-        secondary_attributes(product, secondary_product, product.quantity, product.image.blob)
+        secondary_attributes(
+                             product,
+                             secondary_product,
+                             product.quantity
+                             )
       end
     end
   end
 
-  def secondary_attributes(product, name, quantity, image)
+  def secondary_attributes(product, name, quantity, variation = nil, subgroup = nil)
     secondary = Secondaryproduct.find_or_initialize_by(
       admin_id: product.admin_id,
       product_id: product.id,
@@ -157,9 +160,10 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
     )
     secondary.update(
       quantity: quantity,
-      image: image,
       sale_price: product.sale_price,
-      purchase_price: product.purchase_price
+      purchase_price: product.purchase_price,
+      variation_id: variation,
+      subgroup_id: subgroup
     )
   end
 end

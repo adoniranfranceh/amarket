@@ -4,7 +4,7 @@
       <%= form.input :customer_id, as: :select, collection: @customers, label: 'Selecione o cliente', include_blank: true, input_html: { class: 'form-control select2 required-field', id: 'sale_customer_id' } %>
       <div class="error-message"></div>
     </div>
-
+    <%= params[:quantity_for_product] %>
     <div class="mb-3">
       <div class="mb-3">
         <%= render 'modal_sale' %>
@@ -15,7 +15,7 @@
           Adicionar Produto
         </button>
         <div class="error-message"></div>
-        <%= form.hidden_field :product_id, id: 'product-id-list', class: 'required-field' %>
+        <%= form.hidden_field :secondaryproduct_ids, id: 'product-id-list', class: 'required-field' %>
         <%= render partial: 'products_select' %>
       </div>
 
@@ -27,11 +27,13 @@
 
       <div class="input-group mr-5">
           <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
-        <%= form.number_field :total_price, class: 'form-control input-number', step: 0.01, id: 'total-price-input', value: 0.0, disabled: true %>
+        <%= form.number_field :total_price, class: 'form-control input-number', step: 0.01, id: 'total-price-input'%>
+        <div class="error-message"></div>
       </div>
        <div class="input-group mr-5">
           <span class="input-group-text"><i class="bi bi-bag-fill"></i></span>
-        <%= form.number_field :quantity, class: 'form-control input-number', step: 0.01, id: 'total-quantity-input', value: 0, disabled: true %>
+          <%= form.number_field :quantity, class: 'form-control input-number', step: 0.01, id: 'total-quantity-input'%>
+          <div class="error-message"></div>
       </div>
     </div>
     <div class="mb-3">
@@ -41,7 +43,7 @@
       <%= form.collection_select :status, Sale::STATUS_OPTIONS.values, :to_s, ->(status) { status.to_s.humanize }, { include_blank: 'Selecione um status' }, class: 'form-control' %>
     </div>
     <div class="mb-3">
-      <%= form.text_area :comments, class: 'form-control required-field', rows: 3 %>
+      <%= form.text_area :comments, class: 'form-control', rows: 3 %>
     </div>
     <div>
       <%= form.button :submit, 'Salvar', id: 'submit-button', class: 'btn btn-primary' %>

@@ -1,10 +1,11 @@
 class Variation < ApplicationRecord
   belongs_to :product
   has_many :subgroups, dependent: :destroy
+  has_many :secondaryproduct, dependent: :destroy
   accepts_nested_attributes_for :subgroups, reject_if: :all_blank, allow_destroy: true
   has_one_attached :photo
-  before_save :quantity_for_subgroups
-  before_update :quantity_for_subgroups
+  after_save :variation_quantity_to_product
+  after_update :variation_quantity_to_product
 
   def image_url
     if photo.attached?
@@ -14,7 +15,16 @@ class Variation < ApplicationRecord
     end
   end
 
-  def quantity_for_subgroups
-    
+  private
+
+  def variation_quantity_to_product
+    total_quantity_product = 0
+    self.product.variations.each do |variation|
+      total_quantity_product += variation.variation_quantity
+      puts "#{variation.variation_quantity} <<<<<<<<<<<,"
+    end
+    self.product.update(quantity: total_quantity_product)
+    puts total_quantity_product
+    puts 'total product <<<<<<<<<<<<<<<<<<<<<<<<'
   end
 end

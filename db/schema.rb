@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_20_171752) do
+ActiveRecord::Schema.define(version: 2023_07_25_014829) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -92,14 +92,13 @@ ActiveRecord::Schema.define(version: 2023_07_20_171752) do
   end
 
   create_table "products_sales", id: false, force: :cascade do |t|
-    t.integer "product_id", null: false
+    t.integer "product_id"
     t.integer "sale_id", null: false
     t.index ["product_id", "sale_id"], name: "index_products_sales_on_product_id_and_sale_id"
     t.index ["sale_id", "product_id"], name: "index_products_sales_on_sale_id_and_product_id"
   end
 
   create_table "sales", force: :cascade do |t|
-    t.integer "product_id", null: false
     t.integer "quantity"
     t.float "total_price"
     t.string "payment_method"
@@ -113,7 +112,13 @@ ActiveRecord::Schema.define(version: 2023_07_20_171752) do
     t.integer "discount"
     t.index ["admin_id"], name: "index_sales_on_admin_id"
     t.index ["customer_id"], name: "index_sales_on_customer_id"
-    t.index ["product_id"], name: "index_sales_on_product_id"
+  end
+
+  create_table "sales_secondaryproducts", id: false, force: :cascade do |t|
+    t.bigint "secondaryproduct_id"
+    t.integer "sale_id", null: false
+    t.index ["sale_id", "secondaryproduct_id"], name: "index_sales_secondaryproducts_on_sale_id_and_secondaryproduct_id"
+    t.index ["secondaryproduct_id", "sale_id"], name: "index_sales_secondaryproducts_on_secondaryproduct_id_and_sale_id"
   end
 
   create_table "secondaryproducts", force: :cascade do |t|
@@ -125,7 +130,11 @@ ActiveRecord::Schema.define(version: 2023_07_20_171752) do
     t.integer "admin_id"
     t.integer "sale_price"
     t.integer "purchase_price"
+    t.integer "variation_id"
+    t.integer "subgroup_id"
     t.index ["product_id"], name: "index_secondaryproducts_on_product_id"
+    t.index ["subgroup_id"], name: "index_secondaryproducts_on_subgroup_id"
+    t.index ["variation_id"], name: "index_secondaryproducts_on_variation_id"
   end
 
   create_table "subgroups", force: :cascade do |t|
@@ -157,9 +166,10 @@ ActiveRecord::Schema.define(version: 2023_07_20_171752) do
   add_foreign_key "products", "categories"
   add_foreign_key "sales", "admins"
   add_foreign_key "sales", "customers"
-  add_foreign_key "sales", "products"
   add_foreign_key "secondaryproducts", "admins"
   add_foreign_key "secondaryproducts", "products"
+  add_foreign_key "secondaryproducts", "subgroups"
+  add_foreign_key "secondaryproducts", "variations"
   add_foreign_key "subgroups", "variations"
   add_foreign_key "variations", "products"
 end
