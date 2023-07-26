@@ -13,10 +13,13 @@
     "admin-lte": "^3.2",
     "bootstrap": "4.6.1",
     "bootstrap-icons": "^1.10.5",
+    "cleave.js": "^1.6.0",
     "jquery": "3.6.0",
+    "jquery-mask-plugin": "1.14.10",
     "jquery-ui": "^1.13.2",
     "jquery-ui-dist": "^1.13.2",
     "popper.js": "^1.16.1",
+    "sweetalert2": "^11.7.12",
     "turbolinks": "^5.2.0",
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"

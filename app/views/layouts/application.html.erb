@@ -6,12 +6,16 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', async: true %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload', as: 'style' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'product', 'data-turbolinks-track': 'reload'%>
     <% if params[:controller] == 'admin_template/sales' && action_name == 'new'%>
-      <%= javascript_pack_tag 'sale', 'data-turbolinks-track': 'reload', async:true %>
+      <%= javascript_pack_tag 'sale', 'data-turbolinks-track': 'reload'%>
     <% end %>
-    <%= javascript_pack_tag 'admin', 'data-turbolinks-track': 'reload', async: true %>
+    <%= javascript_pack_tag 'admin', 'data-turbolinks-track': 'reload'%>
+   
+
+
   </head>
 
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -19,20 +23,19 @@
       <% if signed_in? %>
         <%= render 'layouts/navbar' %>
       <% end %>
-
       <div class="content-wrapper">
         <section class="content">
           <div class="container-fluid">
+            <%= render 'shared/flash_message' %>
             <%= yield %>
           </div>
         </section>
       </div>
-
       <footer class="main-footer">
         <div class="float-right d-none d-sm-inline-block">
           <b>Version</b> 3.2.0
         </div>
-        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+        <strong>Copyright &copy; <%= Time %> <a href="https://adminlte.io">Amarket.io</a>.</strong>
         All rights reserved.
       </footer>
     </div>

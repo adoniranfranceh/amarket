@@ -3,7 +3,6 @@
     <div class="mb-3 row">
       <%= form.text_field :name, placeholder: :name, class: 'form-control col-10'%>
     </div>
-
     <div class="mb-3 row">
       <%= form.text_field :brand, placeholder: :brand, class: 'form-control col-10' %>
     </div>
@@ -16,23 +15,24 @@
     <% else %>
       <label for="product_category_id">Selecione a categoria</label>
       <div class="form-floating row mb-3">
-        <%= form.collection_select(:category_id, @categories, :id, :name, { include_blank: 'Nenhuma' }, { class: 'form-control select2 select2-hidden-accessible col-10' }) %>
+        <%= form.collection_select(:category_id, @categories.to_a, :id, :name, { include_blank: 'Nenhuma', selected: nil }, { class: 'form-control select2 select2-hidden-accessible col-10' })%>
       </div>
     <% end %>
     <div class="mb-3 row">
       <%= form.label :purchase_price, class: 'form-label mr-3' %>
-      <%= form.number_field :purchase_price, class: 'form-control col-3 mr-4', step: 0.01 %>
+      <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+      <%= form.text_field :purchase_price, placeholder:'Digite o preço de compra', class: 'form-control col-3 price-input mr-4 number input-number', step: 0.01, value: number_with_precision(@product.purchase_price, precision: 2, delimiter: '.', separator: ',') %>
       <%= form.label :sale_price, class: 'form-label mr-3' %>
-      <%= form.number_field :sale_price, class: 'form-control col-3 mr-4', step: 0.01 %>
+      <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+      <%= form.text_field :sale_price, placeholder:'Digite o preço de venda', class: 'form-control col-3 mr-4 price-input number input-number', step: 0.01, value: number_with_precision(@product.sale_price, precision: 2, delimiter: '.', separator: ',') %>
     </div>
-    <div class="mb-3 row">
+    <div class="mb-3 row div-quantity">
       <%= form.label :quantity, class: 'form-label mr-3' %>
-      <%= form.number_field :quantity, class: 'form-control col-3' %>
+      <%= form.number_field :quantity, class: 'form-control col-3 number', id:'product-quantity' %>
     </div>
 
     <div id="variations">
-      <h3><%= is_present?(@product.variations, 'Variação' ,form, :variations, 'btn btn-success mb-3') %></h3>
-    <% end %>
+      <h3><%= is_present?(@product.variations, 'Variação' ,form, :variations, 'btn btn-success mb-3 add-variation') %></h3>
       <%= form.fields_for :variations do |variation| %>
         <%= render partial: 'variation_fields', locals: {f: variation} %> 
       <% end %>
@@ -44,10 +44,10 @@
   </div>
   <div>
     <% if action_name == 'show' %>
-      <%= link_to edit_admin_template_product_path(@product), class:'btn btn-primary' do %>
+      <%= link_to edit_admin_template_product_path(@product), data: { turbolinks: false }, class:'btn btn-primary' do %>
         <i class="bi bi-pencil-square">Editar</i>
       <% end %>
-      <%= link_to admin_template_product_path(@product), method: :delete, class:'btn btn-danger', data:{confirm: "Você quer excluir #{@product.name}?"} do %>
+      <%= link_to admin_template_product_path(@product), method: :delete, class:'btn btn-danger delete-confirm-link' do %>
         <i class="bi bi-trash-fill">Excluir</i>
       <% end %>
     <% else %>
@@ -59,3 +59,16 @@
     <% end %>
   </div>
 <% end %>
+<!-- 
+<div class="mb-3 row div-quantity div-center">
+      <#%= form.label :purchase_price, class: 'form-label mr-3' %>
+      <div class="input-group mr-5">
+        <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+        <#%= form.text_field :purchase_price, class: 'form-control input-number price-input', step: 0.01, placeholder: 'Digite o preço de compra', value: number_with_precision(@product.sale_price, precision: 2, delimiter: '.', separator: ',') %>
+      </div>
+
+      <#%= form.label :sale_price, class: 'form-label mr-3' %>
+      <div class="input-group mr-5">
+        <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+        <#%= form.text_field :sale_price, class: 'form-control input-number price-input', step: 0.01, placeholder: 'Digite o preço de venda', value: number_with_precision(@product.sale_price, precision: 2, delimiter: '.', separator: ',') %>
+    </div> -->
