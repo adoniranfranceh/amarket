@@ -1,14 +1,14 @@
-
-<div class="col-md-6 div-center">
+<div class="col-md-6 div-center variations">
   <div class="nested-fields card card-success">
     <div class="card-header">
       <h3 class="card-title">Variação</h3>
     </div>
     <div class="card-body">
-      <div class="row">
-        <%= f.text_field :name, placeholder: :name, class: 'form-control col-3 mr-4' %>
-        <%= f.text_field :color, placeholder: :color, class: 'form-control col-3 mr-4' %>
-        <%= f.text_field :type, placeholder: :type, class: 'form-control col-3 ' %>
+      <div class="row variation">
+        <%= f.text_field :name, placeholder: :name, class: 'form-control col-3 mr-2' %>
+        <%= f.text_field :color, placeholder: :color, class: 'form-control col-3 mr-2' %>
+        <%= f.text_field :variation_type, placeholder: :variation_type, class: 'form-control col-3 mr-2' %>
+        <%= f.number_field :variation_quantity, placeholder: :quantity, class: 'form-control col-2 quantity variation-quantity' %>
       </div>
       <br>
       <% if action_name != 'show' %>
@@ -16,10 +16,10 @@
           <%= f.file_field :photo, class: 'custom-file-input', id: 'exampleInputFile' %>
           <%= f.label :photo, class: 'custom-file-label', id: 'exampleInputFile' %>
         </div>
-        <%= link_to_remove_association('Remover', f, class: 'btn btn-danger') %>
-      <% end %>
+          <%= link_to_remove_association('Remover', f, class: 'btn btn-danger remove remove-variation') %>
+        <% end %>
       <div id="subgroups">
-        <h3><%= is_present?(@subgroups, 'Subgrupo', f, :subgroups,'btn btn-primary mb-3') %></h3>
+        <h3><%= is_present?(@subgroups, 'Subgrupo', f, :subgroups,'btn btn-primary mb-3 add-subgroup') %></h3>
         <%= f.fields_for :subgroups do |subgroup| %>
           <%= render partial: 'subgroup_fields', locals: {f: subgroup}  %>
         <% end %>

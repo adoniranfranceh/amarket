@@ -7,7 +7,7 @@
 
     <div class="mb-3">
       <%= form.label :phone, class: 'form-label' %>
-      <%= form.phone_field :phone, class: 'form-control' %>
+      <%= form.phone_field :phone, placeholder: '(99) 9 9999-9999', class: 'form-control phone' %>
     </div>
 
     <div class="mb-3">
@@ -36,12 +36,12 @@
 
     <div class="mb-3">
       <%= form.label :cpf, class: 'form-label' %>
-      <%= form.text_field :cpf, class: 'form-control' %>
+      <%= form.text_field :cpf, class: 'form-control cpf-input' %>
     </div>
   </div>
   <div>
     <% if action_name == 'show' %>
-      <%= link_to edit_admin_template_customer_path(@customer), class:'btn btn-primary' do %>
+      <%= link_to edit_admin_template_customer_path(@customer), data: { turbolinks: false }, class:'btn btn-primary' do %>
         <i class="bi bi-pencil-square">Editar</i>
       <% end %>
       <%= link_to admin_template_customer_path(@customer), method: :delete, class:'btn btn-danger', data:{confirm: "Você quer excluir #{@customer.name}?"} do %>

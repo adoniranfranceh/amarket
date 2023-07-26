@@ -1,0 +1,30 @@
+<div>
+  <table class="table table-bordered dataTable dtr-inline">
+    <thead>
+      <tr>
+        <th class="col-1">Id</th>
+        <th class="col-3">Nome</th>
+        <th class="col-3">Image</th>
+        <th class="col-1">Preço</th>
+        <th class="col-1">Estoque</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @secondary_products.each do |product| %>   
+      <tr>
+        <td style="padding-bottom: 37px;"><%= product.id %></td>
+        <td><%= product.name %></td>
+        <td  class="rounded float-end"><%= link_to(image(product), '#', "data-toggle":"modal", "data-target":"#exampleModal")%></td>
+        <td class="">
+          R$ <%= number_with_precision(product.sale_price, precision: 2, separator: ',', delimiter: '.') %>
+        </td>
+        <td class="number">
+          <%= product.quantity %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= render partial: 'admin_template/shared/image_modal' %>

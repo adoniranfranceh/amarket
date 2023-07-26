@@ -1,0 +1,4 @@
+<div class="nested-fields">
+  <%= f.collection_select :product_id, @products, :id, :name, include_blank: true %>
+  <%= f.link_to_remove 'Remover Produto', f %>
+</div>

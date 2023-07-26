@@ -20,26 +20,26 @@ i {
   font-size: 1.5em;
 }
 
-.nav-item:hover{
+.nav-item:hover {
   background: green;
 }
+
 .disabled-form {
   pointer-events:none;
 }
-.btn-green {
-  background: #3cb371;
-  color: #fff;
-}
+
 #search-results li:hover {
   cursor: pointer;
   background: #708090;
   color: white;
 }
-.image-t{
+
+.image-t {
   width: 100px;
   height: 100px;
   border-radius: 30%;
 }
+
 .image-t:hover {
   width: 110px;
   height: 110px;
@@ -53,4 +53,45 @@ i {
 
 .div-center {
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.img-modal {
+  width: 60%;
+  height: 60%;
+  margin: auto;
+  display: block;
+}
+
+.number {
+  font-size: 30px;
+  text-align: center;
+}
+
+.required-field-error {
+  border: solid red 1px;
+}
+
+.error-message {
+  color: red;
+}
+
+.input-number {
+  font-size: 18px;
+  font-weight: bold;
+  height: 70px;
+  width: 70px;
+}
+
+.input-group-text{
+  height: 70px;
+}
+
+.input-group {
+  width: 180px;
+}
+
+.hidden {
+  display: none;
 }

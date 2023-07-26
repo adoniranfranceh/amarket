@@ -7,4 +7,5 @@ class Admin < ApplicationRecord
   has_many :categories
   has_many :products
   has_many :sales
+  has_many :secondaryproducts
 end

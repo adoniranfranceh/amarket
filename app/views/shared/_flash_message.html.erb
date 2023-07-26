@@ -1,0 +1,29 @@
+<% if flash.present? %>
+  <% if flash[:success].present? %>
+    <% @icon = 'success' %>
+    <% @title = 'Tudo certo!' %>
+    <% @message = flash[:success] %> <!-- Corrigido "sucess" para "success" -->
+
+  <% elsif flash[:error].present? %>
+    <% @icon = 'error' %>
+    <% @title = 'Erro' %>
+    <% @message = flash[:error] %>
+  <% elsif flash[:alert] %>
+    <% @icon = 'warning' %>
+    <% @title = 'Alerta!' %>
+    <% @message = flash[:alert] %>
+  <% elsif flash[:notice].present?  %>
+    <% @icon = 'success' %>
+    <% @title = 'Tudo certo!' %>
+    <% @message = flash[:notice] %>
+  <% end %>
+
+  <%= javascript_tag do %>
+    Swal.fire({
+      title: '<%= "#{@title}" %>',
+      text: '<%= "#{@message}" %>',
+      icon: '<%= "#{@icon}" %>',
+      confirmButtonText: 'Ok!'
+    })
+  <% end %>
+<% end %>
