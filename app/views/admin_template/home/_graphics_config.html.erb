@@ -1,0 +1,116 @@
+<%= javascript_tag do %>
+  if (typeof ctxLine === 'undefined') {
+    const ctxBar = document.getElementById('myBarChart').getContext('2d');
+    const labels = <%= raw @product_selected.to_json %>;
+    const data = {
+      labels: labels,
+      datasets: [{
+        label: 'Produtos mais populares por venda <%= @text %>',
+        data: <%= raw @quantity_of_sales.to_json %>,
+        barPercentagem: 1,
+      }]
+    }
+    console.log(labels)
+
+    new Chart(ctxBar, {
+      type: 'bar',
+      data: data,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            grid: {},
+            ticks: {
+              font: {
+                size: 12
+              }
+            }
+          },
+          y: {
+            suggestedMin: 0,
+            suggestedMax: 20,
+            color: 'white',
+            grid: {},
+            ticks: {
+              font: {
+                size: 12
+              }
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              font: {
+                size: 15
+              }
+            }
+          }
+        }
+      }
+    });
+
+    const ctxLine = document.getElementById('myLineChart').getContext('2d');
+    const lineLabels = <%= raw @all_dates_last_days.map { |date| date == Date.current ? "#{date.strftime("%A")} (Hoje)" : date.strftime("%A") }.to_json%>;
+    const lineData = {
+      labels: lineLabels,
+      datasets: [{
+        label: 'Quantidade de vendas dos últimos 7 dias <%= @total_text %>',
+        data: <%= @data %> ,
+        fill: false,
+        borderColor: 'cyan',
+        tension: 0.1,
+        borderWidth: 5,
+        pointHitRadius: 20,
+        pointBackgroundColor: 'black'
+      }]
+    };
+
+    new Chart(ctxLine, {
+      type: 'line',
+      data: lineData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            color: 'white',
+            grid: {
+              color: 'white'
+            },
+             ticks: {
+              color: 'white',
+              font: {
+                size: 12
+              }
+            }
+          },
+          y: {
+            suggestedMin: 0,
+            suggestedMax: 20,
+            color: 'white',
+            grid: {
+              color: 'white'
+            },
+            ticks: {
+              color: 'white',
+              font: {
+                size: 12
+              }
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: 'white',
+              font: {
+                size: 15
+              }
+            }
+          }
+        }
+      }
+    });}
+<% end %>

@@ -45,7 +45,7 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
   def search
     term = params[:term]
 
-    secondaryproducts = Secondaryproduct.where("LOWER(name) LIKE ?", "%#{term.downcase}%")
+    secondaryproducts = current_admin.secondaryproducts.where("LOWER(name) LIKE ?", "%#{term.downcase}%")
 
     secondaryproducts_data = secondaryproducts.map do |secondaryproduct|
       data = {
