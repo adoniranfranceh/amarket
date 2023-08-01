@@ -52,7 +52,7 @@
     });
 
     const ctxLine = document.getElementById('myLineChart').getContext('2d');
-    const lineLabels = <%= raw @all_dates_last_days.map { |date| date == Date.current ? "#{date.strftime("%A")} (Hoje)" : date.strftime("%A") }.to_json%>;
+    const lineLabels = <%= raw @day_names.to_json%>;
     const lineData = {
       labels: lineLabels,
       datasets: [{

@@ -7,18 +7,20 @@ class AdminTemplate::HomeController < AdminTemplateController
 
   def last_seven_days(other_or_date_current)
     start_date = other_or_date_current - 6.days
-    @all_dates_last_days = (start_date..other_or_date_current).to_a
-    @data = @all_dates_last_days.map do |date|
-      current_admin.sales.where("DATE(created_at) = ?", date).count
-    end
+    all_dates_last_days = (start_date..other_or_date_current).to_a
+    @day_names = all_dates_last_days.map { |date| date == Date.current ? "#{I18n.l(date, format: '%A')} (Hoje)" : I18n.l(date, format: '%A') }
+
+    @data = current_admin.sales.where(created_at: all_dates_last_days).group("DATE(created_at)").count.values
   end
 
   def customer_info_select(other_or_month_current)
     @start_month = other_or_month_current - 5.month
-    @all_months = (@start_month..other_or_month_current).to_a
-    @data_monthly = @all_months.map do |data|
-      current_admin.customers.where("DATE(created_at) = ?", data).count
-    end
+    all_months = (@start_month..other_or_month_current).to_a
+    @month_names = all_months.map do |month|
+      month.month == Date.current.month ? "#{I18n.l(month, format: '%B')} (mês atual)" : I18n.l(month, format: '%B')
+    end.uniq
+
+    @data_monthly = current_admin.customers.where(created_at: all_months.first..all_months.last).group("DATE(created_at)").count.values
   end
 
   def choose_date_request
@@ -32,10 +34,10 @@ class AdminTemplate::HomeController < AdminTemplateController
       customer_info_select(Date.current)
     else
       @sales = current_admin.sales.within_selected_day(@choose_date)
-      @text = "(#{@choose_date.strftime("%d de %B")})"
+      @text = "(#{I18n.l(@choose_date, format: "%d de %B")})"
       @customers = current_admin.customers.within_selected_month(@choose_date)
       @secondary_products = current_admin.secondaryproducts.within_selected_month(@choose_date)
-      @total_text = " (mês de #{@choose_date.strftime("%B")})"
+      @total_text = " (mês de #{I18n.l(@choose_date, format: "%B")})"
       last_seven_days(@choose_date)
       customer_info_select(@choose_date)
     end
