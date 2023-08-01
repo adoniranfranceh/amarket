@@ -95,3 +95,10 @@ i {
 .hidden {
   display: none;
 }
+
+.chart-container {
+  position: relative;
+  margin: auto;
+  height: 100%;
+  width: 100%;
+}

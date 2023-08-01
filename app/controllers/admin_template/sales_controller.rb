@@ -11,7 +11,6 @@ class AdminTemplate::SalesController < AdminTemplateController
   end
 
   def create
-    logger.info "Received params: #{params.inspect} <<<<<<<<<<<<<<<<<<<<,"
     @sale = current_admin.sales.build(sale_params)
     secondary_ids = params[:sale][:secondaryproduct_ids].split(',')
 
@@ -45,17 +44,18 @@ class AdminTemplate::SalesController < AdminTemplateController
   end
 
   def sale_params
-    params.require(:sale).permit(:customer_id,
-                                 :secondaryproduct_ids,
-                                 :total_price,
-                                 :payment_method,
-                                 :status,
-                                 :completed_at,
-                                 :discount,
-                                 :quantity,
-                                 :comments
+    params.require(:sale).permit(
+                                  :customer_id,
+                                  :total_price,
+                                  :payment_method,
+                                  :status,
+                                  :completed_at,
+                                  :discount,
+                                  :quantity,
+                                  :comments,
+                                  secondaryproduct_ids: []
                                 )
-  end
+end
 
   def update_product_quantities(sale)
     sale.secondaryproducts.each do |product|

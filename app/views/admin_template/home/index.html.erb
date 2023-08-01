@@ -1,0 +1,101 @@
+<%= @month_names %>
+<h1>Mês em português: <%= I18n.l(Date.current, format: '%b')%></h1>
+<% puts "Locale atual: #{I18n.locale}" %>
+
+<h1>Dashboard</h1>
+<section class="content">
+  <div class="container-fluid shadow-sm p-3 mb-5 bg-white rounded">
+    <%= form_tag admin_template_home_index_path, method: :get , class: 'mb-4' do %>
+      <%= label_tag 'choose_date', 'Escolha a data:' %>
+      <div class="row">
+        <%= date_field_tag 'choose_date',  @choose_date.strftime("%Y-%m-%d"), class: 'form-control col-3 mb-2 ml-2' %>
+        <%= submit_tag "Filtrar", class: 'btn btn-dark mr-2'%>
+        <%= link_to "Mostrar Todos", request.params.except(:choose_date), class: 'btn btn-primary' %>
+      </div>
+    <% end %>
+    <div class="row">
+      <div class="col-lg-3 col-6">
+        <div class="small-box bg-info">
+          <div class="inner">
+            <h3><%= @sales.count %></h3>
+            <p>Vendas <%= @text %></p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-bag"></i>
+          </div>
+          <%= link_to 'Mostrar vendas',admin_template_sales_path, class: 'small-box-footer' %>
+        </div>
+      </div>
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-success">
+          <div class="inner">
+            <h3>R$ <%= @total %><sup style="font-size: 20px"></sup></h3>
+            <p>Vendidos <%= @text %></p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-stats-bars"></i>
+          </div>
+          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+          <div class="inner">
+            <h3><%= @customers.count %></h3>
+            <p>Total de clientes<%= @total_text %></p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-person-add"></i>
+          </div>
+          <%= link_to 'Mostrar clientes',admin_template_customers_path, class: 'small-box-footer' %>
+        </div>
+      </div>
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+          <div class="inner">
+            <h3><%= @secondary_products.count %></h3>
+
+            <p>Total de produtos<%= @total_text %></p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-pie-graph"></i>
+          </div>
+          <%= link_to 'Mostrar produtos',admin_template_secondary_products_path, class: 'small-box-footer' %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="card bg-gradient-info float-left mr-1" style="width: 53%; height: 50%;">
+      <div class="card-header border-0">
+        <h3 class="card-title">
+          <i class="bi bi-graph-up"></i>
+          Gráfico de vendas
+        </h3>
+      </div>
+      <div class="chart-container" style="position: relative; margin: auto; height: 15em; width: 100%;">
+        <canvas id="myLineChart"></canvas>
+      </div>
+    </div>
+
+    <div class="card float-right" style="width: 45%; height: 50%;">
+      <div class="card-header ui-sortable-handle " >
+        <h3 class="card-title">
+          <i class="bi bi-bar-chart-fill"></i>
+          Produtos mais vendidos
+        </h3>
+      </div>
+      <div class="chart-container" style="position: relative; margin: auto; height: 15em; width: 100%;">
+        <canvas id="myBarChart"></canvas>
+      </div>
+    </div>
+
+  </div>
+  <%= render 'graphics_config' %>
+</section>
