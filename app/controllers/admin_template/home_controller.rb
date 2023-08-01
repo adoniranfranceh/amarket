@@ -18,7 +18,6 @@ class AdminTemplate::HomeController < AdminTemplateController
     @data = all_dates_last_days.map { |date| sales_data[date.to_s] || 0 }
   end
 
-
   def customer_info_select(other_or_month_current)
     @start_month = other_or_month_current - 5.month
     all_months = (@start_month..other_or_month_current).to_a
