@@ -10,8 +10,14 @@ class AdminTemplate::HomeController < AdminTemplateController
     all_dates_last_days = (start_date..other_or_date_current).to_a
     @day_names = all_dates_last_days.map { |date| date == Date.current ? "#{I18n.l(date, format: '%A')} (Hoje)" : I18n.l(date, format: '%A') }
 
-    @data = current_admin.sales.where(created_at: all_dates_last_days).group("DATE(created_at)").count.values
+    sales_data = current_admin.sales
+      .where(created_at: all_dates_last_days.first..all_dates_last_days.last)
+      .group("DATE(created_at)")
+      .count
+
+    @data = all_dates_last_days.map { |date| sales_data[date.to_s] || 0 }
   end
+
 
   def customer_info_select(other_or_month_current)
     @start_month = other_or_month_current - 5.month
