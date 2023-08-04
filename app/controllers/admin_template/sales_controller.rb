@@ -1,6 +1,7 @@
 class AdminTemplate::SalesController < AdminTemplateController
   before_action :set_customers_and_products, only: [:new]
   skip_before_action :verify_authenticity_token, only: [:create]
+  before_action :cash_is_open?, only: [:new, :create]
 
   def index
     @sales = current_admin.sales
@@ -62,6 +63,14 @@ end
       quantity_sold = params["quantity_for_product#{product.id}"].to_i
       total = product.quantity - quantity_sold
       product.update(quantity: total)
+    end
+  end
+
+  def cash_is_open?
+    cash = Cash.find_by(admin_id: current_admin.id)
+    unless cash.is_open
+      flash[:error] = 'O caixa não está aberto. Não é possível criar uma venda.'
+      redirect_to admin_template_sales_path
     end
   end
 end
