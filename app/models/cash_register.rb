@@ -1,3 +1,3 @@
 class CashRegister < ApplicationRecord
-  belongs_to :admin_id
+  belongs_to :cash
 end
