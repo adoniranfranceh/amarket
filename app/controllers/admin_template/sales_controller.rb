@@ -2,9 +2,10 @@ class AdminTemplate::SalesController < AdminTemplateController
   before_action :set_customers_and_products, only: [:new]
   skip_before_action :verify_authenticity_token, only: [:create]
   before_action :cash_is_open?, only: [:new, :create]
+  include CashRegisterable
 
   def index
-    @sales = current_admin.sales
+    @sales = current_admin.sales.order(created_at: :desc)
   end
 
   def new
@@ -19,6 +20,9 @@ class AdminTemplate::SalesController < AdminTemplateController
       secondary = Secondaryproduct.find_by(id: secondary_id)
       @sale.secondaryproducts << secondary if secondary
     end
+
+    cash_register = CashRegister.find_by(closing_time: nil)
+    @sale.cash_register = cash_register if cash_register
 
     respond_to do |format|
       if @sale.save
@@ -56,7 +60,7 @@ class AdminTemplate::SalesController < AdminTemplateController
                                   :comments,
                                   secondaryproduct_ids: []
                                 )
-end
+  end
 
   def update_product_quantities(sale)
     sale.secondaryproducts.each do |product|
@@ -67,8 +71,8 @@ end
   end
 
   def cash_is_open?
-    cash = Cash.find_by(admin_id: current_admin.id)
-    unless cash.is_open
+    cash_register = current_cash_register
+    unless cash_register
       flash[:error] = 'O caixa não está aberto. Não é possível criar uma venda.'
       redirect_to admin_template_sales_path
     end

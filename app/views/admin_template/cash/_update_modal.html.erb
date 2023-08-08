@@ -1,0 +1,20 @@
+<div class="modal fade " id="update" tabindex="-1" aria-labelledby="exampleModalLabel" aria-modal="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Caixa aberto</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <%= simple_form_for([:admin_template, @movement]) do |form| %>
+          <%= form.input :cash_deposit, as: :string, placeholder: 'Digite o valor a ser depositado', input_html: { class: 'form-control price-input', step: '0.01'} %>
+          <%= form.input :cash_withdrawal, as: :string, placeholder: 'Digite o valor sangria', input_html: { class: 'form-control price-input', step: '0.01'} %>
+          <%= form.input :reason, as: :text, placeholder: 'Diga o motivo da movimentação', input_html: { class: 'form-control' } %>
+          <%= form.button :submit, 'Salvar', class: 'btn btn-primary'%>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

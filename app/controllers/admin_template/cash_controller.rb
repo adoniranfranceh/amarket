@@ -1,6 +1,6 @@
 class AdminTemplate::CashController < AdminTemplateController
    before_action :set_cash_register, only: [:index, :edit, :update]
-
+   include CashRegisterable
   def index; end
 
   def update
@@ -13,7 +13,11 @@ class AdminTemplate::CashController < AdminTemplateController
   end
 
   def set_cash_register
-    @cash = Cash.where(admin_id: current_admin.id).first
+    @cash = current_admin.cash.find_by(admin_id: current_admin.id)
+    if @cash.cash_registers.present?
+      @cash_register = current_cash_register
+      @movement = @cash_register.movements.build
+    end
   end
 
   private 

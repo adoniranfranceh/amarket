@@ -2,6 +2,7 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
   before_action :set_product, only: [:index, :edit, :update, :show, :destroy]
   before_action :set_categories, only: [:edit, :new]
   before_action :set_subgroups, only: [:show, :edit]
+  include NumberUtils
 
   def index; end
 
@@ -11,6 +12,7 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
 
   def create
     @product = current_admin.products.build(product_params)
+    format_decimal_value_product
     if @product.save
        create_secondary_records(@product)
        redirect_to admin_template_products_path, success: 'Produto salvo com sucesso'
@@ -23,6 +25,7 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
   def edit; end
 
   def update
+    format_decimal_value_product
     if @product.update(product_params)
       create_secondary_records(@product)
       redirect_to admin_template_product_path(@product), success: 'Produto atualizado'
@@ -65,6 +68,11 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
   end
 
   private
+
+  def format_decimal_value_product
+    format_decimal_value(:product, :purchase_price)
+    format_decimal_value(:product, :sale_price)
+  end
 
   def set_categories
     @categories = current_admin.categories

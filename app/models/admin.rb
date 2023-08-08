@@ -9,7 +9,6 @@ class Admin < ApplicationRecord
   has_many :sales
   has_many :secondaryproducts
   has_many :cash
-  has_many :cash_registers
   before_save :create_cash
 
   def create_cash

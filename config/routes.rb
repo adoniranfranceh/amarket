@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     resources :cash_registers do
       post :close, on: :collection
     end
+    resources :movements
   end
 
   root 'admin_template/home#index'
