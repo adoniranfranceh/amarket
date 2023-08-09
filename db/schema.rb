@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_07_171442) do
+ActiveRecord::Schema.define(version: 2023_08_09_012313) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 2023_08_07_171442) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.float "cash_total"
+    t.float "cash_sale"
     t.index ["cash_id"], name: "index_cash_registers_on_cash_id"
   end
 

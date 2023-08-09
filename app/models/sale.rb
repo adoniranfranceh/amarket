@@ -25,12 +25,8 @@ class Sale < ApplicationRecord
   end
 
   def movement_for_sale
-    sale_registers = Sale.where(cash_register_id: current_cash_register.id)
-    moviments = 0
-    sale_registers.each do |sale|
-      moviments += sale.total_price
-    end
-    total_calc = current_cash_register.cash_total + moviments
-    current_cash_register.update(cash_total: total_calc)
+    total_sale = Sale.where(cash_register_id: current_cash_register.id).sum(:total_price)
+    total = current_cash_register.cash_total + total_sale
+    current_cash_register.update(cash_sale: total_sale, cash_total: total)
   end
 end

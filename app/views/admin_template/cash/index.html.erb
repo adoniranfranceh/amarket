@@ -7,7 +7,7 @@
         </div>
         <div class="text-center mt-4">
           <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#update" data-whatever="@getbootstrap">Movimentar</button>
-          <%= link_to 'Fechar Caixa', close_admin_template_cash_registers_path, method: :post, class: 'btn btn-danger btn-lg ml-2' %>
+          <%= link_to 'Fechar Caixa', close_admin_template_cash_registers_path, method: :patch, class: 'btn btn-danger btn-lg ml-2' %>
         </div>
         <div class="card mt-4">
           <div class="card-body text-center">
@@ -27,7 +27,7 @@
           <h1 class="display-4">Olá, <%= @cash.cash_name %></h1>
         </div>
         <div class="text-center mt-4">
-          <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#openModal">Abrir caixa</button>
+          <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#open">Abrir caixa</button>
         </div>
       </div>
     </div>

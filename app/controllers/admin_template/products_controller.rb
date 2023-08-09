@@ -70,8 +70,14 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
   private
 
   def format_decimal_value_product
-    format_decimal_value(:product, :purchase_price)
-    format_decimal_value(:product, :sale_price)
+    if params[:product][:purchase_price].present?
+      format_decimal_value(params[:product], "purchase_price")
+      @product.purchase_price = params[:product][:purchase_price]
+    end
+    if params[:product][:sale_price].present?
+      format_decimal_value(params[:product], "sale_price")
+      @product.sale_price = params[:product][:sale_price]
+    end
   end
 
   def set_categories

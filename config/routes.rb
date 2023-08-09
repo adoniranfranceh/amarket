@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     resources :sales
     resources :cash, only: [:index, :edit, :update, :new, :create]
     resources :cash_registers do
-      post :close, on: :collection
+      patch :close, on: :collection
     end
     resources :movements
   end

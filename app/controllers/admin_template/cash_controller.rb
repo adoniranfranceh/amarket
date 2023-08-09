@@ -16,7 +16,7 @@ class AdminTemplate::CashController < AdminTemplateController
     @cash = current_admin.cash.find_by(admin_id: current_admin.id)
     if @cash.cash_registers.present?
       @cash_register = current_cash_register
-      @movement = @cash_register.movements.build
+      @movement = @cash_register.movements.build if @cash_register.present?
     end
   end
 
