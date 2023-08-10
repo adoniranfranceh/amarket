@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       patch :close, on: :collection
     end
     resources :movements
+    resources :admins, only: [:edit, :update]
   end
 
   root 'admin_template/home#index'

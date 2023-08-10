@@ -141,7 +141,8 @@
         <div class="image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <% @admin = current_admin %>
+          <%= link_to "#{@admin.full_name_admin}", edit_admin_template_admin_path(@admin) %>
         </div>
       </div>
 
