@@ -22,7 +22,6 @@ class Product < ApplicationRecord
     end
   end
 
-
   private
 
   def quantity_for_variations

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_25_014829) do
+ActiveRecord::Schema.define(version: 2023_08_09_012313) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -52,6 +52,27 @@ ActiveRecord::Schema.define(version: 2023_07_25_014829) do
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
   end
 
+  create_table "cash_registers", force: :cascade do |t|
+    t.integer "cash_id", null: false
+    t.float "initial_value"
+    t.datetime "opening_time"
+    t.datetime "closing_time"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.float "cash_total"
+    t.float "cash_sale"
+    t.index ["cash_id"], name: "index_cash_registers_on_cash_id"
+  end
+
+  create_table "cashes", force: :cascade do |t|
+    t.string "cash_name"
+    t.boolean "is_open"
+    t.integer "admin_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["admin_id"], name: "index_cashes_on_admin_id"
+  end
+
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.string "descryption"
@@ -74,6 +95,16 @@ ActiveRecord::Schema.define(version: 2023_07_25_014829) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["admin_id"], name: "index_customers_on_admin_id"
+  end
+
+  create_table "movements", force: :cascade do |t|
+    t.float "cash_withdrawal"
+    t.float "cash_deposit"
+    t.string "reason"
+    t.integer "cash_register_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cash_register_id"], name: "index_movements_on_cash_register_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -110,12 +141,14 @@ ActiveRecord::Schema.define(version: 2023_07_25_014829) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "customer_id", null: false
     t.integer "discount"
+    t.integer "cash_register_id", null: false
     t.index ["admin_id"], name: "index_sales_on_admin_id"
+    t.index ["cash_register_id"], name: "index_sales_on_cash_register_id"
     t.index ["customer_id"], name: "index_sales_on_customer_id"
   end
 
   create_table "sales_secondaryproducts", id: false, force: :cascade do |t|
-    t.bigint "secondaryproduct_id"
+    t.integer "secondaryproduct_id", null: false
     t.integer "sale_id", null: false
     t.index ["sale_id", "secondaryproduct_id"], name: "index_sales_secondaryproducts_on_sale_id_and_secondaryproduct_id"
     t.index ["secondaryproduct_id", "sale_id"], name: "index_sales_secondaryproducts_on_secondaryproduct_id_and_sale_id"
@@ -160,11 +193,15 @@ ActiveRecord::Schema.define(version: 2023_07_25_014829) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "cash_registers", "cashes"
+  add_foreign_key "cashes", "admins"
   add_foreign_key "categories", "admins"
   add_foreign_key "customers", "admins"
+  add_foreign_key "movements", "cash_registers"
   add_foreign_key "products", "admins"
   add_foreign_key "products", "categories"
   add_foreign_key "sales", "admins"
+  add_foreign_key "sales", "cash_registers"
   add_foreign_key "sales", "customers"
   add_foreign_key "secondaryproducts", "admins"
   add_foreign_key "secondaryproducts", "products"

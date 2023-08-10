@@ -1,6 +1,6 @@
 class AdminTemplate::CustomersController < AdminTemplateController
   before_action :set_customer, only: [:index, :edit, :update, :show, :destroy]
-  def index;end
+  def index; end
 
   def new
     @customer = current_admin.customers.build
@@ -16,9 +16,7 @@ class AdminTemplate::CustomersController < AdminTemplateController
     end
   end
 
-  def edit
-    @customer = Customer.find(params[:id])
-  end
+  def edit; end
 
   def update
     if @customer.update(customer_params)

@@ -1,4 +1,4 @@
-<%= javascript_pack_tag 'admin_template/sales.js', 'data-turbolinks-track': 'reload' %>
+<%= javascript_pack_tag 'sales', 'data-turbolinks-track': 'reload' %>
 <%= simple_form_for [:admin_template, @sale], remote: false, authenticity_token: true do |form| %>
   <div class="<%= fieldset_disabled %>">
     <div class="mb-3">

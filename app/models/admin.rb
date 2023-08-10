@@ -8,4 +8,11 @@ class Admin < ApplicationRecord
   has_many :products
   has_many :sales
   has_many :secondaryproducts
+  has_many :cash
+  before_save :create_cash
+
+  def create_cash
+    return if cash.present?
+    self.cash.build(cash_name: "Caixa do #{email}", is_open: false)
+  end
 end

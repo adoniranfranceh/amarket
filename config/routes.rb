@@ -11,6 +11,11 @@ Rails.application.routes.draw do
     resources :secondary_products, only: [:index]
     resources :inventary
     resources :sales
+    resources :cash, only: [:index, :edit, :update, :new, :create]
+    resources :cash_registers do
+      patch :close, on: :collection
+    end
+    resources :movements
   end
 
   root 'admin_template/home#index'
