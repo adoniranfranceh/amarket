@@ -1,29 +1,22 @@
-<%= form_with(model: [:admin_template, @admin]) do |form| %>
-  <div class="row">
-      <div class="mb-3 col-6">
-        <%= form.fields_for :profile_admin do |profile_admin_fields| %>
-          <div class="mb-3">
-            <%= profile_admin_fields.label :first_name, class: 'form-label' %>
-            <%= profile_admin_fields.text_field :first_name, class: 'form-control' %>
-          </div>
-        <% end %>
+<%= simple_form_for [:admin_template, @admin], html: { class: 'form' } do |form| %>
+  <%= form.fields_for :profile_admin do |profile_admin_fields| %>
+    <div class="form-group row">
+      <div class="col-md-6">
+        <%= profile_admin_fields.input :first_name, class: 'form-control', placeholder: 'Primeiro Nome' %>
       </div>
-
-      <div class="mb-3 col-6">
-        <%= form.fields_for :profile_admin do |profile_admin_fields| %>
-          <div class="mb-3">
-            <%= profile_admin_fields.label :last_name, class: 'form-label' %>
-            <%= profile_admin_fields.text_field :last_name, class: 'form-control' %>
-          </div>
-        <% end %>
+      <div class="col-md-6">
+        <%= profile_admin_fields.input :last_name, class: 'form-control', placeholder: 'Sobrenome' %>
       </div>
     </div>
-    <div class="mb-3">
-      <%= form.label :email, class: 'form-label' %>
-      <%= form.text_field :email, class: 'form-control' %>
-    </div>
+  <% end %>
+  <div class="form-group">
+    <%= form.input :email, label: false, placeholder: 'Endereço de Email', class: 'form-control' %>
   </div>
-  <div>
+  <div class="custom-file form-group">
+    <%= form.file_field :avatar, class: 'custom-file-input', id: 'exampleInputFile' %>
+    <%= form.label 'Escolha uma imagem', class: 'custom-file-label', id: 'exampleInputFile' %>
+  </div>
+  <div class="form-group">
     <%= form.submit 'Salvar', class: 'btn btn-primary' %>
   </div>
 <% end %>

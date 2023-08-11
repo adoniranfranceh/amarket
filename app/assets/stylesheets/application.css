@@ -19,9 +19,13 @@
 i {
   font-size: 1.5em;
 }
+.navbar-light .navbar-nav .nav-link {
+    color: rgba(0,0,0,.5);
+}
 
-.nav-item:hover {
-  background: green;
+.nav-sidebar .nav-item:hover {
+  background-color: rgba(0,0,0,.1);
+  color: #212529;
 }
 
 .disabled-form {
@@ -43,6 +47,18 @@ i {
 .image-t:hover {
   width: 110px;
   height: 110px;
+}
+
+.avatar {
+  border-radius: 50%;
+}
+
+.profile_avatar {
+  width: 30%;
+  border-radius: 50%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
 }
 
 .product-image-modal {

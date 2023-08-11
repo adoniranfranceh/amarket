@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-body text-center">
+          <div class="mb-4">
+            <%= link_to(avatar_profile(current_admin), edit_admin_template_admin_path(current_admin)) %>
+          </div>
+          <h3 class="mb-0"><%= @current_admin.full_name_admin %></h3>
+          <p class="text-muted"><%= @current_admin.email %></p>
+          <hr>
+          <div class="row">
+            <div class="col">
+              <%= link_to 'Editar Perfil', edit_admin_template_admin_path(@admin), class: 'btn btn-primary btn-block' %>
+            </div>
+            <div class="col">
+              <%= link_to 'Alterar Senha', edit_password_admin_template_admin_path(current_admin), class: 'btn btn-outline-secondary btn-block' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

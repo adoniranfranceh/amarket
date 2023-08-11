@@ -16,7 +16,10 @@ Rails.application.routes.draw do
       patch :close, on: :collection
     end
     resources :movements
-    resources :admins, only: [:edit, :update]
+    resources :admins, only: [:edit, :update] do
+      get :edit_password, on: :member
+      put :update_password, on: :member
+    end
   end
 
   root 'admin_template/home#index'

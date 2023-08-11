@@ -3,6 +3,7 @@ class Admin < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+  validates :email, presence: true 
   has_many :customers
   has_many :categories
   has_many :products
@@ -10,8 +11,17 @@ class Admin < ApplicationRecord
   has_many :secondaryproducts
   has_many :cash
   has_one :profile_admin
+  has_one_attached :avatar
   accepts_nested_attributes_for :profile_admin
   before_create :create_cash_and_blank_profile
+
+  def image_url
+    if avatar.attached?
+      avatar.url
+    else
+      'assets/no_image.png'
+    end
+  end
 
   def full_name_admin
     "#{self.profile_admin.first_name} #{self.profile_admin.last_name}"
