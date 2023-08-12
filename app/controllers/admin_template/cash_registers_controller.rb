@@ -25,6 +25,15 @@ class AdminTemplate::CashRegistersController < AdminTemplateController
     open_or_close(false, 'Caixa fechado', 'Não foi possível fechar caixa')
   end
 
+  def close_if_last_day
+    if current_cash_register && current_cash_register.opening_time.to_day < Date.current
+      current_cash_register.update(closing_time: current_cash_register.opening_time.end_of_day)
+      flash[:notice] = 'Caixa fechado automaticamente.'
+    end
+  end
+
+  private
+
   private
 
   def format_decimal_value_movement

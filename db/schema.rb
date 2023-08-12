@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_09_012313) do
+ActiveRecord::Schema.define(version: 2023_08_10_162155) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -129,6 +129,15 @@ ActiveRecord::Schema.define(version: 2023_08_09_012313) do
     t.index ["sale_id", "product_id"], name: "index_products_sales_on_sale_id_and_product_id"
   end
 
+  create_table "profile_admins", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.integer "admin_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["admin_id"], name: "index_profile_admins_on_admin_id"
+  end
+
   create_table "sales", force: :cascade do |t|
     t.integer "quantity"
     t.float "total_price"
@@ -200,6 +209,7 @@ ActiveRecord::Schema.define(version: 2023_08_09_012313) do
   add_foreign_key "movements", "cash_registers"
   add_foreign_key "products", "admins"
   add_foreign_key "products", "categories"
+  add_foreign_key "profile_admins", "admins"
   add_foreign_key "sales", "admins"
   add_foreign_key "sales", "cash_registers"
   add_foreign_key "sales", "customers"

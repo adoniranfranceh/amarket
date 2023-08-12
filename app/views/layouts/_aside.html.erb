@@ -1,0 +1,22 @@
+<aside class="control-sidebar control-sidebar-light">
+  <nav class="mt-4">
+    <ul class="nav flex-column" data-widget="treeview">
+      <li class="nav-item menu-open mb-3">
+        <% @admin = current_admin %>
+        <%= link_to admin_template_admin_path(@admin), class: 'nav-link dark' do %>
+          <i class="bi bi-speedometer h5 mr-2"></i>
+          <span class="font-weight-bold">Seu Perfil</span>
+        <% end %>
+      </li>
+
+      <li class="dropdown-divider"></li>
+
+      <li class="nav-item menu-open mb-3">
+        <%= link_to destroy_admin_session_path, class: 'nav-link dark' do %>
+          <i class="bi bi-box-arrow-left"></i>
+          Sair
+        <% end %>
+      </li>
+    </ul>
+  </nav>
+</aside>

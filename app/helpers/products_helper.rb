@@ -14,4 +14,12 @@ module ProductsHelper
       link_to_add_association "Adicionar #{text}", form, attribute, class: class_name
    end
   end
+
+  def investment
+    @products.sum { |product| product.purchase_price * product.quantity }
+  end
+
+  def profit
+    @products.sum { |product| product.sale_price * product.quantity }
+  end
 end
