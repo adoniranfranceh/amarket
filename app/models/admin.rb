@@ -19,7 +19,7 @@ class Admin < ApplicationRecord
     if avatar.attached?
       avatar.url
     else
-      'assets/no_image.png'
+      '/assets/no_image.png'
     end
   end
 

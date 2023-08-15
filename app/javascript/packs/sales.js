@@ -134,6 +134,10 @@ $(document).ready(function() {
     updateTotal();
   });
 
+  $('#taxes-input').on('input', function() {
+    updateTotal();
+  });
+
   // Atualiza a quantidade dos itens ao carregar a página
   $('#product-table tbody tr').each(function() {
     var productName = $(this).find('td:nth-child(2)').text();
@@ -143,36 +147,56 @@ $(document).ready(function() {
 
   function updateTotal() {
     var total = 0;
+    var totalQuantity = 0; // Variável para armazenar a quantidade total de itens
+
     $('#product-table tbody tr').each(function() {
       var quantity = parseFloat($(this).find('.quantity').val());
       var price = parseFloat($(this).find('td:nth-child(4)').text().replace('R$', '').trim());
       var subtotal = quantity * price;
+
       if (!isNaN(subtotal)) {
         total += subtotal;
-      }
-
-     var totalQuantity = 0; // Variável para armazenar a quantidade total de itens
-
-    $('#product-table tbody tr').each(function() {
-      var quantity = parseFloat($(this).find('.quantity').val());
-      if (!isNaN(quantity)) {
         totalQuantity += quantity; // Adiciona a quantidade do item à quantidade total
       }
     });
 
     $('#total-quantity-input').val(totalQuantity);
-      });
 
-      var discount = parseFloat($('#discount-input').val());
-      if (!isNaN(discount)) {
-        var discountAmount = total * (discount / 100);
-        total -= discountAmount;
+    var discount = parseFloat($('#discount-input').val());
+    if (!isNaN(discount)) {
+      var discountAmount = total * (discount / 100);
+      total -= discountAmount;
+    }
+
+    var taxes = parseFloat($('#taxes-input').val()); // Pega o valor da taxa de taxes
+    if (!isNaN(taxes)) {
+      var taxesAmount = total * (taxes / 100);
+      total += taxesAmount;
     }
 
     $('#total-price-input').val(total.toFixed(2));
     $('tfoot .row-total span').text('R$' + total.toFixed(2));
-  }
 
+    $('#customer_value').val(total.toFixed(2));
+
+    $('#total-price-input').val(total.toFixed(2));
+    $('tfoot .row-total span').text('R$' + total.toFixed(2));
+
+    $('#customer_value').val(total.toFixed(2));
+
+    $('#change-input').val('0.00');
+
+    $('#customer_value').on('input', function() {
+      var customerValue = parseFloat($(this).val());
+      if (!isNaN(customerValue)) {
+        var changeAmount = customerValue - total;
+        $('#change-input').val(changeAmount.toFixed(2));
+      } else {
+        // Se o valor for NaN (não numérico), define o troco como zero
+        $('#change-input').val('0.00');
+      }
+    });
+  }
 
   function addProductId(productId) {
     var productIds = getProductIds();

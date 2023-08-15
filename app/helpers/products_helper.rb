@@ -16,10 +16,10 @@ module ProductsHelper
   end
 
   def investment
-    @products.sum { |product| product.purchase_price * product.quantity }
+    @products.sum { |product| product.purchase_price.to_f * product.quantity.to_f }
   end
 
   def profit
-    @products.sum { |product| product.sale_price * product.quantity }
+    @products.sum { |product| product.sale_price.to_f * product.quantity.to_f }
   end
 end

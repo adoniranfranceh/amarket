@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_10_162155) do
+ActiveRecord::Schema.define(version: 2023_08_15_024617) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -107,6 +107,15 @@ ActiveRecord::Schema.define(version: 2023_08_10_162155) do
     t.index ["cash_register_id"], name: "index_movements_on_cash_register_id"
   end
 
+  create_table "others_for_sales", force: :cascade do |t|
+    t.string "payment_method"
+    t.float "other_value"
+    t.integer "sale_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["sale_id"], name: "index_others_for_sales_on_sale_id"
+  end
+
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.string "descryption"
@@ -151,6 +160,9 @@ ActiveRecord::Schema.define(version: 2023_08_10_162155) do
     t.integer "customer_id", null: false
     t.integer "discount"
     t.integer "cash_register_id", null: false
+    t.float "taxes"
+    t.float "customer_value"
+    t.float "change"
     t.index ["admin_id"], name: "index_sales_on_admin_id"
     t.index ["cash_register_id"], name: "index_sales_on_cash_register_id"
     t.index ["customer_id"], name: "index_sales_on_customer_id"
@@ -207,6 +219,7 @@ ActiveRecord::Schema.define(version: 2023_08_10_162155) do
   add_foreign_key "categories", "admins"
   add_foreign_key "customers", "admins"
   add_foreign_key "movements", "cash_registers"
+  add_foreign_key "others_for_sales", "sales"
   add_foreign_key "products", "admins"
   add_foreign_key "products", "categories"
   add_foreign_key "profile_admins", "admins"

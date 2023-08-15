@@ -6,6 +6,8 @@ class Sale < ApplicationRecord
   belongs_to :customer
   belongs_to :cash_register
   validates :customer, :secondaryproducts, :quantity, :total_price, presence: true
+  has_many :others_for_sales
+  accepts_nested_attributes_for :others_for_sales, allow_destroy: true, reject_if: :all_blank
   include CashRegisterable
 
   STATUS_OPTIONS = {

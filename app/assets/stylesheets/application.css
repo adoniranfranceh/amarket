@@ -19,17 +19,18 @@
 i {
   font-size: 1.5em;
 }
+
 .navbar-light .navbar-nav .nav-link {
-    color: rgba(0,0,0,.5);
+  color: rgba(0, 0, 0, .5);
 }
 
 .nav-sidebar .nav-item:hover {
-  background-color: rgba(0,0,0,.1);
+  background-color: rgba(0, 0, 0, .1);
   color: #212529;
 }
 
 .disabled-form {
-  pointer-events:none;
+  pointer-events: none;
 }
 
 #search-results li:hover {
@@ -100,7 +101,7 @@ i {
   width: 70px;
 }
 
-.input-group-text{
+.input-group-text {
   height: 70px;
 }
 

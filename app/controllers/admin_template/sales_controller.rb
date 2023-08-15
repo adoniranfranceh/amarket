@@ -58,7 +58,15 @@ class AdminTemplate::SalesController < AdminTemplateController
                                   :discount,
                                   :quantity,
                                   :comments,
-                                  secondaryproduct_ids: []
+                                  secondaryproduct_ids: [],
+                                  others_for_sales_attributes:[
+                                    :id,
+                                    :payment_method,
+                                    :taxes,
+                                    :other_value,
+                                    :discount,
+                                    :_destroy
+                                  ]
                                 )
   end
 
