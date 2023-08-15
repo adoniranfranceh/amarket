@@ -1,7 +1,7 @@
-<div class="nested-fields mt-4 mb-4 container">
+<div class="nested-fields div-center mt-4 mb-4 container">
   <div class="row align-items-center">
-    <div class="col-md-3">
-      <%= f.collection_select :payment_method, available_payment_methods, :itself, :itself, { include_blank: 'Selecione um método de pagamento' }, { class: 'form-control', id: 'paymentMethod' } %>
+    <div class="col-md-7">
+      <%= f.collection_select :payment_method, available_payment_methods_others, :itself, :itself, { include_blank: 'Selecione um método de pagamento' }, { class: 'form-control', id: 'paymentMethod' } %>
     </div>
     <div class="col-md-2">
       <%= f.number_field :other_value, class: 'form-control other-value-display other-value-input', step: 0.01, placeholder: 'Valor' %>

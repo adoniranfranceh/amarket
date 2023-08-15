@@ -4,7 +4,11 @@ Rails.application.routes.draw do
   namespace :admin_template do
     resources :admins
     resources :home
-    resources :customers
+    resources :customers do
+      collection do
+        get 'search',  to: 'customers#search', as: :search
+      end
+    end
     resources :inventary
     resources :categories
     resources :products

@@ -2,10 +2,16 @@
 <%= javascript_pack_tag 'other', 'data-turbolinks-track': 'reload' %>
 <%= simple_form_for [:admin_template, @sale], remote: false, authenticity_token: true do |form| %>
   <div class="<%= fieldset_disabled %>">
-    <div class="mb-3">
-      <%= form.input :customer_id, as: :select, collection: @customers, label: 'Selecione o cliente', include_blank: true, input_html: { class: 'form-control select2 required-field', id: 'sale_customer_id' } %>
+    <div class="mb-3 row align-items-center">
+      <div class="col-10">
+        <%= form.input :customer_id, as: :select, collection: @customers, label: 'Cliente', include_blank: 'Selecione o cliente', input_html: { class: 'form-control select2 required-field', id: 'sale_customer_id', hint:"love u" } %>
+      </div>
+      <div class=" text-center align-self-center">
+        <%= link_to 'Adicionar Cliente', new_admin_template_customer_path, class: 'btn btn-secondary ', data: { toggle: 'tooltip' }, title: 'Registre um novo cliente caso não exista' %>
+      </div>
       <div class="error-message"></div>
     </div>
+
     <div class="mb-3">
       <div class="mb-3">
         <%= render 'modal_sale' %>
@@ -31,7 +37,7 @@
     </div>
     <div class="mb-3 row div-center">
       <div class="form-group">
-        <div class="form-description">Taxas:</div>
+        <div class="form-description">Juros:</div>
         <%= icon_number_field(form, :taxes, 'percent', step: 0.01, id: 'taxes-input') %>
       </div>
       <div class="form-group">
