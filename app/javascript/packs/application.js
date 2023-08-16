@@ -15,6 +15,8 @@ import Swal from 'sweetalert2/dist/sweetalert2.js'
 import 'sweetalert2/src/sweetalert2.scss'
 window.Swal = Swal
 import "@nathanvda/cocoon"
+import Chart from 'chart.js/auto';
+global.Chart = Chart;
 
 $(document).ready(function() {
   $('.price-input').mask("#.##0,00", {reverse: true});

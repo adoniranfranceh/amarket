@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   var currentNumOtherValueInputs = 0;
   var lastEqualValue = 0;
+  console.log('Aqui é o other')
 
   document.querySelector('#btnSubmit').style.display = 'none';
 

@@ -1,17 +1,26 @@
+<script>
+  // Função para recarregar a página
+  function forceRefresh() {
+    location.reload(true); // Força o recarregamento da página
+  }
+  forceRefresh
+</script>
 <%= javascript_pack_tag 'sales', 'data-turbolinks-track': 'reload' %>
 <%= javascript_pack_tag 'other', 'data-turbolinks-track': 'reload' %>
+
+
+
 <%= simple_form_for [:admin_template, @sale], remote: false, authenticity_token: true do |form| %>
   <div class="<%= fieldset_disabled %>">
     <div class="mb-3 row align-items-center">
-      <div class="col-10">
-        <%= form.input :customer_id, as: :select, collection: @customers, label: 'Cliente', include_blank: 'Selecione o cliente', input_html: { class: 'form-control select2 required-field', id: 'sale_customer_id', hint:"love u" } %>
+      <div class="col-9">
+        <%= form.input :customer_id, as: :select, collection: @customers, label: 'Cliente', include_blank: 'Selecione o cliente', input_html: { class: 'form-control select2 required-field', id: 'sale_customer_id' } %>
       </div>
-      <div class=" text-center align-self-center">
-        <%= link_to 'Adicionar Cliente', new_admin_template_customer_path, class: 'btn btn-secondary ', data: { toggle: 'tooltip' }, title: 'Registre um novo cliente caso não exista' %>
+      <div class="col-3 text-center align-self-center mt-2">
+        <%= link_to 'Adicionar Cliente', new_admin_template_customer_path, class: 'btn btn-secondary btn-sm', data: { toggle: 'tooltip' } %>
       </div>
       <div class="error-message"></div>
     </div>
-
     <div class="mb-3">
       <div class="mb-3">
         <%= render 'modal_sale' %>
@@ -25,6 +34,7 @@
         <%= render partial: 'products_select' %>
       </div>
     </div>
+
     <div class="mb-3 row div-center">
       <div class="form-group">
         <div class="form-description">Preço Total:</div>
@@ -35,6 +45,7 @@
         <%= icon_number_field(form, :quantity, 'bag-fill', step: 0.01, id: 'total-quantity-input', disabled: true) %>
       </div>
     </div>
+
     <div class="mb-3 row div-center">
       <div class="form-group">
         <div class="form-description">Juros:</div>
@@ -53,9 +64,11 @@
         <%= icon_number_field(form, :change, 'cash-stack', step: 0.01, id: 'change-input', disabled: true) %>
       </div>
     </div>
+
     <div class="mb-3">
       <%= form.collection_select :payment_method, available_payment_methods, :itself, :itself, { include_blank: 'Selecione um método de pagamento' }, { class: 'form-control', id: 'paymentMethod' } %>
     </div>
+
     <div id="others_for_sales">
       <%= form.simple_fields_for :others_for_sales do |others_for_sale| %>
         <%= render partial: 'others_for_sale_fields', locals: { f: others_for_sale } %>
@@ -64,13 +77,15 @@
         <%= link_to_add_association 'Adicionar Outro', form, :others_for_sales, class: 'btn btn-primary', id: 'btnSubmit' %>
       </div>
     </div>
+
     <div class="mb-3">
       <%= form.collection_select :status, Sale::STATUS_OPTIONS.values, :to_s, ->(status) { status.to_s.humanize }, { include_blank: 'Selecione um status' }, class: 'form-control' %>
     </div>
+
     <div class="mb-3">
       <%= form.text_area :comments, class: 'form-control', rows: 3 %>
     </div>
+
     <%= form.submit 'Salvar', class: 'btn btn-primary' %>
-    <%= params[:customer_value] %>
   </div>
 <% end %>

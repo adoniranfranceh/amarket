@@ -19,7 +19,22 @@ module ProductsHelper
     @products.sum { |product| product.purchase_price.to_f * product.quantity.to_f }
   end
 
-  def profit
+  def revenue
     @products.sum { |product| product.sale_price.to_f * product.quantity.to_f }
+  end
+
+  def gross_profit
+    @products.sum { |product| (product.sale_price.to_f - product.purchase_price.to_f) * product.quantity.to_f }
+  end
+
+  def profit_margin
+    total_cost = investment
+    total_revenue = revenue
+
+    if total_revenue.zero?
+      0.0
+    else
+      ((total_revenue - total_cost) / total_revenue) * 100
+    end
   end
 end

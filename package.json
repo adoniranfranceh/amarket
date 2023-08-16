@@ -13,6 +13,7 @@
     "admin-lte": "^3.2",
     "bootstrap": "4.6.1",
     "bootstrap-icons": "^1.10.5",
+    "chart.js": "^4.3.3",
     "cleave.js": "^1.6.0",
     "jquery": "3.6.0",
     "jquery-mask-plugin": "1.14.10",
