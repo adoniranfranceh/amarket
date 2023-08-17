@@ -57,30 +57,32 @@ function checkRequiredFields() {
           var response = JSON.parse(xhr.responseText);
           if (response && response.errors) {
             var errorMessages = response.errors;
+            console.log(errorMessages);
+
+            var errorList = '<ul>';
+            errorMessages.forEach(function(message) {
+              errorList += '<li>' + message + '</li>';
+            });
+            errorList += '</ul>';
+
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
-              text: errorMessages
-            })
-            $('.required-field').removeClass('required-field-error');
-            $('.error-message').empty();
+              html: errorList
+            });
 
+            $('.required-field').removeClass('required-field-error');
+            $('.error-message').remove();
             $('.required-field').each(function() {
               if ($.trim($(this).val()) === '') {
                 $(this).addClass('required-field-error');
-                $(this).siblings('.error-message').remove();
-
-                var errorMessage = 'Este campo é obrigatório.';
-                $(this).after('<div class="error-message">' + errorMessage + '</div>');
+                $(this).after('<div class="error-message">Este campo é obrigatório.</div>');
               }
-            $('.required-field').on('click', function() {
-              $(this).removeClass('required-field-error');
-              $(this).siblings('.error-message').remove();
             });
-            });
+
             var errorMessagesElement = $('#error-messages');
             errorMessagesElement.empty();
-            errorMessagesElement.text(JSON.stringify(errorMessages));
+            errorMessagesElement.html(errorList);
           }
         }
       }

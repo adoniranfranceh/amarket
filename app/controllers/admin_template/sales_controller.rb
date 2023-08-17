@@ -37,7 +37,6 @@ class AdminTemplate::SalesController < AdminTemplateController
     end
   end
 
-
   def show
     @sale = Sale.find(params[:id])
   end
@@ -58,13 +57,14 @@ class AdminTemplate::SalesController < AdminTemplateController
                                   :discount,
                                   :quantity,
                                   :comments,
+                                  :taxes,
+                                  :customer_value,
+                                  :secondaryproduct_ids,
                                   secondaryproduct_ids: [],
                                   others_for_sales_attributes:[
                                     :id,
                                     :payment_method,
-                                    :taxes,
                                     :other_value,
-                                    :discount,
                                     :_destroy
                                   ]
                                 )

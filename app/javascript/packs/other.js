@@ -1,76 +1,72 @@
-document.addEventListener('DOMContentLoaded', function() {
-  var currentNumOtherValueInputs = 0;
-  var lastEqualValue = 0;
-  console.log('Aqui é o other')
+var currentNumOtherValueInputs = 0;
+var lastEqualValue = 0;
 
-  document.querySelector('#btnSubmit').style.display = 'none';
+document.querySelector('#paymentMethod').addEventListener('change', function() {
+  var selectedValue = this.value;
+  var btnSubmit = document.querySelector('#btnSubmit');
 
-  document.querySelector('#paymentMethod').addEventListener('change', function() {
-    var selectedValue = this.value;
-    if (selectedValue === 'Outros') {
-      document.querySelector('#btnSubmit').style.display = 'block';
-    } else {
-      document.querySelector('#btnSubmit').style.display = 'none';
-      removeAllFields();
-      currentNumOtherValueInputs = 0; // Redefine a variável para 0
-      lastEqualValue = 0; // Redefine a variável para 0
-      setTimeout(updateOtherValues, 0); // Atualiza os valores
-    }
+  if (selectedValue == 'Outros') {
+    btnSubmit.classList.remove('d-none');
+  } else {
+    btnSubmit.classList.add('d-none');
+    removeAllFields();
+    currentNumOtherValueInputs = 0;
+    lastEqualValue = 0;
+    setTimeout(updateOtherValues, 0);
+  }
+});
+
+function removeAllFields() {
+  var fields = document.querySelectorAll('.nested-fields');
+  fields.forEach(function(field) {
+    field.parentNode.removeChild(field);
   });
+}
 
-  function removeAllFields() {
-    var fields = document.querySelectorAll('.nested-fields');
-    fields.forEach(function(field) {
-      field.parentNode.removeChild(field);
+function updateOtherValues() {
+  var total = parseFloat(document.querySelector('#total-price-input').value);
+  var otherValueInputs = document.querySelectorAll('.other-value-input');
+  var numOtherValueInputs = currentNumOtherValueInputs;
+
+  if (numOtherValueInputs > 0) {
+    var equalValue = total / numOtherValueInputs;
+    lastEqualValue = equalValue;
+
+    otherValueInputs.forEach(function(input) {
+      input.value = equalValue.toFixed(2);
+    });
+  } else {
+    otherValueInputs.forEach(function(input) {
+      input.value = lastEqualValue.toFixed(2);
     });
   }
+}
 
-  function updateOtherValues() {
-    var total = parseFloat(document.querySelector('#total-price-input').value);
-    var otherValueInputs = document.querySelectorAll('.other-value-input');
-    var numOtherValueInputs = currentNumOtherValueInputs;
-    console.log(currentNumOtherValueInputs)
+var container = document.querySelector('#others_for_sales');
+container.addEventListener('click', function(e) {
+  if (e.target && e.target.classList.contains('remove_fields')) {
+    e.preventDefault();
+    e.stopPropagation();
 
-    if (numOtherValueInputs > 0) {
-      var equalValue = total / numOtherValueInputs;
-      lastEqualValue = equalValue;
+    currentNumOtherValueInputs--;
 
-      otherValueInputs.forEach(function(input) {
-        input.value = equalValue.toFixed(2);
-      });
-    } else {
-      otherValueInputs.forEach(function(input) {
-        input.value = lastEqualValue.toFixed(2);
-      });
-    }
+    var field = e.target.closest('.nested-fields');
+    field.parentNode.removeChild(field);
+
+    setTimeout(updateOtherValues, 0);
   }
+});
 
-  var container = document.querySelector('#others_for_sales');
-  container.addEventListener('click', function(e) {
-    if (e.target && e.target.classList.contains('remove_fields')) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      currentNumOtherValueInputs--;
-
-      var field = e.target.closest('.nested-fields');
-      field.parentNode.removeChild(field);
-
-      setTimeout(updateOtherValues, 0);
-    }
-  });
-
-  var addButton = document.querySelector('.add_fields');
-  if (addButton) {
-    addButton.addEventListener('click', function() {
-      currentNumOtherValueInputs++;
-      setTimeout(updateOtherValues, 0);
-    });
-  }
-
-  document.querySelector('#total-price-input').addEventListener('input', function() {
+var addButton = document.querySelector('.add_fields');
+if (addButton) {
+  addButton.addEventListener('click', function() {
+    currentNumOtherValueInputs++;
     setTimeout(updateOtherValues, 0);
   });
+}
 
-  updateOtherValues();
+document.querySelector('#total-price-input').addEventListener('input', function() {
+  setTimeout(updateOtherValues, 0);
 });
+
+updateOtherValues();
