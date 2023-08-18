@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_18_012306) do
+ActiveRecord::Schema.define(version: 2023_08_18_045755) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -97,6 +97,17 @@ ActiveRecord::Schema.define(version: 2023_08_18_012306) do
     t.index ["admin_id"], name: "index_customers_on_admin_id"
   end
 
+  create_table "invoice_products", force: :cascade do |t|
+    t.string "name"
+    t.integer "quantity"
+    t.float "sale_price"
+    t.integer "sale_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "Code"
+    t.index ["sale_id"], name: "index_invoice_products_on_sale_id"
+  end
+
   create_table "movements", force: :cascade do |t|
     t.float "cash_withdrawal"
     t.float "cash_deposit"
@@ -163,6 +174,7 @@ ActiveRecord::Schema.define(version: 2023_08_18_012306) do
     t.float "taxes"
     t.float "customer_value"
     t.float "change"
+    t.string "Code"
     t.index ["admin_id"], name: "index_sales_on_admin_id"
     t.index ["cash_register_id"], name: "index_sales_on_cash_register_id"
     t.index ["customer_id"], name: "index_sales_on_customer_id"
@@ -218,6 +230,7 @@ ActiveRecord::Schema.define(version: 2023_08_18_012306) do
   add_foreign_key "cashes", "admins"
   add_foreign_key "categories", "admins"
   add_foreign_key "customers", "admins"
+  add_foreign_key "invoice_products", "sales"
   add_foreign_key "movements", "cash_registers"
   add_foreign_key "others_for_sales", "sales"
   add_foreign_key "products", "admins"

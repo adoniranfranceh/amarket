@@ -82,7 +82,7 @@ $('#search-results').on('click', '.add-btn', function() {
     type: 'number',
     min: 1,
     max: $(this).data('quantity')
-  }).addClass('quantity form-control input-number').val(1).attr('name', 'quantity_for_product[${productId}]');
+  }).addClass('quantity form-control input-number').val(1).attr('name', 'quantity_for_product' + productId);
   var card = $('<div>').addClass('product-card');
   card.append($('<h4>').text(productName));
   card.append($('<p>').text('Preço: R$' + productPrice));
