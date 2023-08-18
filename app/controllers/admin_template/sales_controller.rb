@@ -4,6 +4,7 @@ class AdminTemplate::SalesController < AdminTemplateController
   before_action :cash_is_open?, only: [:new, :create]
   include CashRegisterable
   include Code
+  include DecimalCoin
 
   def index
     @sales = current_admin.sales.order(created_at: :desc)
@@ -24,7 +25,7 @@ class AdminTemplate::SalesController < AdminTemplateController
 
     cash_register = CashRegister.find_by(closing_time: nil)
     @sale.cash_register = cash_register if cash_register
-    @sale.Code = generate_unique_code
+    @sale.code = generate_unique_code
 
     respond_to do |format|
       if @sale.save
@@ -40,6 +41,19 @@ class AdminTemplate::SalesController < AdminTemplateController
     end
   end
 
+  def update_status
+    @sale = Sale.find(params[:id])
+    new_status = params[:new_status]
+
+    if @sale.update(status: new_status)
+      flash[:notice] = 'Status atualizado com sucesso!'
+    else
+      flash[:error] = 'Erro ao atualizar o status.'
+    end
+
+    redirect_to admin_template_sales_path
+  end
+
   def show_invoice
     @sale = Sale.find(params[:id])
     @invoice_product = @sale.invoice_products
@@ -51,9 +65,13 @@ class AdminTemplate::SalesController < AdminTemplateController
     respond_to do |format|
       format.html
       format.pdf do
-        pdf = generate_invoice_pdf(@sale, @products, @customer, @seller, @total)
-        pdf_filename = "nota_de_compra_#{@sale.id}_#{@sale.created_at.strftime('%Y%m%d%H%M%S')}.pdf"
-        send_data pdf, filename: pdf_filename, type: 'application/pdf', disposition: 'inline'
+        if @sale.status == 'completed'
+          pdf = generate_invoice_pdf(@sale, @products, @customer, @seller, @total)
+          pdf_filename = "nota_de_compra_#{@sale.id}_#{@sale.created_at.strftime('%Y%m%d%H%M%S')}.pdf"
+          send_data pdf, filename: pdf_filename, type: 'application/pdf', disposition: 'inline'
+        else
+          flash[:error] = 'A nota fiscal só pode ser gerada para vendas concluídas.'
+        end
       end
     end
   end
@@ -75,31 +93,35 @@ class AdminTemplate::SalesController < AdminTemplateController
 
   def generate_invoice_pdf(sale, products, customer, seller, total)
     pdf = Prawn::Document.new(page_size: 'A7', margin: [10, 10, 10, 10])
+    line = '--------------------------------------------------------'
 
     pdf.font_size 10
 
     pdf.text 'CUPOM FISCAL', align: :center, style: :bold, size: 14
-    pdf.text '--------------------------'
-    pdf.text "COD: #{sale.Code}" # Corrigido para sale.code
+    pdf.text line
+    pdf.text "COD: #{sale.code}"
 
     pdf.text "Data: #{sale.created_at.strftime('%d/%m/%Y %H:%M')}"
     pdf.text "Cliente: #{customer.name}"
     pdf.text "Vendedor: #{seller.full_name_admin}"
-    pdf.text '--------------------------'
+    pdf.text line
 
     pdf.text 'Produtos:'
     products_details = products.map do |product|
-      "#{product.id} - #{product.name} (#{product.quantity}x) - R$ #{product.sale_price}"
+      "#{product.id} - #{product.name} #{product.quantity} UN - #{format_to_decimal(product.sale_price * product.quantity)}"
     end
     pdf.text products_details.join("\n")
+    pdf.text "Total de itens #{sale.quantity}"
 
-    pdf.text '--------------------------'
-    pdf.text "#{sale.payment_method}: R$ #{sale.customer_value}"
+    pdf.text line
+    pdf.text "#{sale.payment_method}: #{format_to_decimal(sale.customer_value)}"
     pdf.text "Troco: #{sale.change}"
     pdf.text "Desconto: #{sale.discount}"
     pdf.text "Juros: #{sale.taxes}"
     pdf.font_size 11
-    pdf.text "TOTAL: R$ #{total.to_s.gsub('.', ',')}"
+    pdf.text "TOTAL: #{format_to_decimal(total)}"
+
+    pdf.text "Concluída em #{sale.completed_at}"
 
     pdf.move_down 5
 
@@ -109,8 +131,6 @@ class AdminTemplate::SalesController < AdminTemplateController
 
     pdf.render
   end
-
-
 
   def set_customers_and_products
     @customers = current_admin.customers

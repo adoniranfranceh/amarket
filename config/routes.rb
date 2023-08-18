@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       member do
         get 'invoice', to: 'sales#show_invoice', format: :pdf
         get 'invoice_html', to: 'sales#show_invoice_html', format: :html
+        put 'update_status'
       end
     end
     resources :cash, only: [:index, :edit, :update, :new, :create]

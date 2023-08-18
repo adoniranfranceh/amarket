@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_18_045755) do
+ActiveRecord::Schema.define(version: 2023_08_18_185230) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -174,7 +174,7 @@ ActiveRecord::Schema.define(version: 2023_08_18_045755) do
     t.float "taxes"
     t.float "customer_value"
     t.float "change"
-    t.string "Code"
+    t.string "code"
     t.index ["admin_id"], name: "index_sales_on_admin_id"
     t.index ["cash_register_id"], name: "index_sales_on_cash_register_id"
     t.index ["customer_id"], name: "index_sales_on_customer_id"

@@ -1,6 +1,6 @@
 class Sale < ApplicationRecord
-  before_save :set_completed_at
-  after_save :movement_for_sale
+  after_save :set_completed_at
+  after_save :movement_for_devolution
   has_and_belongs_to_many :secondaryproducts
   belongs_to :admin
   belongs_to :customer
@@ -17,19 +17,35 @@ class Sale < ApplicationRecord
     completed: 'Concluído',
     canceled: 'Cancelado',
     refunded: 'Reembolsada',
-    awaiting_payment: 'Aguardando pagamento',
+    devolution: 'Devolução',
     in_review: 'Em análise'
   }.freeze
 
   private
 
   def set_completed_at
-    self.completed_at = Time.zone.now if status == 'Concluído' && status_changed?
+    if status == 'completed'
+      self.completed_at = Time.zone.now
+      movement_for_sale
+    end
   end
 
   def movement_for_sale
     total_sale = Sale.where(cash_register_id: current_cash_register.id).sum(:total_price)
     total = current_cash_register.cash_total + total_sale
     current_cash_register.update(cash_sale: total_sale, cash_total: total)
+  end
+
+  def movement_for_devolution
+    if status == 'devolution'
+      total_devolution = 0
+      self.secondaryproducts.each do |product|
+        total_devolution += product.sale_price
+      end
+
+      total_sale = Sale.where(cash_register_id: current_cash_register.id).sum(:total_price)
+      total = current_cash_register.cash_total - total_devolution
+      current_cash_register.update(cash_sale: total_sale - total_devolution, cash_total: total)
+    end
   end
 end

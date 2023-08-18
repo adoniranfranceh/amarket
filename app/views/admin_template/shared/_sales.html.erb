@@ -1,11 +1,13 @@
 <div class="float-end"><%= link_to 'Registrar nova venda', new_admin_template_sale_path, class: 'btn btn-success refresh-link' %></div>
 <div>
-  <table class="table">
+  <table class="table table-bordered daaTable dtr-inline">
     <thead>
       <tr>
         <th class="col-1">Id</th>
-        <th class="col-10">Nome</th>
-        <th class="col-1"></th>
+        <th class="col-1">Data</th>
+        <th class="col-1">Vendedor</th>
+        <th class="col-1">Cliente</th>
+        <th class="col-1">Ações</th>
       </tr>
     </thead>
 
@@ -13,9 +15,26 @@
       <% @sales.each do |sale| %>   
       <tr>
         <td class="row" style="padding-bottom: 37px;"><%= sale.id %></td>
-        <td><%= sale.secondaryproduct_ids %></td>
+        <td><%= sale.created_at.strftime('%d/%m/%Y') %></td>
+        <td><%= sale.admin.full_name_admin %></td>
+        <td><%= sale.customer.name %></td>
         <td><%= link_to 'ver', admin_template_sale_path(sale), class: "btn btn-success " %>
-        <td><%= link_to 'Ver Nota', invoice_admin_template_sale_path(sale, format: :pdf), class: 'btn btn-primary' %></td>
+            <%= link_to invoice_admin_template_sale_path(sale, format: :pdf), class: 'btn btn-primary' do %>
+              <i class="bi bi-card-text"></i>
+            <% end %>
+            <% unless sale.status == 'completed' %>
+              <%= form_tag update_status_admin_template_sale_path(sale), method: :put do %>
+                <%= select_tag 'new_status', options_for_select(Sale::STATUS_OPTIONS.map { |key, value| [value, key.to_s] }), include_blank: true, class: 'form-control' %>
+                <%= submit_tag 'Atualizar Status', class: 'btn btn-primary' %>
+              <% end %>
+              <%= link_to update_status_admin_template_sale_path(sale, new_status: "canceled"), method: :put, class: 'btn btn-danger' do %>
+                <i class="bi bi-x-lg"></i>
+              <% end %>
+            <% else %>
+              <%= link_to update_status_admin_template_sale_path(sale, new_status: "devolution"), method: :put, class: 'btn btn-warning' do %>
+                <i class="bi bi-arrow-counterclockwise"></i>
+              <% end %>
+            <% end %>
         </td>
       </tr>
       <% end %>

@@ -51,15 +51,20 @@ class AdminTemplate::HomeController < AdminTemplateController
   private
 
   def select_product_info
-    @product_selected = select_product_query.pluck('products.name', 'products.brand')
-    @quantity_of_sales = select_product_query.count.values
+    @product_selected = []
+    @quantity_of_sales = []
+
+    select_product_query.each do |product|
+      @product_selected << product.name
+      @quantity_of_sales << product.sales.count
+    end
   end
 
   def select_product_query
-    current_admin.products.joins(secondaryproducts: { sales: :sales_secondaryproducts })
-                  .where(sales: { created_at: @choose_date.all_month })
-                  .group('products.id')
-                  .order('COUNT(products.id) DESC')
-                  .limit(10)
+    current_admin.secondaryproducts.joins(:sales)
+                      .where(sales: {created_at: @choose_date.all_month})
+                      .group('secondaryproducts.id')
+                      .order('COUNT(sales.id) DESC')
+                      .limit(10)
   end
 end
