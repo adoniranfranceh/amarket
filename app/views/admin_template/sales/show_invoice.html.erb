@@ -1,0 +1,14 @@
+<!-- app/views/sales/show_invoice.html.erb -->
+<h1>Nota de Compra</h1>
+<p>Data da Venda: <%= @sale.created_at %></p>
+<p>Cliente: <%= @customer.name %></p>
+<p>Vendedor: <%= @seller.full_name_admin %></p>
+
+<h2>Produtos:</h2>
+<ul>
+  <% @products.each do |product| %>
+    <li><%= product.name %> - <%= product.sale_price %></li>
+  <% end %>
+</ul>
+
+<p>Total: <%= @total %></p>

@@ -18,15 +18,14 @@ import "@nathanvda/cocoon"
 import Chart from 'chart.js/auto';
 global.Chart = Chart;
 
-$(document).ready(function() {
-  $('.price-input').mask("#.##0,00", {reverse: true});
-  $('.phone').mask('(00) 0 0000-0000');
-  $('.cpf-input').mask('000-000.000-00');
 
-  $('#submit-button').click(function(event) {
-    event.preventDefault();
-    checkRequiredFields();
-  });
+$('.price-input').mask("#.##0,00", {reverse: true});
+$('.phone').mask('(00) 0 0000-0000');
+$('.cpf-input').mask('000-000.000-00');
+
+$('#submit-button').click(function(event) {
+  event.preventDefault();
+  checkRequiredFields();
 });
 
 function checkRequiredFields() {

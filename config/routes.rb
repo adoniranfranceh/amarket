@@ -14,7 +14,12 @@ Rails.application.routes.draw do
     resources :products
     resources :secondary_products, only: [:index]
     resources :inventary
-    resources :sales
+    resources :sales do
+      member do
+        get 'invoice', to: 'sales#show_invoice', format: :pdf
+        get 'invoice_html', to: 'sales#show_invoice_html', format: :html
+      end
+    end
     resources :cash, only: [:index, :edit, :update, :new, :create]
     resources :cash_registers do
       patch :close, on: :collection

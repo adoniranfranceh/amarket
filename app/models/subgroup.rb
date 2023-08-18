@@ -10,7 +10,5 @@ class Subgroup < ApplicationRecord
       total_quantity_variation += subgroup.quantity
     end
     self.variation.update(variation_quantity: total_quantity_variation)
-    puts total_quantity_variation
-    puts 'total variation <<<<<<<<<<<<<<<<<<<<<<<<'
   end
 end

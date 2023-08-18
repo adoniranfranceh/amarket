@@ -37,11 +37,58 @@ class AdminTemplate::SalesController < AdminTemplateController
     end
   end
 
-  def show
+  def show_invoice
     @sale = Sale.find(params[:id])
+    @products = @sale.secondaryproducts
+    @customer = @sale.customer
+    @seller = @sale.admin
+    @total = @sale.total_price
+
+    respond_to do |format|
+      format.html
+      format.pdf do
+        pdf = generate_invoice_pdf(@sale, @products, @customer, @seller, @total)
+        pdf_filename = "nota_de_compra_#{@sale.id}_#{@sale.created_at.strftime('%Y%m%d%H%M%S')}.pdf"
+        send_data pdf, filename: pdf_filename, type: 'application/pdf', disposition: 'inline'
+      end
+    end
   end
 
   private
+
+  def generate_invoice_pdf(sale, products, customer, seller, total)
+    pdf = Prawn::Document.new(page_size: 'A7', margin: [10, 10, 10, 10])
+
+    pdf.font_size 10
+
+    pdf.text 'CUPOM FISCAL', align: :center, style: :bold, size: 14
+    pdf.text '--------------------------'
+
+    pdf.text "Data: #{sale.created_at.strftime('%d/%m/%Y %H:%M')}"
+    pdf.text "Cliente: #{customer.name}"
+    pdf.text "Vendedor: #{seller.full_name_admin}"
+    pdf.text '--------------------------'
+
+    pdf.text 'Produtos:'
+    products_details = []
+    products.each do |product|
+      products_details <<  "#{product.name} (#{product.quantity}x) - R$ #{product.sale_price}"
+    end
+    pdf.text products_details.join("\n")
+
+    pdf.text '--------------------------'
+    pdf.text "TOTAL: R$ #{total.to_s.gsub('.', ',')}"
+
+    pdf.move_down 5
+
+    qr_code = RQRCode::QRCode.new("#{invoice_admin_template_sale_url(sale, format: :pdf)}")
+    qr_code_img = qr_code.as_png(size: 150)
+    pdf.image StringIO.new(qr_code_img.to_s), width: 100, height: 100, position: :center
+
+    pdf.render
+  end
+
+
   def set_customers_and_products
     @customers = current_admin.customers
     @products = current_admin.products
@@ -59,16 +106,16 @@ class AdminTemplate::SalesController < AdminTemplateController
                                   :comments,
                                   :taxes,
                                   :customer_value,
-                                  :secondaryproduct_ids,
-                                  secondaryproduct_ids: [],
-                                  others_for_sales_attributes:[
+                                  others_for_sales_attributes: [
                                     :id,
                                     :payment_method,
                                     :other_value,
                                     :_destroy
-                                  ]
+                                  ],
+                                  secondaryproduct_ids: [:id, :quantity]
                                 )
   end
+
 
   def update_product_quantities(sale)
     sale.secondaryproducts.each do |product|

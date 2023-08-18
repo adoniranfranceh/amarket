@@ -4,7 +4,7 @@ module NumberUtils
   private
 
   def format_decimal(value)
-    value.gsub('.','').gsub(',','.').to_f
+    value.to_s.gsub('.','').gsub(',','.').to_f
   end
 
   def format_decimal_value(model, attribute)
