@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     resources :products
     resources :secondary_products, only: [:index]
     resources :inventary
-    resources :sales do
+     resources :sales do
       member do
         get 'invoice', to: 'sales#show_invoice', format: :pdf
         get 'invoice_html', to: 'sales#show_invoice_html', format: :html
@@ -35,4 +35,5 @@ Rails.application.routes.draw do
   root 'admin_template/home#index'
   get '/search', to: 'admin_template/products#search'
   get '/datas_from_controller', to: 'admin_template/home#datas_from_controller'
+  post '/validate_admin_password', to: 'admin_template/sales#validate_admin_password'
 end

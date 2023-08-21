@@ -2,6 +2,8 @@ class AdminTemplate::SalesController < AdminTemplateController
   before_action :set_customers_and_products, only: [:new]
   skip_before_action :verify_authenticity_token, only: [:create]
   before_action :cash_is_open?, only: [:new, :create]
+  skip_before_action :verify_authenticity_token, only: [:validate_admin_password]
+
   include CashRegisterable
   include Code
   include DecimalCoin
@@ -41,14 +43,45 @@ class AdminTemplate::SalesController < AdminTemplateController
     end
   end
 
+  def validate_admin_password
+    admin = current_admin
+    password = params[:password]
+
+    if admin.valid_password?(password)
+      render json: { valid: true }
+    else
+      render json: { valid: false }
+    end
+  end
+
+
   def update_status
     @sale = Sale.find(params[:id])
     new_status = params[:new_status]
 
-    if @sale.update(status: new_status)
-      flash[:notice] = 'Status atualizado com sucesso!'
+    if new_status == 'devolution'
+      total_devolution = 0
+      @sale.secondaryproducts.each do |product|
+        total_devolution += product.sale_price
+      end
+
+      if current_cash_register.cash_total < total_devolution
+        nested_value = total_devolution - current_cash_register.cash_total
+        flash[:error] = "O valor da devolução é maior que o total em caixa. Necessário #{format_to_decimal(nested_value)}"
+      else
+        if @sale.update(status: new_status, total_price: 0)
+          current_cash_register.movements.create(cash_withdrawal: total_devolution, reason: 'Devolução de venda')
+          flash[:notice] = 'Status atualizado com sucesso!'
+        else
+          flash[:error] = 'Erro ao atualizar o status.'
+        end
+      end
     else
-      flash[:error] = 'Erro ao atualizar o status.'
+      if @sale.update!(status: new_status)
+        flash[:notice] = 'Status atualizado com sucesso!'
+      else
+        flash[:error] = 'Erro ao atualizar o status: ' + @sale.errors.full_messages.join(', ')
+      end
     end
 
     redirect_to admin_template_sales_path
@@ -121,7 +154,7 @@ class AdminTemplate::SalesController < AdminTemplateController
     pdf.font_size 11
     pdf.text "TOTAL: #{format_to_decimal(total)}"
 
-    pdf.text "Concluída em #{sale.completed_at}"
+    pdf.text "Concluída em #{}"
 
     pdf.move_down 5
 

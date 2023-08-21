@@ -1,6 +1,5 @@
 class Sale < ApplicationRecord
   after_save :set_completed_at
-  after_save :movement_for_devolution
   has_and_belongs_to_many :secondaryproducts
   belongs_to :admin
   belongs_to :customer
@@ -11,13 +10,18 @@ class Sale < ApplicationRecord
   accepts_nested_attributes_for :others_for_sales, allow_destroy: true, reject_if: :all_blank
   include CashRegisterable
 
-  STATUS_OPTIONS = {
+  STATUS_OPTIONS_IN_FORM = {
     pending: 'Pendente',
     in_progress: 'Em andamento',
     completed: 'Concluído',
-    canceled: 'Cancelado',
+    in_review: 'Em análise'
+  }.freeze
+
+  STATUS_OPTIONS_IN_INDEX = {
+    pending: 'Pendente',
+    in_progress: 'Em andamento',
+    completed: 'Concluído',
     refunded: 'Reembolsada',
-    devolution: 'Devolução',
     in_review: 'Em análise'
   }.freeze
 
@@ -31,21 +35,9 @@ class Sale < ApplicationRecord
   end
 
   def movement_for_sale
+    sale = Sale.where(cash_register_id: current_cash_register.id)
     total_sale = Sale.where(cash_register_id: current_cash_register.id).sum(:total_price)
     total = current_cash_register.cash_total + total_sale
     current_cash_register.update(cash_sale: total_sale, cash_total: total)
-  end
-
-  def movement_for_devolution
-    if status == 'devolution'
-      total_devolution = 0
-      self.secondaryproducts.each do |product|
-        total_devolution += product.sale_price
-      end
-
-      total_sale = Sale.where(cash_register_id: current_cash_register.id).sum(:total_price)
-      total = current_cash_register.cash_total - total_devolution
-      current_cash_register.update(cash_sale: total_sale - total_devolution, cash_total: total)
-    end
   end
 end

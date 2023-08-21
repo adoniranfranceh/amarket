@@ -1,17 +1,24 @@
 class AdminTemplate::HomeController < AdminTemplateController
   def index
     choose_date_request
+    sales_completed = @sales.where(status: 'completed')
     @total = @sales.sum(:total_price)
     select_product_info
+
   end
 
   def last_seven_days(other_or_date_current)
-    start_date = other_or_date_current - 6.days
-    all_dates_last_days = (start_date..other_or_date_current).to_a
-    @day_names = all_dates_last_days.map { |date| date == Date.current ? "#{I18n.l(date, format: '%A')} (Hoje)" : I18n.l(date, format: '%A') }
+    start_date = other_or_date_current - 7.days
+    end_date = other_or_date_current
+
+    all_dates_last_days = (start_date..end_date).to_a
+    @day_names = all_dates_last_days.map do |date|
+      formatted_date = (date == Date.current) ? "#{I18n.l(date, format: '%A')} (Hoje)" : I18n.l(date, format: '%A')
+      formatted_date
+    end
 
     sales_data = current_admin.sales
-      .where(created_at: all_dates_last_days.first..all_dates_last_days.last)
+      .where(created_at: start_date.beginning_of_day..end_date.end_of_day, status: 'completed')
       .group("DATE(created_at)")
       .count
 
@@ -31,14 +38,14 @@ class AdminTemplate::HomeController < AdminTemplateController
   def choose_date_request
     @choose_date = params[:choose_date].present? ? Date.parse(params[:choose_date]) : Date.current
     if @choose_date == Date.current
-      @sales = current_admin.sales.within_current_month
+      @sales = current_admin.sales.within_current_month.where(status: 'completed')
       @text = '(mês atual)'
       @customers = current_admin.customers
       @secondary_products = current_admin.secondaryproducts
       last_seven_days(Date.current)
       customer_info_select(Date.current)
     else
-      @sales = current_admin.sales.within_selected_day(@choose_date)
+      @sales = current_admin.sales.within_selected_day(@choose_date).where(status: 'completed')
       @text = "(#{I18n.l(@choose_date, format: "%d de %B")})"
       @customers = current_admin.customers.within_selected_month(@choose_date)
       @secondary_products = current_admin.secondaryproducts.within_selected_month(@choose_date)
@@ -51,20 +58,26 @@ class AdminTemplate::HomeController < AdminTemplateController
   private
 
   def select_product_info
+    product_data = select_product_query
+
     @product_selected = []
     @quantity_of_sales = []
 
-    select_product_query.each do |product|
+    product_data.each do |product|
       @product_selected << product.name
-      @quantity_of_sales << product.sales.count
+      @quantity_of_sales << product.sales_count
     end
+
+    puts "#{@product_selected} produtos "
+    puts "#{@quantity_of_sales} quantidade"
   end
 
   def select_product_query
     current_admin.secondaryproducts.joins(:sales)
-                      .where(sales: {created_at: @choose_date.all_month})
-                      .group('secondaryproducts.id')
-                      .order('COUNT(sales.id) DESC')
-                      .limit(10)
+                  .where(sales: { created_at: @choose_date.all_month, status: 'completed' })
+                  .group('secondaryproducts.id')
+                  .order(Arel.sql('COUNT(sales.id) DESC'))
+                  .limit(10)
+                  .select('secondaryproducts.*, COUNT(sales.id) as sales_count')
   end
 end

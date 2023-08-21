@@ -18,26 +18,80 @@
         <td><%= sale.created_at.strftime('%d/%m/%Y') %></td>
         <td><%= sale.admin.full_name_admin %></td>
         <td><%= sale.customer.name %></td>
-        <td><%= link_to 'ver', admin_template_sale_path(sale), class: "btn btn-success " %>
-            <%= link_to invoice_admin_template_sale_path(sale, format: :pdf), class: 'btn btn-primary' do %>
-              <i class="bi bi-card-text"></i>
-            <% end %>
-            <% unless sale.status == 'completed' %>
-              <%= form_tag update_status_admin_template_sale_path(sale), method: :put do %>
-                <%= select_tag 'new_status', options_for_select(Sale::STATUS_OPTIONS.map { |key, value| [value, key.to_s] }), include_blank: true, class: 'form-control' %>
-                <%= submit_tag 'Atualizar Status', class: 'btn btn-primary' %>
-              <% end %>
-              <%= link_to update_status_admin_template_sale_path(sale, new_status: "canceled"), method: :put, class: 'btn btn-danger' do %>
-                <i class="bi bi-x-lg"></i>
-              <% end %>
-            <% else %>
-              <%= link_to update_status_admin_template_sale_path(sale, new_status: "devolution"), method: :put, class: 'btn btn-warning' do %>
-                <i class="bi bi-arrow-counterclockwise"></i>
-              <% end %>
-            <% end %>
+        <td>
+          <%= sale.status %>
+          <%= pdf_and_devolution_btns(sale) %>
+          <%= cancel_btn(sale) %>
+          <%= select_status(sale) %>
+          <% modal_id = "statusModal#{sale.id}" %>
+          <%= render 'admin_template/shared/status_select_modal', sale: sale, modal_id: modal_id %>
         </td>
       </tr>
-      <% end %>
+    <% end %>
     </tbody>
   </table>
 </div>
+<%= javascript_tag do %>
+  document.addEventListener("DOMContentLoaded", function() {
+    const adminActionLinks = document.querySelectorAll(".admin-action-link");
+
+    adminActionLinks.forEach(link => {
+      link.addEventListener("click", function(event) {
+        event.preventDefault();
+
+        const saleId = event.currentTarget.getAttribute("data-sale-id");
+        const status = event.currentTarget.getAttribute("data-status");
+
+        const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
+
+        Swal.fire({
+          title: 'Digite a senha',
+          input: 'password',
+          inputValue: '',
+          inputAttributes: {
+            autocapitalize: 'off'
+          },
+          inputAttributes: {
+            autocapitalize: 'off',
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Confirmar',
+          cancelButtonText: 'Cancelar',
+          preConfirm: (password) => {
+            return new Promise((resolve) => {
+              $.ajax({
+                method: 'POST',
+                url: '/validate_admin_password',
+                data: { password: password },
+                success: function(response) {
+                  if (response.valid) {
+                    resolve();
+                  } else {
+                    Swal.showValidationMessage('Senha incorreta');
+                    const confirmButton = Swal.getConfirmButton();
+                    const cancelButton = Swal.getCancelButton();
+                    confirmButton.disabled = false;
+                    cancelButton.disabled = false;
+                  }
+                }
+              });
+            });
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajaxSetup({
+              headers: {
+                'X-CSRF-Token': csrfToken
+              }
+            });
+
+            $.ajax({
+              method: 'PUT',
+              url: `/admin_template/sales/${saleId}/update_status?new_status=${status}`
+            });
+          }
+        });
+      });
+    });
+  });
+<% end %>
