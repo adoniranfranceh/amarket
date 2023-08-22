@@ -1,0 +1,30 @@
+pt-BR:
+  activerecord:
+    attributes:
+      sale:
+        quantity: Quantidade
+        total_price: Preço Total
+        payment_method: Método de Pagamento
+        completed_at: Data de Conclusão
+        status: Status
+        comments: Comentários
+        admin_id: ID do Admin
+        created_at: Criado em
+        updated_at: Atualizado em
+        customer_id: ID do Cliente
+        discount: Desconto
+        cash_register_id: ID do Caixa
+        taxes: Impostos
+        customer_value: Valor do Cliente
+        change: Troco
+        code: Código
+    enums:
+      sale:
+        status:
+          pending: Pendente
+          in_progress: Em andamento
+          completed: Concluído
+          refunded: Reembolsada
+          in_review: Em análise
+          canceled: Cancelado
+          devolution: Devolvido

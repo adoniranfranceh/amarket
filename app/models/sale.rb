@@ -21,7 +21,6 @@ class Sale < ApplicationRecord
     pending: 'Pendente',
     in_progress: 'Em andamento',
     completed: 'Concluído',
-    refunded: 'Reembolsada',
     in_review: 'Em análise'
   }.freeze
 

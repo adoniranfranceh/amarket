@@ -1,36 +1,49 @@
-<div class="float-end"><%= link_to 'Registrar nova venda', new_admin_template_sale_path, class: 'btn btn-success refresh-link' %></div>
-<div>
-  <table class="table table-bordered daaTable dtr-inline">
+
+<div class="sales-table-container">
+  <div class="actions-container">
+    <%= link_to 'Registrar nova venda', new_admin_template_sale_path, class: 'btn btn-success refresh-link' %>
+  </div>
+
+  <table class="table table-bordered data-table dtr-inline">
     <thead>
       <tr>
-        <th class="col-1">Id</th>
-        <th class="col-1">Data</th>
-        <th class="col-1">Vendedor</th>
-        <th class="col-1">Cliente</th>
-        <th class="col-1">Ações</th>
+        <th class="col-1">Id <i class="bi bi-hash" data-bs-toggle="tooltip" data-bs-placement="top" title="ID"></i></th>
+        <th class="col-2">Cliente <i class="bi bi-person" data-bs-toggle="tooltip" data-bs-placement="top" title="Cliente"></i></th>
+        <th class="col-2">Data e Hora <i class="bi bi-clock" data-bs-toggle="tooltip" data-bs-placement="top" title="Data e Hora"></i></th>
+        <th class="col-1">Status <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="top" title="Status da Venda"></i></th>
+        <th class="col-2">Vendedor <i class="bi bi-person" data-bs-toggle="tooltip" data-bs-placement="top" title="Vendedor"></i></th>
+        <th class="col-2 text-center">Ações <i class="bi bi-gear-fill" data-bs-toggle="tooltip" data-bs-placement="top" title="Ações"></i></th>
       </tr>
     </thead>
 
     <tbody>
       <% @sales.each do |sale| %>   
-      <tr>
-        <td class="row" style="padding-bottom: 37px;"><%= sale.id %></td>
-        <td><%= sale.created_at.strftime('%d/%m/%Y') %></td>
-        <td><%= sale.admin.full_name_admin %></td>
-        <td><%= sale.customer.name %></td>
-        <td>
-          <%= sale.status %>
-          <%= pdf_and_devolution_btns(sale) %>
-          <%= cancel_btn(sale) %>
-          <%= select_status(sale) %>
-          <% modal_id = "statusModal#{sale.id}" %>
-          <%= render 'admin_template/shared/status_select_modal', sale: sale, modal_id: modal_id %>
-        </td>
-      </tr>
-    <% end %>
+        <tr>
+          <td><%= sale.id %></td>
+          <td><%= sale.customer.name %></td>
+          <td><%= sale.created_at.strftime('%d/%m/%Y %H:%M') %></td>
+          <td>
+            <div class="status-icon">
+              <%= link_to "#", class: "status-icon-link", data: { toggle: "modal", target: "#statusModal#{sale.id}" } do %>
+                <h2 class="div-center"><%= status_icon(sale.status) %></h2>
+              <% end %>
+            </div>
+          </td>
+          <td><%= sale.admin.full_name_admin %></td>
+          <td>
+            <div class="actions-btns">
+              <%= pdf_and_devolution_btns(sale) %>
+              <%= cancel_btn(sale) %>
+              <% modal_id = "statusModal#{sale.id}" %>
+              <%= render 'admin_template/shared/status_select_modal', sale: sale, modal_id: modal_id %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
     </tbody>
   </table>
 </div>
+
 <%= javascript_tag do %>
   document.addEventListener("DOMContentLoaded", function() {
     const adminActionLinks = document.querySelectorAll(".admin-action-link");

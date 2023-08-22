@@ -69,7 +69,7 @@ class AdminTemplate::SalesController < AdminTemplateController
         nested_value = total_devolution - current_cash_register.cash_total
         flash[:error] = "O valor da devolução é maior que o total em caixa. Necessário #{format_to_decimal(nested_value)}"
       else
-        if @sale.update(status: new_status, total_price: 0)
+        if @sale.update(status: "Devolvido em #{Date.current.strftime('%d/%m/%Y')}", total_price: 0)
           current_cash_register.movements.create(cash_withdrawal: total_devolution, reason: 'Devolução de venda')
           flash[:notice] = 'Status atualizado com sucesso!'
         else
@@ -154,7 +154,7 @@ class AdminTemplate::SalesController < AdminTemplateController
     pdf.font_size 11
     pdf.text "TOTAL: #{format_to_decimal(total)}"
 
-    pdf.text "Concluída em #{}"
+    pdf.text "Concluída em #{sale.updated_at.strftime('%d/%m/%Y %H:%M')}"
 
     pdf.move_down 5
 
