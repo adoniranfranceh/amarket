@@ -5,7 +5,7 @@
     </div>
 
     <div class="mb-3">
-      <%= form.input :phone, label: 'Telefone', placeholder: '(99) 9 9999-9999', input_html: { class: 'form-control phone' } %>
+      <%= form.input :phone, as: :string, label: 'Telefone', placeholder: '(99) 9 9999-9999', input_html: { class: 'form-control phone' } %>
     </div>
 
     <div class="mb-3">
@@ -29,7 +29,7 @@
     </div>
 
     <div class="mb-3">
-      <%= form.input :cpf, label: 'CPF', class: 'form-control cpf-input' %>
+      <%= form.input :cpf, as: :string, label: 'CPF', input_html: { class: 'form-control cpf-input'} %>
     </div>
   </div>
   <div>

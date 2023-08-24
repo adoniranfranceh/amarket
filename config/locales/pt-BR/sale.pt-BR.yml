@@ -14,7 +14,7 @@ pt-BR:
         customer_id: ID do Cliente
         discount: Desconto
         cash_register_id: ID do Caixa
-        taxes: Impostos
+        taxes: Juros
         customer_value: Valor do Cliente
         change: Troco
         code: Código
