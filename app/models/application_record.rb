@@ -1,5 +1,6 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
+
   scope :within_current_month, -> {
     where(created_at: Date.current.all_month)
   }

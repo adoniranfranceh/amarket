@@ -10,6 +10,28 @@ class Sale < ApplicationRecord
   accepts_nested_attributes_for :others_for_sales, allow_destroy: true, reject_if: :all_blank
   include CashRegisterable
 
+  scope :search, -> (term) {
+    return all unless term.present?
+    joins(:customer).where("LOWER(customers.name) LIKE ? OR LOWER(code) LIKE ?", "%#{term.downcase}%", "%#{term.downcase}%")
+  }
+  scope :search_by_date, -> (date) {
+    return all unless date.present?
+    where("DATE(created_at) = ?", date)
+  }
+
+  scope :search_by_date_range, -> (start_date, end_date) {
+    return all unless start_date.present? || end_date.present?
+
+    if start_date.present? && end_date.present?
+      where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+    elsif start_date.present?
+      where("created_at >= ?", start_date.beginning_of_day)
+    elsif end_date.present?
+      where("created_at <= ?", end_date.end_of_day)
+    end
+  }
+
+
   STATUS_OPTIONS_IN_FORM = {
     pending: 'Pendente',
     in_progress: 'Em andamento',

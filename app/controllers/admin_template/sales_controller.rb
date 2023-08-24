@@ -9,7 +9,13 @@ class AdminTemplate::SalesController < AdminTemplateController
   include DecimalCoin
 
   def index
-    @sales = current_admin.sales.order(created_at: :desc)
+    @sales = current_admin.sales.includes(:customer)
+             .where(admin_id: current_admin.id)
+             .search(params[:search])
+             .search_by_date(params[:search_date])
+             .search_by_date_range(params[:start_date], params[:end_date])
+             .order(created_at: :desc)
+             .page(params[:page]).per(5)
   end
 
   def new
