@@ -13,7 +13,6 @@ class AdminTemplate::SalesController < AdminTemplateController
              .where(admin_id: current_admin.id)
              .search(params[:search])
              .search_by_date(params[:search_date])
-             .search_by_date_range(params[:start_date], params[:end_date])
              .order(created_at: :desc)
              .page(params[:page]).per(5)
   end
@@ -31,7 +30,7 @@ class AdminTemplate::SalesController < AdminTemplateController
       @sale.secondaryproducts << secondary if secondary
     end
 
-    cash_register = CashRegister.find_by(closing_time: nil)
+    cash_register = current_cash_register
     @sale.cash_register = cash_register if cash_register
     @sale.code = generate_unique_code
 
@@ -43,7 +42,7 @@ class AdminTemplate::SalesController < AdminTemplateController
         format.json { render json: @sale, status: :created }
       else
         puts @sale.errors.full_messages
-        format.html { render :new }
+        format.html { render :index, flash[:error] = 'Houve algum problema ao tentar concluir a venda' }
         format.json { render json: { errors: @sale.errors.full_messages }, status: 422 }
       end
     end

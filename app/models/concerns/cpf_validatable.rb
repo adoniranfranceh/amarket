@@ -16,8 +16,6 @@ module CpfValidatable
 
     unless CPF.valid?(cpf_clean)
       errors.add(:cpf, 'inválido')
-    else
-      puts "CPF válido: #{cpf_clean}"
     end
   end
 end

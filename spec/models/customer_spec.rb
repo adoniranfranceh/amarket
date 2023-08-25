@@ -10,7 +10,7 @@ RSpec.describe Customer, type: :model do
 
     it 'is invalid with an invalid CPF' do
       admin = FactoryBot.create(:admin)
-      customer = FactoryBot.build(:customer, cpf: '12345678910', admin: admin)
+      customer = FactoryBot.build(:customer, cpf: '123.456.789-10', admin: admin)
       expect(customer).not_to be_valid
     end
 

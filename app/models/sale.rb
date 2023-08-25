@@ -19,19 +19,6 @@ class Sale < ApplicationRecord
     where("DATE(created_at) = ?", date)
   }
 
-  scope :search_by_date_range, -> (start_date, end_date) {
-    return all unless start_date.present? || end_date.present?
-
-    if start_date.present? && end_date.present?
-      where(created_at: start_date.beginning_of_day..end_date.end_of_day)
-    elsif start_date.present?
-      where("created_at >= ?", start_date.beginning_of_day)
-    elsif end_date.present?
-      where("created_at <= ?", end_date.end_of_day)
-    end
-  }
-
-
   STATUS_OPTIONS_IN_FORM = {
     pending: 'Pendente',
     in_progress: 'Em andamento',
@@ -56,9 +43,7 @@ class Sale < ApplicationRecord
   end
 
   def movement_for_sale
-    sale = Sale.where(cash_register_id: current_cash_register.id)
-    total_sale = Sale.where(cash_register_id: current_cash_register.id).sum(:total_price)
-    total = current_cash_register.cash_total + total_sale
-    current_cash_register.update(cash_sale: total_sale, cash_total: total)
+    movement = current_cash_register.movements.build(cash_deposit: self.total_price, reason: "O cliente #{self.customer.name}")
+    movement.save!
   end
 end

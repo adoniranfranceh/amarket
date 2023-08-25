@@ -7,7 +7,7 @@
   <%= form_tag(admin_template_sales_path, method: :get, class: "form-inline mb-3") do %>
     <div class="form-group mr-2">
       <%= label_tag :search, "Pesquisar por:" %>
-      <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "Código de Venda" %>
+      <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "Código de Venda ou Cliente" %>
     </div>
     <div class="form-group mr-2">
       <%= label_tag :search_date, "Pesquisar por dia:" %>
