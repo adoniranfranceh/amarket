@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_18_185230) do
+ActiveRecord::Schema.define(version: 2023_08_25_191520) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -104,7 +104,7 @@ ActiveRecord::Schema.define(version: 2023_08_18_185230) do
     t.integer "sale_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "Code"
+    t.string "code"
     t.index ["sale_id"], name: "index_invoice_products_on_sale_id"
   end
 
@@ -171,10 +171,10 @@ ActiveRecord::Schema.define(version: 2023_08_18_185230) do
     t.integer "customer_id", null: false
     t.integer "discount"
     t.integer "cash_register_id", null: false
+    t.string "code"
     t.float "taxes"
     t.float "customer_value"
     t.float "change"
-    t.string "code"
     t.index ["admin_id"], name: "index_sales_on_admin_id"
     t.index ["cash_register_id"], name: "index_sales_on_cash_register_id"
     t.index ["customer_id"], name: "index_sales_on_customer_id"

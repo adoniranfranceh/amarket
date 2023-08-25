@@ -134,9 +134,14 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
     Secondaryproduct.transaction do
       Secondaryproduct.where(product_id: product.id).destroy_all
       product.variations.each do |variation|
+        variation_name = variation.name.present? ? "- #{variation.name}" : ""
+        variation_type = variation.variation_type.present? ? "- #{variation.variation_type}" : ""
+        variation_color = variation.color.present? ? "- #{variation.color}" : ""
         if variation.subgroups.present?
           variation.subgroups.each do |subgroup|
-            subgroup_secondary_name = "#{product.full_name} #{variation.name} - #{variation.variation_type} - #{variation.color} - #{subgroup.size}"
+            subgroup_size = subgroup.size.present? ? "- #{subgroup.size}" : ""
+            subgroup_number = subgroup.number.present? ? "- #{subgroup.number}" : ""
+            subgroup_secondary_name = "#{product.full_name} #{variation_name} #{variation_type} #{variation_color} #{subgroup_size} #{subgroup_number}"
             secondary_attributes(
                                  product,
                                  subgroup_secondary_name,
@@ -146,7 +151,7 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
                                  )
           end
         else
-          secondary_name = "#{product.full_name} #{variation.name} - #{variation.variation_type} - #{variation.color}"
+          secondary_name = "#{product.full_name} #{variation_name} #{variation_type} #{variation_color}"
           secondary_attributes(
                                product, secondary_name,
                                variation.variation_quantity,

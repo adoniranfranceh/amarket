@@ -40,6 +40,7 @@ class AdminTemplate::HomeController < AdminTemplateController
     if @choose_date == Date.current
       @sales = current_admin.sales.within_current_month.where(status: 'completed')
       @text = '(mês atual)'
+      @total_text = @text
       @customers = current_admin.customers
       @secondary_products = current_admin.secondaryproducts
       last_seven_days(Date.current)
@@ -65,19 +66,19 @@ class AdminTemplate::HomeController < AdminTemplateController
 
     product_data.each do |product|
       @product_selected << product.name
-      @quantity_of_sales << product.sales_count
+      @quantity_of_sales << product.total_secondary_sales
     end
 
-    puts "#{@product_selected} produtos "
+    puts "#{@product_selected} produtos <<<<<<<<<<<<<<<<<<<<<"
     puts "#{@quantity_of_sales} quantidade"
   end
 
   def select_product_query
-    current_admin.secondaryproducts.joins(:sales)
+    current_admin.products.joins(secondaryproducts: :sales)
                   .where(sales: { created_at: @choose_date.all_month, status: 'completed' })
-                  .group('secondaryproducts.id')
+                  .group('products.id')
                   .order(Arel.sql('COUNT(sales.id) DESC'))
                   .limit(10)
-                  .select('secondaryproducts.*, COUNT(sales.id) as sales_count')
+                  .select('products.*, COUNT(secondaryproducts.id) as total_secondary_sales')
   end
 end

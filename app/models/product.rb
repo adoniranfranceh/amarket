@@ -6,7 +6,7 @@ class Product < ApplicationRecord
   has_many :variations, dependent: :destroy
   has_many :secondaryproducts, dependent: :destroy
   accepts_nested_attributes_for :variations, reject_if: :all_blank, allow_destroy: true
-  after_save :quantity_for_variations
+
 
   validates :name, :sale_price, :purchase_price, presence: true
   validates :category_id, presence: true, unless: -> { category_id.blank? }
@@ -35,7 +35,6 @@ class Product < ApplicationRecord
             total_variation += subgroup.quantity
           end
         end
-        variation.variation_quantity += total_variation
         total_quantity += variation.variation_quantity
       end
       self.quantity = total_quantity
