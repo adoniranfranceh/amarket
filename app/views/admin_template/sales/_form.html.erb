@@ -1,88 +1,90 @@
 <%= simple_form_for [:admin_template, @sale], remote: false, authenticity_token: true do |form| %>
-  <div class="<%= fieldset_disabled %>">
-    <div class="mb-3 row align-items-center">
-      <div class="col-11">
-        <%= form.input :customer_id, as: :select, collection: @customers, label: 'Cliente', include_blank: 'Selecione o cliente', input_html: { class: 'form-control select2 required-field', id: 'sale_customer_id' } %>
-      </div>
-      <div class="text-center align-self-center">
-        <%= link_to new_admin_template_customer_path, class: 'btn btn-secondary btn-sm mt-2 ml-2', 'data-toggle':'tooltip', 'data-placement':'top', title: "Registrar novo cliente" do %>
-          <i class="bi bi-person-plus-fill"></i>
-        <% end %>
-      </div>
+  <div class="mb-3 row align-items-center">
+    <div class="col-11">
+      <%= form.input :customer_id, as: :select, collection: @customers, label: 'Cliente', include_blank: 'Selecione o cliente', input_html: { class: 'form-control select2 required-field', id: 'sale_customer_id' } %>
     </div>
-    <div class="mb-3">
-      <div class="mb-3">
-        <%= render 'modal_sale' %>
-      </div>
-      <div class="mb-3">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-          Adicionar Produto
-        </button>
-        <%= form.hidden_field :secondaryproduct_ids, id: 'product-id-list', class: 'required-field' %>
-        <%= render partial: 'products_select' %>
-      </div>
-    </div>
-
-    <div class="mb-3 row div-center">
-      <div class="form-group">
-        <div class="form-description"><%= I18n.t('activerecord.attributes.sale.total_price') %></div>
-        <%= icon_number_field(form, :total_price, 'currency-dollar', step: 0.01, id: 'total-price-input') %>
-      </div>
-      <div class="form-group">
-        <div class="form-description"><%= I18n.t('activerecord.attributes.sale.quantity') %>:</div>
-        <%= icon_number_field(form, :quantity, 'bag-fill', step: 0.01, id: 'total-quantity-input') %>
-      </div>
-    </div>
-
-    <div class="mb-3 row div-center">
-      <div class="form-group">
-        <div class="form-description"><%= I18n.t('activerecord.attributes.sale.taxes') %></div>
-        <%= icon_number_field(form, :taxes, 'percent', step: 0.01, id: 'taxes-input') %>
-      </div>
-      <div class="form-group">
-        <div class="form-description"><%= I18n.t('activerecord.attributes.sale.discount') %></div>
-        <%= icon_number_field(form, :discount, 'percent', step: 0.01, id: 'discount-input') %>
-      </div>
-      <div class="form-group">
-        <div class="form-description"><%= I18n.t('activerecord.attributes.sale.customer_value') %></div>
-        <%= icon_number_field(form, :customer_value, 'currency-dollar', step: 0.01, id: 'customer_value') %>
-      </div>
-      <div class="form-group">
-        <div class="form-description"><%= I18n.t('activerecord.attributes.sale.change') %></div>
-        <%= icon_number_field(form, :change, 'cash-stack', step: 0.01, id: 'change-input', disabled: true) %>
-      </div>
-    </div>
-
-    <div class="mb-3">
-      <%= form.collection_select :payment_method, available_payment_methods, :itself, :itself, { include_blank: 'Selecione um método de pagamento' }, { class: 'form-control required-field', id: 'paymentMethod' } %>
-    </div>
-
-    <div id="others_for_sales">
-      <%= form.simple_fields_for :others_for_sales do |others_for_sale| %>
-        <%= render partial: 'others_for_sale_fields', locals: { f: others_for_sale } %>
+    <div class="text-center align-self-center">
+      <%= link_to new_admin_template_customer_path, class: 'btn btn-secondary btn-sm mt-2 ml-2', 'data-toggle':'tooltip', 'data-placement':'top', title: "Registrar novo cliente" do %>
+        <i class="bi bi-person-plus-fill"></i>
       <% end %>
-      <div class="links">
-        <%= link_to_add_association 'Adicionar Outro', form, :others_for_sales, class: 'btn btn btn-success d-none btn-block mb-3', id: 'btnSubmit' %>
-      </div>
     </div>
-
-    <div class="mb-3">
-      <%= form.select(
-        :status,
-        options_for_select(Sale::STATUS_OPTIONS_IN_FORM.invert),
-        { include_blank: 'Selecione um status' },
-        class: 'form-control'
-     ) %>
-
-    </div>
-
-    <div class="mb-3">
-      <%= form.text_area :comments, class: 'form-control', rows: 3 %>
-    </div>
-
-    <%= form.submit 'Salvar', class: 'btn btn-primary', id: 'submit-button' %>
   </div>
+  <div class="mb-3">
+    <div class="mb-3">
+      <%= render 'modal_sale' %>
+    </div>
+    <div class="mb-3">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Adicionar Produto
+      </button>
+      <%= form.hidden_field :secondaryproduct_ids, id: 'product-id-list', class: 'required-field' %>
+      <%= render partial: 'products_select' %>
+    </div>
+  </div>
+
+  <div class="mb-3 row div-center">
+    <div class="form-group">
+      <div class="form-description"><%= I18n.t('activerecord.attributes.sale.total_price') %></div>
+      <%= icon_number_field(form, :total_price, 'currency-dollar', step: 0.01, id: 'total-price-input') %>
+    </div>
+    <div class="form-group">
+      <div class="form-description"><%= I18n.t('activerecord.attributes.sale.quantity') %>:</div>
+      <%= icon_number_field(form, :quantity, 'bag-fill', step: 0.01, id: 'total-quantity-input') %>
+    </div>
+  </div>
+
+  <div class="mb-3 row div-center">
+    <div class="form-group">
+      <div class="form-description"><%= I18n.t('activerecord.attributes.sale.taxes') %></div>
+      <%= icon_number_field(form, :taxes, 'percent', step: 0.01, id: 'taxes-input') %>
+    </div>
+    <div class="form-group">
+      <div class="form-description"><%= I18n.t('activerecord.attributes.sale.discount') %></div>
+      <%= icon_number_field(form, :discount, 'percent', step: 0.01, id: 'discount-input') %>
+    </div>
+    <div class="form-group">
+      <div class="form-description"><%= I18n.t('activerecord.attributes.sale.customer_value') %></div>
+      <%= icon_number_field(form, :customer_value, 'currency-dollar', step: 0.01, id: 'customer_value') %>
+    </div>
+    <div class="form-group">
+      <div class="form-description"><%= I18n.t('activerecord.attributes.sale.change') %></div>
+      <%= icon_number_field(form, :change, 'cash-stack', step: 0.01, id: 'change-input', disabled: true) %>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= form.collection_select :payment_method, available_payment_methods, :itself, :itself, { include_blank: 'Selecione um método de pagamento' }, { class: 'form-control required-field', id: 'paymentMethod' } %>
+  </div>
+
+  <div id="others_for_sales">
+    <%= form.simple_fields_for :others_for_sales do |others_for_sale| %>
+      <%= render partial: 'others_for_sale_fields', locals: { f: others_for_sale } %>
+    <% end %>
+    <div class="links">
+      <%= link_to_add_association 'Adicionar Outro', form, :others_for_sales, class: 'btn btn btn-success d-none btn-block mb-3', id: 'btnSubmit' %>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= form.select(
+      :status,
+      options_for_select(Sale::STATUS_OPTIONS_IN_FORM.invert),
+      { include_blank: 'Selecione um status' },
+      class: 'form-control'
+   ) %>
+
+  </div>
+
+  <div class="mb-3">
+    <%= form.text_area :comments, class: 'form-control', rows: 3 %>
+  </div>
+
+  <%= form.submit 'Salvar', class: 'btn btn-primary', id: 'submit-button' %>
 <% end %>
 
+<%= javascript_tag do %>
+  var ajaxUrl = '<%= admin_template_sales_path %>';
+<% end %>
+<%= javascript_pack_tag 'amarket' %>
 <%= javascript_pack_tag 'other' %>
 <%= javascript_pack_tag 'sales' %>

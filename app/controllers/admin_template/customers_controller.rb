@@ -13,7 +13,6 @@ class AdminTemplate::CustomersController < AdminTemplateController
        redirect_to admin_template_customers_path, notice: 'Cliente salvo com sucesso'
     else
       render :new
-      flash[:error] = 'Existem campos inválidos'
     end
   end
 

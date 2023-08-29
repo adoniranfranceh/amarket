@@ -74,11 +74,11 @@ class AdminTemplate::HomeController < AdminTemplateController
   end
 
   def select_product_query
-    current_admin.products.joins(secondaryproducts: :sales)
+    current_admin.products.joins( :sales)
                   .where(sales: { created_at: @choose_date.all_month, status: 'completed' })
                   .group('products.id')
                   .order(Arel.sql('COUNT(sales.id) DESC'))
                   .limit(10)
-                  .select('products.*, COUNT(secondaryproducts.id) as total_secondary_sales')
+                  .select('products.*, COUNT(products.id)/2 as total_secondary_sales')
   end
 end

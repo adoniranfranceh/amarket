@@ -38,6 +38,10 @@ class AdminTemplate::SalesController < AdminTemplateController
       if @sale.save
         create_invoice_products(@sale)
         update_product_quantities(@sale)
+         @sale.secondaryproduct_ids.each do |secondaryproduct_id|
+          secondaryproduct = Secondaryproduct.find(secondaryproduct_id)
+          @sale.products << secondaryproduct.product
+        end
         format.html { redirect_to admin_template_sales_path, notice: 'Nova venda feita com sucesso!' }
         format.json { render json: @sale, status: :created }
       else
@@ -74,11 +78,11 @@ class AdminTemplate::SalesController < AdminTemplateController
         nested_value = total_devolution - current_cash_register.cash_total
         flash[:error] = "O valor da devolução é maior que o total em caixa. Necessário #{format_to_decimal(nested_value)}"
       else
-        if @sale.update(status: "Devolvido em #{Date.current.strftime('%d/%m/%Y')}", total_price: 0)
+        if @sale.update(status: new_status, total_price: 0)
           current_cash_register.movements.create(cash_withdrawal: total_devolution, reason: 'Devolução de venda')
           flash[:notice] = 'Status atualizado com sucesso!'
         else
-          flash[:error] = 'Erro ao atualizar o status.'
+          flash[:error] = 'Erro ao atualizar o status.' + @sale.errors.full_messages.join(', ')
         end
       end
     else
@@ -187,6 +191,7 @@ class AdminTemplate::SalesController < AdminTemplateController
                                   :comments,
                                   :taxes,
                                   :customer_value,
+                                  :secondaryproduct_ids,
                                   others_for_sales_attributes: [
                                     :id,
                                     :payment_method,
@@ -196,7 +201,6 @@ class AdminTemplate::SalesController < AdminTemplateController
                                   secondaryproduct_ids: [:id, :quantity]
                                 )
   end
-
 
   def update_product_quantities(sale)
     sale.secondaryproducts.each do |product|

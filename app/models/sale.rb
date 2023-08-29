@@ -1,6 +1,7 @@
 class Sale < ApplicationRecord
-  after_save :set_completed_at
+  after_save :set_completed_at, :update_products
   has_and_belongs_to_many :secondaryproducts
+  has_and_belongs_to_many :products
   belongs_to :admin
   belongs_to :customer
   belongs_to :cash_register
@@ -45,5 +46,9 @@ class Sale < ApplicationRecord
   def movement_for_sale
     movement = current_cash_register.movements.build(cash_deposit: self.total_price, reason: "O cliente #{self.customer.name}")
     movement.save!
+  end
+
+  def update_products
+    self.products = self.secondaryproducts.map(&:product)
   end
 end

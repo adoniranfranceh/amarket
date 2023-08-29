@@ -1,47 +1,52 @@
-<%= simple_form_for [:admin_template, @customer] do |form| %>
-  <div class="<%= fieldset_disabled %>">
-    <div class="mb-3">
-      <%= form.input :name, label: 'Nome', class: 'form-control' %>
-    </div>
+<div class="d-flex justify-content-center">
+  <div class="col-md-8">
+    <%= simple_form_for [:admin_template, @customer], html: { class: 'customer-form' } do |form| %>
+      <div class="<%= fieldset_disabled %>">
+        <div class="mb-3">
+          <%= form.input :name, label: 'Nome', class: 'form-control' %>
+        </div>
 
-    <div class="mb-3">
-      <%= form.input :phone, as: :string, label: 'Telefone', placeholder: '(99) 9 9999-9999', input_html: { class: 'form-control phone' } %>
-    </div>
+        <div class="mb-3">
+          <%= form.input :phone, as: :string, label: 'Telefone', placeholder: '(99) 9 9999-9999', input_html: { class: 'form-control phone' } %>
+        </div>
 
-    <div class="mb-3">
-      <%= form.input :email, label: 'Email', class: 'form-control' %>
-    </div>
+        <div class="mb-3">
+          <%= form.input :email, label: 'Email', class: 'form-control' %>
+        </div>
 
-    <div class="mb-3">
-      <%= form.input :city, label: 'Cidade', class: 'form-control' %>
-    </div>
+        <div class="mb-3">
+          <%= form.input :city, label: 'Cidade', class: 'form-control' %>
+        </div>
 
-    <div class="mb-3">
-      <%= form.input :neighborhood, label: 'Bairro', class: 'form-control' %>
-    </div>
+        <div class="mb-3">
+          <%= form.input :neighborhood, label: 'Bairro', class: 'form-control' %>
+        </div>
 
-    <div class="mb-3">
-      <%= form.input :andress, label: 'Endereço', class: 'form-control' %>
-    </div>
+        <div class="mb-3">
+          <%= form.input :andress, label: 'Endereço', class: 'form-control' %>
+        </div>
 
-    <div class="mb-3">
-      <%= form.input :house_number, label: 'Número da Casa', class: 'form-control' %>
-    </div>
+        <div class="mb-3">
+          <%= form.input :house_number, label: 'Número da Casa', class: 'form-control' %>
+        </div>
 
-    <div class="mb-3">
-      <%= form.input :cpf, as: :string, label: 'CPF', input_html: { class: 'form-control cpf-input'} %>
-    </div>
-  </div>
-  <div>
-    <% if action_name == 'show' %>
-      <%= link_to edit_admin_template_customer_path(@customer), data: { turbolinks: false }, class: 'btn btn-primary' do %>
-        <i class="bi bi-pencil-square">Editar</i>
-      <% end %>
-      <%= link_to admin_template_customer_path(@customer), method: :delete, class: 'btn btn-danger', data: { confirm: "Você quer excluir #{@customer.name}?" } do %>
-        <i class="bi bi-trash-fill">Excluir</i>
-      <% end %>
-    <% else %>
-      <%= form.button :submit, 'Salvar', class: 'btn btn-primary' %>
+        <div class="mb-3">
+          <%= form.input :cpf, as: :string, label: 'CPF', input_html: { class: 'form-control cpf-input'} %>
+        </div>
+      </div>
+
+      <div class="text-center mb-4">
+        <% if action_name == 'show' %>
+          <%= link_to edit_admin_template_customer_path(@customer), data: { turbolinks: false }, class: 'btn btn-primary mr-2' do %>
+            <i class="bi bi-pencil-square"></i> Editar
+          <% end %>
+          <%= link_to admin_template_customer_path(@customer), method: :delete, class: 'btn btn-danger', data: { confirm: "Você quer excluir #{@customer.name}?" } do %>
+            <i class="bi bi-trash-fill"></i> Excluir
+          <% end %>
+        <% else %>
+          <%= form.button :submit, 'Salvar', class: 'btn btn-primary' %>
+        <% end %>
+      </div>
     <% end %>
   </div>
-<% end %>
+</div>

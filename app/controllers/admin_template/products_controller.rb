@@ -13,12 +13,17 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
   def create
     @product = current_admin.products.build(product_params)
     format_decimal_value_product
-    if @product.save
-       create_secondary_records(@product)
-       redirect_to admin_template_products_path, success: 'Produto salvo com sucesso'
-    else
-      render :new
-      flash[:error] = 'Existem campos inválidos'
+
+    respond_to do |format|
+      if @product.save
+        create_secondary_records(@product)
+        format.html { redirect_to admin_template_products_path, notice: 'Produto salvo com sucesso!' }
+        format.json { render json: @product, status: :created }
+      else
+        puts @product.errors.full_messages
+        format.html { render :index, flash[:error] = 'Existem campos inválidos' }
+        format.json { render json: { errors: @product.errors.full_messages }, status: 422 }
+      end
     end
   end
 

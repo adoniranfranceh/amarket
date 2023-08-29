@@ -1,55 +1,49 @@
-$(document).ready(function() {
-  function hideShowQuantityFields() {
-    $('.variation').each(function() {
-      var $this = $(this);
-      var subgroupsPresent = $this.find('.subgroup').length;
+function hideShowQuantityFields() {
+  $('.variation').each(function() {
+    var $this = $(this);
+    var subgroupsPresent = $this.find('.subgroup').length;
 
-      if (subgroupsPresent > 0) {
-        $this.find('.variation-quantity').hide();
-      } else {
-        $this.find('.variation-quantity').show();
-      }
-    });
-
-    var variationsPresent = $('.variation').length;
-    var subgroupsPresent = $('.subgroup').length;
-
-    console.log('Variations Present:', variationsPresent);
-    console.log('Subgroups Present:', subgroupsPresent);
-
-    if (variationsPresent === 0) {
-      $('.div-quantity').show();
-      console.log('Show div-quantity');
+    if (subgroupsPresent > 0) {
+      $this.find('.variation-quantity').hide();
     } else {
-      $('.div-quantity').hide();
+      $this.find('.variation-quantity').show();
     }
+  });
 
-    if (subgroupsPresent === 0) {
-      $('.variation-quantity').show();
-      console.log('Show variation-quantity');
-    }
+  var variationsPresent = $('.variation').length;
+  var subgroupsPresent = $('.subgroup').length;
+
+  if (variationsPresent === 0) {
+    $('.div-quantity').show();
+  } else {
+    $('.div-quantity').hide();
   }
 
-  $(document).on('click', '.add-variation, .remove-variation, .add-subgroup, .rm-subgroup', function() {
-    setTimeout(function() {
-      hideShowQuantityFields();
-    }, 100);
-  });
+  if (subgroupsPresent === 0) {
+    $('.variation-quantity').show();
+  } else {
+    $('.variation-quantity').hide();
+  }
+}
 
-  $('a[data-toggle="modal"]').click(function() {
-    var imageUrl = $(this).find('img').attr('src');
-    $('#exampleModal').find('.img-modal').attr('src', imageUrl);
-  });
-
-  $('#exampleModal').on('show.bs.modal', function() {
-    var imageUrl = $(this).find('img').attr('src');
-    $(this).find('.img-modal').attr('src', imageUrl);
-  });
-
-  $('#exampleModal').on('hidden.bs.modal', function() {
-    $(this).find('.img-modal').attr('src', '');
-  });
-
-  // Esconder os campos corretamente no carregamento da página
-  hideShowQuantityFields();
+$(document).on('click', '.add-variation, .remove-variation, .add-subgroup, .rm-subgroup', function() {
+  setTimeout(function() {
+    hideShowQuantityFields();
+  }, 100);
 });
+
+$('a[data-toggle="modal"]').click(function() {
+  var imageUrl = $(this).find('img').attr('src');
+  $('#exampleModal').find('.img-modal').attr('src', imageUrl);
+});
+
+$('#exampleModal').on('show.bs.modal', function() {
+  var imageUrl = $(this).find('img').attr('src');
+  $(this).find('.img-modal').attr('src', imageUrl);
+});
+
+$('#exampleModal').on('hidden.bs.modal', function() {
+  $(this).find('.img-modal').attr('src', '');
+});
+
+hideShowQuantityFields();

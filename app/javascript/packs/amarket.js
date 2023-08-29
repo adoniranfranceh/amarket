@@ -21,7 +21,7 @@ function checkRequiredFields() {
     $('form').submit();
   } else {
     $.ajax({
-      url: '/admin_template/sales',
+      url: ajaxUrl,
       type: 'POST',
       data: $('form').serialize(),
       dataType: 'json',
