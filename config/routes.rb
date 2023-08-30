@@ -21,9 +21,12 @@ Rails.application.routes.draw do
         put 'update_status'
       end
     end
-    resources :cash, only: [:index, :edit, :update, :new, :create]
+    resources :cash
     resources :cash_registers do
       patch :close, on: :collection
+      member do
+        get :show_cash_register, to: 'cash_registers#show_cash_register', as: :pdf
+      end
     end
     resources :movements
     resources :admins, only: [:edit, :update] do

@@ -10,7 +10,12 @@
       </li>
 
       <li class="dropdown-divider"></li>
-
+      <li class="nav-item menu-open mb-3">
+         <%= link_to admin_template_cash_registers_path, class: 'nav-link dark' do %>
+            <i class="bi bi-box--left"></i>
+            Registros de caixa
+          <% end %>
+      </li>
       <li class="nav-item menu-open mb-3">
         <%= link_to destroy_admin_session_path, class: 'nav-link dark' do %>
           <i class="bi bi-box-arrow-left"></i>

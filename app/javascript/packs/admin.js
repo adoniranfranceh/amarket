@@ -1081,8 +1081,8 @@
   var SELECTOR_ICON = SELECTOR_DATA_WIDGET$2 + " i";
   var EVENT_FULLSCREEN_CHANGE = 'webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange';
   var Default$8 = {
-    minimizeIcon: 'fa-compress-arrows-alt',
-    maximizeIcon: 'fa-expand-arrows-alt'
+    minimizeIcon: 'bi bi-fullscreen-exit',
+    maximizeIcon: 'bi bi-arrows-fullscreen'
   };
   /**
    * Class Definition

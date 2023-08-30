@@ -3,7 +3,7 @@
     <% if model.total_pages > 1 %>
       <% if model.prev_page %>
         <li class="page-item">
-          <%= link_to 'Anterior', admin_template_sales_path(page: model.prev_page), class: 'page-link' %>
+          <%= link_to 'Anterior', "#{path}?page=#{model.prev_page}", class: 'page-link' %>
         </li>
       <% else %>
         <li class="page-item disabled">
@@ -18,14 +18,14 @@
           </li>
         <% else %>
           <li class="page-item">
-            <%= link_to num + 1, admin_template_sales_path(page: num + 1), class: 'page-link' %>
+            <%= link_to num + 1, "#{path}?page=#{num + 1}", class: 'page-link' %>
           </li>
         <% end %>
       <% end %>
 
       <% if model.next_page %>
         <li class="page-item">
-          <%= link_to 'Próximo', admin_template_sales_path(page: model.next_page), class: 'page-link' %>
+          <%= link_to 'Próximo', "#{path}?page=#{model.next_page}", class: 'page-link' %>
         </li>
       <% else %>
         <li class="page-item disabled">

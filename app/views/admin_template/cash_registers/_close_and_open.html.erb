@@ -1,0 +1,40 @@
+
+<table class="table table-bordered data-table dtr-inline">
+  <thead>
+    <tr>
+      <th class="col-1">Id <i class="bi bi-hash"></i></th>
+      <th class="col-2">Abertura <i class="bi bi-calendar"></i></th>
+      <th class="col-2">Valor inicial <i class="bi bi-currency-dollar"></i></th>
+      <th class="col-2">Fechamento <i class="bi bi-calendar-x"></i></th>
+      <th class="col-2">Vendidos <i class="bi bi-cart"></i></th>
+      <th class="col-1">Total <i class="bi bi-cash"></i></th>
+      <th class="col-2">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @cash_registers.each do |cash_register| %>
+      <tr>
+        <td><%= cash_register.id %></td>
+        <td><%= cash_register.opening_time.strftime('%d/%m/%Y %H:%M') %></td>
+        <td><%= format_to_decimal(cash_register.initial_value) %></td>
+        <td><%= cash_register.closing_time.present? ? cash_register.closing_time.strftime('%d/%m/%Y %H:%M') : 'Ainda aberto' %></td>
+        <td><%= format_to_decimal(cash_register.cash_sale) %></td>
+        <td><%= format_to_decimal(cash_register.cash_total) %></td>
+        <td>
+          <% if cash_register.closing_time.present? %>
+            <%= link_to pdf_admin_template_cash_register_path(cash_register, format: :pdf), target: "_blank", class:'btn btn-primary' do %>
+              <i class="bi bi-card-text"></i>
+            <% end %>
+          <% end %>
+          <% if cash_register.movements.present? %>
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#movimentosModal<%= cash_register.id %>">
+              <i class="bi bi-search"></i> <!-- Ícone de lupa -->
+            </button>
+            <%= render partial: 'movements_modal', locals: {cash_register: cash_register} %>
+          <% end %>  
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= render 'admin_template/shared/pagination', model: @cash_registers %>

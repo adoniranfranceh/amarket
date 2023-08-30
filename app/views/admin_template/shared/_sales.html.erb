@@ -53,67 +53,70 @@
       <% end %>
     </tbody>
   </table>
-  <%= render 'admin_template/shared/pagination', model: @sales %>
+  <%= render 'admin_template/shared/pagination', model: @sales, path: admin_template_sales_path %>
 </div>
 
 <%= javascript_tag do %>
-  const adminActionLinks = document.querySelectorAll(".admin-action-link");
 
-  adminActionLinks.forEach(link => {
-    link.addEventListener("click", function(event) {
-      event.preventDefault();
+  $(document).on('turbolinks:load', function() {
+    const adminActionLinks = document.querySelectorAll(".admin-action-link");
 
-      const saleId = event.currentTarget.getAttribute("data-sale-id");
-      const status = event.currentTarget.getAttribute("data-status");
+    adminActionLinks.forEach(link => {
+      link.addEventListener("click", function(event) {
+        event.preventDefault();
 
-      const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
+        const saleId = event.currentTarget.getAttribute("data-sale-id");
+        const status = event.currentTarget.getAttribute("data-status");
 
-      Swal.fire({
-        title: 'Digite a senha',
-        input: 'password',
-        inputValue: '',
-        inputAttributes: {
-          autocapitalize: 'off'
-        },
-        inputAttributes: {
-          autocapitalize: 'off',
-        },
-        showCancelButton: true,
-        confirmButtonText: 'Confirmar',
-        cancelButtonText: 'Cancelar',
-        preConfirm: (password) => {
-          return new Promise((resolve) => {
-            $.ajax({
-              method: 'POST',
-              url: '/validate_admin_password',
-              data: { password: password },
-              success: function(response) {
-                if (response.valid) {
-                  resolve();
-                } else {
-                  Swal.showValidationMessage('Senha incorreta');
-                  const confirmButton = Swal.getConfirmButton();
-                  const cancelButton = Swal.getCancelButton();
-                  confirmButton.disabled = false;
-                  cancelButton.disabled = false;
+        const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
+
+        Swal.fire({
+          title: 'Digite a senha',
+          input: 'password',
+          inputValue: '',
+          inputAttributes: {
+            autocapitalize: 'off'
+          },
+          inputAttributes: {
+            autocapitalize: 'off',
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Confirmar',
+          cancelButtonText: 'Cancelar',
+          preConfirm: (password) => {
+            return new Promise((resolve) => {
+              $.ajax({
+                method: 'POST',
+                url: '/validate_admin_password',
+                data: { password: password },
+                success: function(response) {
+                  if (response.valid) {
+                    resolve();
+                  } else {
+                    Swal.showValidationMessage('Senha incorreta');
+                    const confirmButton = Swal.getConfirmButton();
+                    const cancelButton = Swal.getCancelButton();
+                    confirmButton.disabled = false;
+                    cancelButton.disabled = false;
+                  }
                 }
+              });
+            });
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajaxSetup({
+              headers: {
+                'X-CSRF-Token': csrfToken
               }
             });
-          });
-        }
-      }).then((result) => {
-        if (result.isConfirmed) {
-          $.ajaxSetup({
-            headers: {
-              'X-CSRF-Token': csrfToken
-            }
-          });
 
-          $.ajax({
-            method: 'PUT',
-            url: `/admin_template/sales/${saleId}/update_status?new_status=${status}`
-          });
-        }
+            $.ajax({
+              method: 'PUT',
+              url: `/admin_template/sales/${saleId}/update_status?new_status=${status}`
+            });
+          }
+        });
       });
     });
   });

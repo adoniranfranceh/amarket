@@ -1,7 +1,8 @@
 class AdminTemplate::CashController < AdminTemplateController
    before_action :set_cash_register, only: [:index, :edit, :update]
    include CashRegisterable
-  def index; end
+  def index
+  end
 
   def update
     if @cash.update(cash_register_params)
