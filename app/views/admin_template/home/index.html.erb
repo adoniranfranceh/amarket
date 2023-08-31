@@ -67,6 +67,39 @@
   </div>
 
   <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="bi bi-calendar-event"></i>
+            Aniversariantes do Mês
+          </h3>
+        </div>
+        <div class="card-body">
+          <% if @birthdays_of_the_month.any? %>
+            <ul class="list-group">
+              <% @birthdays_of_the_month.each do |customer| %>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <span class="birthday-name"><%= customer.name %></span>
+                  <span class="birthday-date">
+                    <% if customer.date_of_birth.month == @choose_date.month && customer.date_of_birth.day == Date.today.day %>
+                      Hoje é aniversário de <%= customer.name %>
+                    <% else %>
+                      <%= customer.date_of_birth.strftime("%d/%m") %>
+                    <% end %>
+                  </span>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="text-muted">Não há aniversariantes neste mês.</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
 
     <div class="card bg-gradient-info float-left mr-1" style="width: 53%; height: 50%;">
       <div class="card-header border-0">

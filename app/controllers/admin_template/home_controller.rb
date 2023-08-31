@@ -4,6 +4,7 @@ class AdminTemplate::HomeController < AdminTemplateController
     sales_completed = @sales.where(status: 'completed')
     @total = sales_completed.sum(:total_price)
     select_product_info
+    @birthdays_of_the_month = current_admin.customers.where("strftime('%m', date_of_birth) = ?", @choose_date.strftime('%m'))
   end
 
   def last_seven_days(other_or_date_current)
