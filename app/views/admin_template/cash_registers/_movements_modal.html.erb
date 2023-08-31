@@ -1,0 +1,40 @@
+<div class="modal fade" id="movimentosModal<%= cash_register.id %>" tabindex="-1" role="dialog" aria-labelledby="movimentosModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="movimentosModalLabel">Todas Movimentações do Caixa</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered data-table dtr-inline">
+          <thead>
+            <tr>
+              <th class="col-1">Id <i class="bi bi-hash"></i></th>
+              <th class="col-1">Data e Hora <i class="bi bi-clock"></i></th>
+              <th class="col-2">Movimentos <i class="bi bi-currency-dollar text-success"></i></th>
+              <th class="col-2">Motivo <i class="bi bi-tag"></i></th>  
+            </tr>
+          </thead>
+          <tbody>
+            <% total_deposit = cash_register.movements.sum(:cash_deposit) %>
+            <% total_withdrawal = cash_register.movements.sum(:cash_withdrawal) %>
+            <p>Total em depositos <%= format_to_decimal(total_deposit) %></p>
+            <p>Total em sangrias <%= format_to_decimal(total_withdrawal) %></p>
+            <% cash_register.movements.each do |movement| %>
+              <tr>
+                <td><%= movement.id %></td>
+                <td><%= movement.created_at.strftime('%d/%m/%Y %H:%M') %></td>
+                <td><% if movement.cash_deposit.present? %><i class="bi bi-plus text-success"></i> <%= format_to_decimal(movement.cash_deposit) %> <% end %>
+                    <% if movement.cash_withdrawal.present? %><i class="bi bi-dash text-danger"></i> <%= format_to_decimal(movement.cash_withdrawal) %> <% end %>
+                </td>
+                <td>"<%= movement.reason %>"</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

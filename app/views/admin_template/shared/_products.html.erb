@@ -1,26 +1,39 @@
-<div class="float-right">
-  <%= link_to 'Variações por cada produto', admin_template_secondary_products_path, class: 'btn btn-warning' %>
-</div>
-<div class="float-end">
-  <%= link_to 'Adicionar novo', new_admin_template_product_path, class: 'btn btn-success' %>
+<div class="d-flex justify-content-between mb-3">
+  <%= link_to 'Adicionar Novo Produto', new_admin_template_product_path, class: 'btn btn-success' %>
+  <%= link_to 'Variações por Cada Produto', admin_template_secondary_products_path, class: 'btn btn-warning' %>
 </div>
 
-<div class="row">
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Investimento</h5>
-        <p class="card-text h4 text-success">R$ <%= number_with_precision(investment, precision: 2, delimiter: '.', separator: ',') %></p>
-        <p class="card-text">Veja o retorno dos seus investimentos nos produtos.</p>
+<button class="btn btn-primary mt-3" type="button" data-toggle="collapse" data-target="#detailsRow" aria-expanded="false" aria-controls="detailsRow">
+  <i class="bi bi-chevron-down me-2"></i> Mostrar Detalhes dos Produtos
+</button>
+
+<div class="collapse mt-3" id="detailsRow">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card align-items-stretch h-100">
+        <div class="card-body">
+          <h5 class="card-title">Investimento</h5>
+          <p class="card-text h4 text-success">R$ <%= number_with_precision(investment, precision: 2, delimiter: '.', separator: ',') %></p>
+          <p class="card-text">Veja o retorno dos seus investimentos nos produtos.</p>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Lucro</h5>
-        <p class="card-text h4 text-primary">R$ <%= number_with_precision(profit, precision: 2, delimiter: '.', separator: ',') %></p>
-        <p class="card-text">Acompanhe o lucro gerado pelos seus produtos.</p>
+    <div class="col-md-6">
+      <div class="card align-items-stretch h-100">
+        <div class="card-body">
+          <h5 class="card-title">Receita a ser gerada</h5>
+          <p class="card-text h4 text-primary">R$ <%= number_with_precision(revenue, precision: 2, delimiter: '.', separator: ',') %></p>
+          <p class="card-text">Acompanhe o lucro gerado pelos seus produtos.</p>
+          <div class="dropdown">
+            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Detalhes
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <p class="dropdown-item"><strong>Lucro Bruto:</strong> R$ <%= number_with_precision(gross_profit, precision: 2, delimiter: '.', separator: ',') %></p>
+              <p class="dropdown-item"><strong>Margem de Lucro:</strong> <%= number_to_percentage(profit_margin, precision: 2) %></p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -33,7 +46,7 @@
         <th class="col-1">Id</th>
         <th class="col-3">Nome</th>
         <th class="col-3">Image</th>
-        <th class="col-1">Preço</th>
+        <th class="col-2">Preço</th>
         <th class="col-1">Estoque</th>
         <th class="col-2">Ações</th>
       </tr>
@@ -58,7 +71,7 @@
             <i class="bi bi-pencil-square"></i>
           <% end %>
           <% if product.variations.present? %>
-            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target=".bd-example-modal-xl<%= product.id %>" title="Variações">
+            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#bd-example-modal-xl<%= product.id %>" title="Variações">
               <i class="bi bi-diagram-3-fill"></i>
             </button>
             <%= render partial: 'admin_template/shared/modal_product', locals: {product: product} %>

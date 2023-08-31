@@ -1,0 +1,10 @@
+<div class="container mt-4">
+  <h2>Registros de Caixa</h2>
+
+  <form method="get" action="<%= admin_template_cash_registers_path %>" class="form-inline mb-3">
+    <%= render 'filters_form', show_all_path: admin_template_cash_registers_path(show_all: true) %>
+  </form>
+
+</div>
+
+<%= render 'close_and_open' %>

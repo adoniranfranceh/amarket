@@ -13,12 +13,17 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
   def create
     @product = current_admin.products.build(product_params)
     format_decimal_value_product
-    if @product.save
-       create_secondary_records(@product)
-       redirect_to admin_template_products_path, success: 'Produto salvo com sucesso'
-    else
-      render :new
-      flash[:error] = 'Existem campos inválidos'
+
+    respond_to do |format|
+      if @product.save
+        create_secondary_records(@product)
+        format.html { redirect_to admin_template_products_path, notice: 'Produto salvo com sucesso!' }
+        format.json { render json: @product, status: :created }
+      else
+        puts @product.errors.full_messages
+        format.html { render :index, flash[:error] = 'Existem campos inválidos' }
+        format.json { render json: { errors: @product.errors.full_messages }, status: 422 }
+      end
     end
   end
 
@@ -134,9 +139,14 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
     Secondaryproduct.transaction do
       Secondaryproduct.where(product_id: product.id).destroy_all
       product.variations.each do |variation|
+        variation_name = variation.name.present? ? "- #{variation.name}" : ""
+        variation_type = variation.variation_type.present? ? "- #{variation.variation_type}" : ""
+        variation_color = variation.color.present? ? "- #{variation.color}" : ""
         if variation.subgroups.present?
           variation.subgroups.each do |subgroup|
-            subgroup_secondary_name = "#{product.full_name} #{variation.name} - #{variation.variation_type} - #{variation.color} - #{subgroup.size}"
+            subgroup_size = subgroup.size.present? ? "- #{subgroup.size}" : ""
+            subgroup_number = subgroup.number.present? ? "- #{subgroup.number}" : ""
+            subgroup_secondary_name = "#{product.full_name} #{variation_name} #{variation_type} #{variation_color} #{subgroup_size} #{subgroup_number}"
             secondary_attributes(
                                  product,
                                  subgroup_secondary_name,
@@ -146,7 +156,7 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
                                  )
           end
         else
-          secondary_name = "#{product.full_name} #{variation.name} - #{variation.variation_type} - #{variation.color}"
+          secondary_name = "#{product.full_name} #{variation_name} #{variation_type} #{variation_color}"
           secondary_attributes(
                                product, secondary_name,
                                variation.variation_quantity,

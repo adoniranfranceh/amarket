@@ -1,32 +1,54 @@
 class Sale < ApplicationRecord
-  before_save :set_completed_at
-  after_save :movement_for_sale
+  after_save :set_completed_at
   has_and_belongs_to_many :secondaryproducts
+  has_and_belongs_to_many :products
   belongs_to :admin
   belongs_to :customer
   belongs_to :cash_register
-  validates :customer, :secondaryproducts, :quantity, :total_price, presence: true
+  validates :customer, :secondaryproducts, :quantity, :total_price, :payment_method, :status, presence: true
+  has_many :others_for_sales
+  has_many :invoice_products
+  accepts_nested_attributes_for :others_for_sales, allow_destroy: true, reject_if: :all_blank
   include CashRegisterable
 
-  STATUS_OPTIONS = {
+  scope :search, -> (term) {
+    return all unless term.present?
+    joins(:customer).where("LOWER(customers.name) LIKE ? OR LOWER(code) LIKE ?", "%#{term.downcase}%", "%#{term.downcase}%")
+  }
+  scope :search_by_date, -> (date) {
+    return all unless date.present?
+    where("DATE(created_at) = ?", date)
+  }
+
+  STATUS_OPTIONS_IN_FORM = {
     pending: 'Pendente',
     in_progress: 'Em andamento',
     completed: 'Concluído',
-    canceled: 'Cancelado',
-    refunded: 'Reembolsada',
-    awaiting_payment: 'Aguardando pagamento',
+    in_review: 'Em análise'
+  }.freeze
+
+  STATUS_OPTIONS_IN_INDEX = {
+    pending: 'Pendente',
+    in_progress: 'Em andamento',
+    completed: 'Concluído',
     in_review: 'Em análise'
   }.freeze
 
   private
 
   def set_completed_at
-    self.completed_at = Time.zone.now if status == 'Concluído' && status_changed?
+    if status == 'completed'
+      self.completed_at = Time.zone.now
+      movement_for_sale
+    end
   end
 
   def movement_for_sale
-    total_sale = Sale.where(cash_register_id: current_cash_register.id).sum(:total_price)
-    total = current_cash_register.cash_total + total_sale
-    current_cash_register.update(cash_sale: total_sale, cash_total: total)
+    movement = current_cash_register.movements.build(cash_deposit: self.total_price, reason: "O cliente #{self.customer.name}")
+    movement.save!
+  end
+
+  def update_products
+    self.products = self.secondaryproducts.map(&:product)
   end
 end

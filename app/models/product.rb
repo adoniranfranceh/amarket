@@ -34,7 +34,6 @@ class Product < ApplicationRecord
             total_variation += subgroup.quantity
           end
         end
-        variation.variation_quantity += total_variation
         total_quantity += variation.variation_quantity
       end
       self.quantity = total_quantity

@@ -1,23 +1,123 @@
-<div class="float-end"><%= link_to 'Registrar nova venda', new_admin_template_sale_path, class: 'btn btn-success' %></div>
-<div>
-  <table class="table">
+<div class="sales-table-container">
+  <div class="actions-container">
+    <%= link_to 'Registrar nova venda', new_admin_template_sale_path, class: 'btn btn-success refresh-link' %>
+  </div>
+
+  <%= form_tag(admin_template_sales_path, method: :get, class: "form-inline mb-3") do %>
+    <div class="form-group mr-2">
+      <%= label_tag :search, "Pesquisar por:" %>
+      <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "Código de Venda ou Cliente" %>
+    </div>
+    <div class="form-group mr-2">
+      <%= label_tag :search_date, "Pesquisar por dia:" %>
+      <%= date_field_tag :search_date, params[:search_date], class: "form-control" %>
+    </div>
+    <%= submit_tag "Pesquisar", class: "btn btn-primary" %>
+  <% end %>
+
+  <table class="table table-bordered data-table dtr-inline">
     <thead>
       <tr>
-        <th class="col-1">Id</th>
-        <th class="col-10">Nome</th>
-        <th class="col-1"></th>
+        <th class="col-1">Id <i class="bi bi-hash" data-bs-toggle="tooltip" data-bs-placement="top" title="ID"></i></th>
+        <th class="col-2">Cliente <i class="bi bi-person" data-bs-toggle="tooltip" data-bs-placement="top" title="Cliente"></i></th>
+        <th class="col-2">Data e Hora <i class="bi bi-clock" data-bs-toggle="tooltip" data-bs-placement="top" title="Data e Hora"></i></th>
+        <th class="col-1">Status <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="top" title="Status da Venda"></i></th>
+        <th class="col-2">Vendedor <i class="bi bi-person" data-bs-toggle="tooltip" data-bs-placement="top" title="Vendedor"></i></th>
+        <th class="col-2 text-center">Ações <i class="bi bi-gear-fill" data-bs-toggle="tooltip" data-bs-placement="top" title="Ações"></i></th>
       </tr>
     </thead>
 
     <tbody>
-      <% @sales.each do |sale| %>   
-      <tr>
-        <td class="row" style="padding-bottom: 37px;"><%= sale.id %></td>
-        <td><%= sale.secondaryproduct_ids %></td>
-        <td><%= link_to 'ver', admin_template_sale_path(sale), class: "btn btn-success " %>
-        </td>
-      </tr>
+      <% @sales.each do |sale| %>
+        <tr>
+          <td><%= sale.id %></td>
+          <td><%= link_to sale.customer.name, admin_template_customer_path(sale.customer), class: 'btn btn-light' %></td>
+          <td><%= sale.created_at.strftime('%d/%m/%Y %H:%M') %></td>
+          <td>
+            <div class="status-icon">
+              <%= link_to "#", class: "status-icon-link", data: { toggle: "modal", target: "#statusModal#{sale.id}" } do %>
+                <h4 class="div-center"><%= status_icon(sale.status) %></h4>
+              <% end %>
+            </div>
+          </td>
+          <td><%= sale.admin.full_name_admin %></td>
+          <td>
+            <div class="actions-btns">
+              <%= pdf_and_devolution_btns(sale) %>
+              <%= cancel_btn(sale) %>
+              <% modal_id = "statusModal#{sale.id}" %>
+              <%= render 'admin_template/shared/status_select_modal', sale: sale, modal_id: modal_id %>
+            </div>
+          </td>
+        </tr>
       <% end %>
     </tbody>
   </table>
+  <%= render 'admin_template/shared/pagination', model: @sales, path: admin_template_sales_path %>
 </div>
+
+<%= javascript_tag do %>
+
+  $(document).on('turbolinks:load', function() {
+    const adminActionLinks = document.querySelectorAll(".admin-action-link");
+
+    adminActionLinks.forEach(link => {
+      link.addEventListener("click", function(event) {
+        event.preventDefault();
+
+        const saleId = event.currentTarget.getAttribute("data-sale-id");
+        const status = event.currentTarget.getAttribute("data-status");
+
+        const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
+
+        Swal.fire({
+          title: 'Digite a senha',
+          input: 'password',
+          inputValue: '',
+          inputAttributes: {
+            autocapitalize: 'off'
+          },
+          inputAttributes: {
+            autocapitalize: 'off',
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Confirmar',
+          cancelButtonText: 'Cancelar',
+          preConfirm: (password) => {
+            return new Promise((resolve) => {
+              $.ajax({
+                method: 'POST',
+                url: '/validate_admin_password',
+                data: { password: password },
+                success: function(response) {
+                  if (response.valid) {
+                    resolve();
+                  } else {
+                    Swal.showValidationMessage('Senha incorreta');
+                    const confirmButton = Swal.getConfirmButton();
+                    const cancelButton = Swal.getCancelButton();
+                    confirmButton.disabled = false;
+                    cancelButton.disabled = false;
+                  }
+                }
+              });
+            });
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajaxSetup({
+              headers: {
+                'X-CSRF-Token': csrfToken
+              }
+            });
+
+            $.ajax({
+              method: 'PUT',
+              url: `/admin_template/sales/${saleId}/update_status?new_status=${status}`
+            });
+          }
+        });
+      });
+    });
+  });
+<% end %>
