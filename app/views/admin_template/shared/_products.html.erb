@@ -1,7 +1,15 @@
 <div class="d-flex justify-content-between mb-3">
   <%= link_to 'Adicionar Novo Produto', new_admin_template_product_path, class: 'btn btn-success' %>
-  <%= link_to 'Variações por Cada Produto', admin_template_secondary_products_path, class: 'btn btn-warning' %>
+  <%= link_to 'Lista de Produto', admin_template_secondary_products_path, class: 'btn btn-warning' %>
 </div>
+
+<%= form_tag(admin_template_products_path, method: :get, class: "form-inline mb-3") do %>
+  <div class="form-group mr-2">
+    <%= label_tag :search, "Pesquisar por:" %>
+    <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "Nome ou descrição" %>
+  </div>
+  <%= submit_tag "Pesquisar", class: "btn btn-primary" %>
+<% end %>
 
 <button class="btn btn-primary mt-3" type="button" data-toggle="collapse" data-target="#detailsRow" aria-expanded="false" aria-controls="detailsRow">
   <i class="bi bi-chevron-down me-2"></i> Mostrar Detalhes dos Produtos
@@ -81,6 +89,7 @@
       <% end %>
     </tbody>
   </table>
+  <%= render 'admin_template/shared/pagination', model: @products, path: admin_template_products_path %>
 </div>
 
 <%= render partial: 'admin_template/shared/image_modal' %>

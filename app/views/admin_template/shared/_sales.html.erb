@@ -12,7 +12,8 @@
       <%= label_tag :search_date, "Pesquisar por dia:" %>
       <%= date_field_tag :search_date, params[:search_date], class: "form-control" %>
     </div>
-    <%= submit_tag "Pesquisar", class: "btn btn-primary" %>
+    <%= submit_tag "Pesquisar", class: "btn btn-primary mr-2" %>
+    <%= link_to "Limpar", admin_template_sales_path, class: "btn btn-secondary" %>
   <% end %>
 
   <table class="table table-bordered data-table dtr-inline">

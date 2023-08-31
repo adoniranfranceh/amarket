@@ -11,7 +11,7 @@ class AdminTemplate::CashRegistersController < AdminTemplateController
     else
       @cash_registers = current_admin.cash.last.cash_registers.within_date_range(@date).order(created_at: :desc).page(params[:page]).per(5)
     end
-    @movements = Movement.where(cash_register_id: @cash_registers.pluck(:id)).page(params[:page]).per(2)
+    @movements = Movement.where(cash_register_id: @cash_registers.pluck(:id))
   end
 
 

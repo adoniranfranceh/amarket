@@ -10,6 +10,11 @@ class Product < ApplicationRecord
   validates :name, :sale_price, :purchase_price, presence: true
   validates :category_id, presence: true, unless: -> { category_id.blank? }
 
+  scope :search, -> (term) {
+    return all unless term.present?
+    where("LOWER(products.name) LIKE ? OR LOWER(products.descryption) LIKE ?", "%#{term.downcase}%", "%#{term.downcase}%")
+  }
+
   def full_name
     self.brand.present? ? [self.name, self.brand].join(' - ') : self.name
   end
