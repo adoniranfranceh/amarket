@@ -46,6 +46,7 @@ class AdminTemplate::CustomersController < AdminTemplateController
     params.require(:customer).permit(:name,
                                      :phone,
                                      :email,
+                                     :date_of_birth,
                                      :city,
                                      :neighborhood,
                                      :andress,

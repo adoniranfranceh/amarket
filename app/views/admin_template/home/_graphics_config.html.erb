@@ -5,7 +5,7 @@
     const data = {
       labels: labels,
       datasets: [{
-        label: 'Produtos mais populares por venda <%= @total_text %>',
+        label: 'Produtos mais populares por venda <%= @text %>',
         data: <%= raw @quantity_of_sales.to_json %>,
         barPercentagem: 1,
       }]

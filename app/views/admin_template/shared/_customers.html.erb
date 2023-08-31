@@ -1,23 +1,32 @@
 <div class="float-end"><%= link_to 'Adicionar novo', new_admin_template_customer_path, class: 'btn btn-success' %></div>
-<div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th class="col-1">Id</th>
-        <th class="col-10">Nome</th>
-        <th class="col-1"></th>
-      </tr>
-    </thead>
 
-    <tbody>
-      <% @customers.each do |customer| %>   
-      <tr>
-        <td class="row" style="padding-bottom: 37px;"><%= customer.id %></td>
-        <td><%= customer.name %></td>
-        <td><%= link_to 'ver', admin_template_customer_path(customer), class: "btn btn-success " %>
-        </td>
-      </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+<table class="table table-bordered data-table dtr-inline">
+  <thead>
+    <tr>
+      <th class="col-1">Id</th>
+      <th class="col-5">Nome</th>
+      <th class="col-2">Email</th>
+      <th class="col-2">Data de nascimento</th>
+      <th class="col-2">Ações</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @customers.each do |customer| %>
+    <tr>
+      <td style="padding-bottom: 37px;"><%= customer.id %></td>
+      <td><%= customer.name %></td>
+      <td><%= customer.email %></td>
+      <td><%= customer.date_of_birth.strftime('%d/%m/%Y') if customer.date_of_birth.present? %></td>
+      <td>
+          <%= link_to admin_template_customer_path(customer), class: "btn btn-info btn-sm", title: "Detalhes" do %>
+            <i class="bi bi-eye-fill"></i>
+          <% end %>
+          <%= link_to edit_admin_template_customer_path(customer), data: { turbolinks: false }, class: "btn btn-primary btn-sm", title: "Editar" do %>
+            <i class="bi bi-pencil-square"></i>
+          <% end %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

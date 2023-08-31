@@ -31,7 +31,7 @@
       <% @sales.each do |sale| %>
         <tr>
           <td><%= sale.id %></td>
-          <td><%= sale.customer.name %></td>
+          <td><%= link_to sale.customer.name, admin_template_customer_path(sale.customer), class: 'btn btn-light' %></td>
           <td><%= sale.created_at.strftime('%d/%m/%Y %H:%M') %></td>
           <td>
             <div class="status-icon">

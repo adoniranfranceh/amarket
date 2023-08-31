@@ -2,9 +2,8 @@ class AdminTemplate::HomeController < AdminTemplateController
   def index
     choose_date_request
     sales_completed = @sales.where(status: 'completed')
-    @total = @sales.sum(:total_price)
+    @total = sales_completed.sum(:total_price)
     select_product_info
-
   end
 
   def last_seven_days(other_or_date_current)
@@ -29,15 +28,15 @@ class AdminTemplate::HomeController < AdminTemplateController
     @start_month = other_or_month_current - 5.month
     all_months = (@start_month..other_or_month_current).to_a
     @month_names = all_months.map do |month|
-      month.month == Date.current.month ? "#{I18n.l(month, format: '%B')} (mês atual)" : I18n.l(month, format: '%B')
+      month.month == Date.today.month ? "#{I18n.l(month, format: '%B')} (mês atual)" : I18n.l(month, format: '%B')
     end.uniq
 
     @data_monthly = current_admin.customers.where(created_at: all_months.first..all_months.last).group("DATE(created_at)").count.values
   end
 
   def choose_date_request
-    @choose_date = params[:choose_date].present? ? Date.parse(params[:choose_date]) : Date.current
-    if @choose_date == Date.current
+    @choose_date = params[:choose_date].present? ? Date.parse(params[:choose_date]) : Date.today
+    if @choose_date == Date.today
       @sales = current_admin.sales.within_current_month.where(status: 'completed')
       @text = '(mês atual)'
       @total_text = @text
@@ -71,11 +70,12 @@ class AdminTemplate::HomeController < AdminTemplateController
 
     puts "#{@product_selected} produtos <<<<<<<<<<<<<<<<<<<<<"
     puts "#{@quantity_of_sales} quantidade"
+     puts "#{@sales.all_month_accurately(@choose_date)}<<<<<<<<<<<<<<<<<<<<<log DO INTERVALO MENSAL"
   end
 
   def select_product_query
-    current_admin.products.joins( :sales)
-                  .where(sales: { created_at: @choose_date.all_month, status: 'completed' })
+    current_admin.products.joins(:sales)
+                  .where(sales: { created_at: @sales.all_month_accurately(@choose_date), status: 'completed' })
                   .group('products.id')
                   .order(Arel.sql('COUNT(sales.id) DESC'))
                   .limit(10)
