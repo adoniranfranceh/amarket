@@ -25,6 +25,11 @@
           <%= link_to edit_admin_template_customer_path(customer), data: { turbolinks: false }, class: "btn btn-primary btn-sm", title: "Editar" do %>
             <i class="bi bi-pencil-square"></i>
           <% end %>
+          <% if customer.phone.present? %>
+            <%= link_to "https://wa.me/55#{customer.phone.gsub(/[\(\)\s-]/, '')}", class: 'btn whatsapp-color btn-sm', alt: 'Icone do Whatsapp', height: '32', width: '32' do %>
+              <i class="bi bi-whatsapp"></i>
+            <% end %>
+          <% end %>
       </td>
     </tr>
     <% end %>

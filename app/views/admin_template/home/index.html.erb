@@ -83,7 +83,15 @@
                   <span class="birthday-name"><%= customer.name %></span>
                   <span class="birthday-date">
                     <% if customer.date_of_birth.month == @choose_date.month && customer.date_of_birth.day == Date.today.day %>
-                      Hoje é aniversário de <%= customer.name %>
+                      <% if customer.phone.present? %>
+                        <% message = "Parabéns, #{customer.name}! Desejamos um dia incrível e cheio de alegria!" %>
+                        <% encoded_message = URI.encode_www_form_component(message) %>
+                        <%= link_to "https://wa.me/55#{customer.phone.gsub(/[\(\)\s-]/, '')}?text=#{encoded_message}",
+                                    class: 'btn btn-danger btn-lg whatsapp-button' do %>
+                          Enviar Mensagem de Parabéns! 🎉
+                        <% end %>
+                      <% end %>
+                      Hoje é aniversário de <%= customer.name %> 🎂
                     <% else %>
                       <%= customer.date_of_birth.strftime("%d/%m") %>
                     <% end %>
@@ -100,7 +108,6 @@
   </div>
 
   <div class="row">
-
     <div class="card bg-gradient-info float-left mr-1" style="width: 53%; height: 50%;">
       <div class="card-header border-0">
         <h3 class="card-title">
@@ -124,7 +131,6 @@
         <canvas id="myBarChart"></canvas>
       </div>
     </div>
-
   </div>
   <%= render 'graphics_config' %>
   <%= render 'show_more_modal' %>

@@ -125,3 +125,12 @@ i {
   height: 100%;
   width: 100%;
 }
+.whatsapp-color {
+  background: rgb(37, 211, 102);
+  color: white;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.whatsapp-color:hover {
+  background: rgb(24, 136, 67);
+}
