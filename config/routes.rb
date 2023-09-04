@@ -8,6 +8,9 @@ Rails.application.routes.draw do
       collection do
         get 'search',  to: 'customers#search', as: :search
       end
+      member do
+        get 'send_birthday_email'
+      end
     end
     resources :inventary
     resources :categories
@@ -33,6 +36,7 @@ Rails.application.routes.draw do
       get :edit_password, on: :member
       put :update_password, on: :member
     end
+     resources :companies, only: [:new, :create, :show, :edit, :update]
   end
 
   root 'admin_template/home#index'

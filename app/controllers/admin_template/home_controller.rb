@@ -80,6 +80,6 @@ class AdminTemplate::HomeController < AdminTemplateController
                   .group('products.id')
                   .order(Arel.sql('COUNT(sales.id) DESC'))
                   .limit(10)
-                  .select('products.*, COUNT(products.id)/2 as total_secondary_sales')
+                  .select('products.*, COUNT(products.id) as total_secondary_sales')
   end
 end

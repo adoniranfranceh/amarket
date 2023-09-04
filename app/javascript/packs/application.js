@@ -21,7 +21,8 @@ global.Chart = Chart;
 $(document).on('turbolinks:load', function() {
   $('.price-input').mask("#.##0,00", { reverse: true });
   $('.phone').mask('(00) 0 0000-0000');
-  $('.cpf-input').mask('000-000.000-00');
+  $('.cpf-input').mask('000.000.000-00', {reverse: true});
+  $('.cnpj-input').mask('00.000.000/0000-00', {reverse: true});
 });
 
 Rails.start()

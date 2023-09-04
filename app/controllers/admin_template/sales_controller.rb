@@ -136,10 +136,10 @@ class AdminTemplate::SalesController < AdminTemplateController
   def generate_invoice_pdf(sale, products, customer, seller, total)
     pdf = Prawn::Document.new(page_size: 'A7', margin: [10, 10, 10, 10])
     line = '--------------------------------------------------------'
-
+    title = current_admin.company.name.present? ? "#{current_admin.company.name}" : "Nota"
     pdf.font_size 10
 
-    pdf.text 'CUPOM FISCAL', align: :center, style: :bold, size: 14
+    pdf.text title, align: :center, style: :bold, size: 14
     pdf.text line
     pdf.text "COD: #{sale.code}"
 
@@ -150,16 +150,17 @@ class AdminTemplate::SalesController < AdminTemplateController
 
     pdf.text 'Produtos:'
     products_details = products.map do |product|
-      "#{product.id} - #{product.name} #{product.quantity} UN - #{format_to_decimal(product.sale_price * product.quantity)}"
+      "#{product.name} #{product.quantity} UN - #{format_to_decimal(product.sale_price * product.quantity)}"
     end
     pdf.text products_details.join("\n")
+    pdf.text line
     pdf.text "Total de itens #{sale.quantity}"
 
     pdf.text line
     pdf.text "#{sale.payment_method}: #{format_to_decimal(sale.customer_value)}"
-    pdf.text "Troco: #{sale.change}"
-    pdf.text "Desconto: #{sale.discount}"
-    pdf.text "Juros: #{sale.taxes}"
+    pdf.text "Troco: #{format_to_decimal(sale.change.present? ? sale.change: 0.0)}"
+    pdf.text "Desconto: #{sale.discount.present? ? sale.discount: 0}%"
+    pdf.text "Juros: #{sale.taxes.present? ? sale.taxes: 0}%"
     pdf.font_size 11
     pdf.text "TOTAL: #{format_to_decimal(total)}"
 
@@ -198,7 +199,10 @@ class AdminTemplate::SalesController < AdminTemplateController
                                     :other_value,
                                     :_destroy
                                   ],
-                                  secondaryproduct_ids: [:id, :quantity]
+                                  secondaryproducts_attributes: [
+                                    :id,
+                                    :quantity,
+                                  ]
                                 )
   end
 

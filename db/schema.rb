@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_31_170714) do
+ActiveRecord::Schema.define(version: 2023_08_31_203314) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -80,6 +80,15 @@ ActiveRecord::Schema.define(version: 2023_08_31_170714) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["admin_id"], name: "index_categories_on_admin_id"
+  end
+
+  create_table "companies", force: :cascade do |t|
+    t.string "name"
+    t.string "cnpj"
+    t.integer "admin_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["admin_id"], name: "index_companies_on_admin_id"
   end
 
   create_table "customers", force: :cascade do |t|
@@ -230,6 +239,7 @@ ActiveRecord::Schema.define(version: 2023_08_31_170714) do
   add_foreign_key "cash_registers", "cashes"
   add_foreign_key "cashes", "admins"
   add_foreign_key "categories", "admins"
+  add_foreign_key "companies", "admins"
   add_foreign_key "customers", "admins"
   add_foreign_key "invoice_products", "sales"
   add_foreign_key "movements", "cash_registers"

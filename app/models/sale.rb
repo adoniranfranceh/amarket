@@ -9,6 +9,7 @@ class Sale < ApplicationRecord
   has_many :others_for_sales
   has_many :invoice_products
   accepts_nested_attributes_for :others_for_sales, allow_destroy: true, reject_if: :all_blank
+  after_save :associate_unique_secondaryproducts
   include CashRegisterable
 
   scope :search, -> (term) {
@@ -50,5 +51,9 @@ class Sale < ApplicationRecord
 
   def update_products
     self.products = self.secondaryproducts.map(&:product)
+  end
+
+  def associate_unique_secondaryproducts
+    self.secondaryproducts = secondaryproducts.uniq
   end
 end
