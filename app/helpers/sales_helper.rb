@@ -7,7 +7,7 @@ module SalesHelper
     ['Pix', 'Dinheiro' ,'Cartão de Dédito', 'Cartão de Crédito','Transferência Bancária']
   end
 
-  def pdf_and_devolution_btns(sale)
+  def pdf_and_devolution_btn(sale)
     return unless sale.status == 'completed'
 
     pdf_btn = link_to invoice_admin_template_sale_path(sale, format: :pdf), class: 'btn btn-primary mr-1' do

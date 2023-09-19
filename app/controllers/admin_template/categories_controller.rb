@@ -43,6 +43,9 @@ class AdminTemplate::CategoriesController < AdminTemplateController
       @category = Category.find(params[:id])
     end
     @categories = current_admin.categories 
+                                .order(:name)
+                                .search(params[:search])
+                                .page(params[:page]).per(5)
   end
 
   def category_params

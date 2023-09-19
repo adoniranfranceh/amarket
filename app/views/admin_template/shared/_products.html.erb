@@ -8,7 +8,8 @@
     <%= label_tag :search, "Pesquisar por:" %>
     <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "Nome ou descrição" %>
   </div>
-  <%= submit_tag "Pesquisar", class: "btn btn-primary" %>
+  <%= submit_tag "Pesquisar", class: "btn btn-primary mr-2" %>
+  <%= link_to "Limpar", admin_template_products_path, class: "btn btn-secondary" %>
 <% end %>
 
 <button class="btn btn-primary mt-3" type="button" data-toggle="collapse" data-target="#detailsRow" aria-expanded="false" aria-controls="detailsRow">
@@ -79,10 +80,10 @@
             <i class="bi bi-pencil-square"></i>
           <% end %>
           <% if product.variations.present? %>
-            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#bd-example-modal-xl<%= product.id %>" title="Variações">
+            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target=".bd-example-modal-xl<%= product.id %>" title="Variações">
               <i class="bi bi-diagram-3-fill"></i>
             </button>
-            <%= render partial: 'admin_template/shared/modal_product', locals: {product: product} %>
+            <%= render partial: 'admin_template/shared/modals/product_modal', locals: {product: product} %>
           <% end %>
         </td>
       </tr>
@@ -92,4 +93,4 @@
   <%= render 'admin_template/shared/pagination', model: @products, path: admin_template_products_path %>
 </div>
 
-<%= render partial: 'admin_template/shared/image_modal' %>
+<%= render partial: 'admin_template/shared/modals/image_modal' %>

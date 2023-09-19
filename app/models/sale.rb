@@ -45,7 +45,7 @@ class Sale < ApplicationRecord
   end
 
   def movement_for_sale
-    movement = current_cash_register.movements.build(cash_deposit: self.total_price, reason: "O cliente #{self.customer.name}")
+    movement = current_cash_register.movements.build(cash_deposit: self.total_price, reason: "Venda para o cliente #{self.customer.name}")
     movement.save!
   end
 

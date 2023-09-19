@@ -31,8 +31,8 @@ class AdminTemplate::CashRegistersController < AdminTemplateController
   end
 
   def close
-    @cash_register = current_cash_register
-    @cash_register.update!(closing_time: Time.now)
+    cash_register = current_cash_register
+    cash_register.update!(closing_time: Time.now)
     open_or_close(false, 'Caixa fechado', 'Não foi possível fechar caixa')
   end
 
@@ -106,7 +106,6 @@ class AdminTemplate::CashRegistersController < AdminTemplateController
   def open_or_close(boolean, success_message, error_message)
     if @cash.update(is_open: boolean)
       redirect_to admin_template_cash_index_path, notice: success_message
-      generate_pdf(@cash_register) unless boolean
     else
       flash[:error] = error_message
       redirect_to admin_template_cash_index_path

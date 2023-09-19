@@ -4,7 +4,7 @@ class AdminTemplate::HomeController < AdminTemplateController
     sales_completed = @sales.where(status: 'completed')
     @total = sales_completed.sum(:total_price)
     select_product_info
-    @birthdays_of_the_month = current_admin.customers.where("strftime('%m', date_of_birth) = ?", @choose_date.strftime('%m'))
+    @birthdays_of_the_month = current_admin.customers.where("extract(month from date_of_birth) = ?", @choose_date.month.to_s)
   end
 
   def last_seven_days(other_or_date_current)
@@ -22,7 +22,7 @@ class AdminTemplate::HomeController < AdminTemplateController
       .group("DATE(created_at)")
       .count
 
-    @data = all_dates_last_days.map { |date| sales_data[date.to_s] || 0 }
+    @data = all_dates_last_days.map { |date| sales_data[date] || 0 }
   end
 
   def customer_info_select(other_or_month_current)
@@ -71,7 +71,7 @@ class AdminTemplate::HomeController < AdminTemplateController
 
     puts "#{@product_selected} produtos <<<<<<<<<<<<<<<<<<<<<"
     puts "#{@quantity_of_sales} quantidade"
-     puts "#{@sales.all_month_accurately(@choose_date)}<<<<<<<<<<<<<<<<<<<<<log DO INTERVALO MENSAL"
+    puts "#{@sales.all_month_accurately(@choose_date)}<<<<<<<<<<<<<<<<<<<<<log DO INTERVALO MENSAL"
   end
 
   def select_product_query

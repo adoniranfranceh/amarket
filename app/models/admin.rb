@@ -41,6 +41,6 @@ class Admin < ApplicationRecord
   end
 
   def send_welcome_email
-    AdminMailer.welcome_email(self).deliver_now
+    AdminMailer.welcome_email(self)
   end
 end

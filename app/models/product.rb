@@ -20,7 +20,11 @@ class Product < ApplicationRecord
   end
 
   def image_url
-    if image.attached?
+    variation_with_image = variations.find { |variation| variation.photo.attached? }
+
+    if variation_with_image
+      variation_with_image.image_url
+    elsif image.attached?
       image.url
     else
       '/assets/no_image.png'

@@ -1,10 +1,11 @@
 <h1>Dashboard</h1>
+<%= @product_selected %>
 <section class="content">
   <div class="container-fluid shadow-sm p-3 mb-5 bg-white rounded">
     <%= form_tag admin_template_home_index_path, method: :get , class: 'mb-4' do %>
       <%= label_tag 'choose_date', 'Escolha a data:' %>
       <div class="row">
-        <%= date_field_tag 'choose_date',  @choose_date.strftime("%Y-%m-%d"), class: 'form-control col-3 mb-2 ml-2' %>
+        <%= date_field_tag 'choose_date',  @choose_date.strftime('%Y-%m-%d'), class: 'form-control col-3 mb-2 ml-2' %>
         <%= submit_tag "Filtrar", class: 'btn btn-dark mr-2'%>
         <%= link_to "Mostrar recentes", request.params.except(:choose_date), class: 'btn btn-primary' %>
       </div>

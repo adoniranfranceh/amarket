@@ -133,3 +133,26 @@ i {
 .whatsapp-color:hover {
   background: rgb(24, 136, 67);
 }
+
+.tooltipped {
+    position: relative;
+  }
+
+.tooltipped::before {
+  content: attr(title);
+  display: none;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 5px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  bottom: calc(100% + 5px); /* Ajuste para posicionar abaixo do elemento */
+  left: 50%; /* Centralizar em relação ao elemento */
+  transform: translateX(-50%); /* Centralizar em relação ao elemento */
+}
+
+.tooltipped:hover::before {
+  display: block;
+}

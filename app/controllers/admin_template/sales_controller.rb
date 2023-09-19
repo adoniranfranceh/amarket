@@ -36,6 +36,7 @@ class AdminTemplate::SalesController < AdminTemplateController
 
     respond_to do |format|
       if @sale.save
+        cash_register.cash_sale += @sale.total_price
         create_invoice_products(@sale)
         update_product_quantities(@sale)
          @sale.secondaryproduct_ids.each do |secondaryproduct_id|
@@ -136,7 +137,7 @@ class AdminTemplate::SalesController < AdminTemplateController
   def generate_invoice_pdf(sale, products, customer, seller, total)
     pdf = Prawn::Document.new(page_size: 'A7', margin: [10, 10, 10, 10])
     line = '--------------------------------------------------------'
-    title = current_admin.company.name.present? ? "#{current_admin.company.name}" : "Nota"
+    title = current_admin.company.present? ? "#{current_admin.company.name}" : "Nota"
     pdf.font_size 10
 
     pdf.text title, align: :center, style: :bold, size: 14
