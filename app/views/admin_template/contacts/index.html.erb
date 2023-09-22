@@ -1,8 +1,8 @@
-<div class="float-end"><%= link_to 'Adicionar novo', new_admin_template_customer_path, class: 'btn btn-success mb-2' %></div>
+<h1>Contatos</h1>
 <%= form_tag(admin_template_customers_path, method: :get, class: "form-inline mb-3") do %>
   <div class="form-group mr-2">
     <%= label_tag :search, "Pesquisar por:" %>
-    <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "Nome, CPF, ou Contato" %>
+    <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "Nome, CPF ou Contato" %>
   </div>
   <div class="form-group mr-2">
     <%= label_tag :search_date, "Pesquisar por data de nascimento:" %>
@@ -34,9 +34,6 @@
           <%= link_to admin_template_customer_path(customer), class: "btn btn-info btn-sm", title: "Detalhes" do %>
             <i class="bi bi-eye-fill"></i>
           <% end %>
-          <%= link_to edit_admin_template_customer_path(customer), data: { turbolinks: false }, class: "btn btn-primary btn-sm", title: "Editar" do %>
-            <i class="bi bi-pencil-square"></i>
-          <% end %>
           <% if customer.phone.present? %>
             <%= link_to "https://wa.me/55#{customer.phone.gsub(/[\(\)\s-]/, '')}", class: 'btn whatsapp-color btn-sm', alt: 'Icone do Whatsapp', height: '32', width: '32' do %>
               <i class="bi bi-whatsapp"></i>
@@ -47,4 +44,3 @@
     <% end %>
   </tbody>
 </table>
-<%= render 'admin_template/shared/pagination', model: @customers, path: admin_template_customers_path %>

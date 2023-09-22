@@ -5,7 +5,7 @@ class Customer < ApplicationRecord
 
   scope :search, -> (term) {
     return all unless term.present?
-    where("LOWER(customers.name) LIKE ? OR LOWER(customers.cpf) LIKE ?", "%#{term.downcase}%", "%#{term.downcase}%")
+    where("LOWER(name) LIKE ? OR LOWER(cpf) LIKE ? OR LOWER(phone) LIKE ? OR LOWER(email) LIKE ?", "%#{term.downcase}%", "%#{term.downcase}%", "%#{term.downcase}%", "%#{term.downcase}%")
   }
   scope :search_by_date, -> (date) {
     return all unless date.present?

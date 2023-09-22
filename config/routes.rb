@@ -3,7 +3,9 @@ Rails.application.routes.draw do
 
   namespace :admin_template do
     resources :admins
-    resources :home
+    resources :home, only: [:index]
+    resources :contacts, only: [:index]
+    resources :dashboard
     resources :customers do
       collection do
         get 'search',  to: 'customers#search', as: :search

@@ -7,10 +7,10 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="bi bi-list"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
+        <%= link_to 'Home', admin_template_home_index_path, class: 'nav-link' %>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <%= link_to 'Contatos', admin_template_contacts_path, class: 'nav-link' %>
       </li>
     </ul>
 
@@ -55,7 +55,7 @@
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image-t-no-hover">
+        <div>
           <%= avatar(current_admin) %>
         </div>
         <div class="info">
@@ -68,7 +68,7 @@
       <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item">
-              <%= link_to root_path, class: 'nav-link' do %>
+              <%= link_to admin_template_dashboard_index_path, class: 'nav-link' do %>
                 <i class="bi bi-speedometer"></i>
                 <p>Dashboard</p>
               <% end %>

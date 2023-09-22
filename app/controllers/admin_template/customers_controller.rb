@@ -69,10 +69,10 @@ class AdminTemplate::CustomersController < AdminTemplateController
       @customer = Customer.find(params[:id])
     end
     @customers = current_admin.customers
+                          .order(created_at: :desc)
+                          .includes(:admin)
                           .search(params[:search])
                           .search_by_date(params[:search_date])
-                          .includes(:admin)
-                          .order(created_at: :desc)
                           .page(params[:page]).per(5)
   end
 end
