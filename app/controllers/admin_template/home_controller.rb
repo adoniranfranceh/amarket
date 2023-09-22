@@ -5,6 +5,7 @@ class AdminTemplate::HomeController < AdminTemplateController
     @total = sales_completed.sum(:total_price)
     select_product_info
     @birthdays_of_the_month = current_admin.customers.where("extract(month from date_of_birth) = ?", @choose_date.month.to_s)
+    @total_text = "(mês de #{I18n.l(@choose_date, format: "%B")})"
   end
 
   def last_seven_days(other_or_date_current)
@@ -40,8 +41,8 @@ class AdminTemplate::HomeController < AdminTemplateController
     if @choose_date == Date.today
       @sales = current_admin.sales.within_current_month.where(status: 'completed')
       @text = '(mês atual)'
-      @total_text = @text
-      @customers = current_admin.customers
+      @customers = current_admin.customers.within_current_month
+      @products = current_admin.products.within_current_month
       @secondary_products = current_admin.secondaryproducts
       last_seven_days(Date.current)
       customer_info_select(Date.current)
@@ -49,14 +50,22 @@ class AdminTemplate::HomeController < AdminTemplateController
       @sales = current_admin.sales.within_selected_day(@choose_date).where(status: 'completed')
       @text = "(#{I18n.l(@choose_date, format: "%d de %B")})"
       @customers = current_admin.customers.within_selected_month(@choose_date)
+      @products = current_admin.products.within_selected_month(@choose_date)
       @secondary_products = current_admin.secondaryproducts.within_selected_month(@choose_date)
-      @total_text = " (mês de #{I18n.l(@choose_date, format: "%B")})"
       last_seven_days(@choose_date)
       customer_info_select(@choose_date)
     end
   end
 
   private
+
+  def sales_for_payment_method
+    @sales_for_money = @sales.where(payment_method: 'Dinheiro')
+    @sales_for_money = @sales.where(payment_method: 'Cartão de Dédito')
+    @sales_for_money = @sales.where(payment_method: 'Pix')
+    @sales_for_money = @sales.where(payment_method: 'Cartão de Crédito')
+    @sales_for_money = @sales.where(payment_method: 'Transferência Bancária')
+  end
 
   def select_product_info
     product_data = select_product_query

@@ -1,0 +1,31 @@
+<div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-labelledby="customerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="customerModalLabel">Clientes cadastrados no <%= @total_text.gsub('(', '').gsub(')', '') %></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="customer-list">
+          <% @customers.each do |customer| %>
+            <div class="customer-item">
+              <div class="customer-details">
+                <h4><%= link_to customer.name, admin_template_customer_path(customer), target: '_blank' %></h4>
+                <p><%= customer.email.present? ? "E-mail: #{customer.email}" : 'E-mail não cadastrado'  %></p>
+              </div>
+            </div>
+            <hr>
+          <% end %>
+        </div>
+        <div class="text-center mt-4">
+          <%= link_to 'Mostrar Todos os Clientes', admin_template_customers_path, class: 'btn btn-primary', target: '_blank' %>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>

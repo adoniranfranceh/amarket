@@ -19,20 +19,23 @@ $(document).ready(function () {
         }
 
         $.each(data, function (index, product) {
-          var addButton = (product.quantity > 0) ?
-            $('<button>').addClass('btn btn-success add-btn').text('Add').attr('type', 'button').data('id', product.id).data('price', product.sale_price).data('image', product.image_url).data('quantity', product.quantity) :
-            $('<button>').addClass('btn btn-secondary').text('Produto não disponível').attr('disabled', 'disabled');
+            var salePrice = parseFloat(product.sale_price.replace(',', '.'));
+            var formattedPrice = salePrice.toFixed(2).replace('.', ',');
 
-          var productRow = $('<tr>').append(
-            $('<td>').text(product.id),
-            $('<td>').text(product.name + (product.brand ? ' - ' + product.brand : '')),
-            $('<td>').text('R$ ' + product.sale_price.toString().replace('.', ',')),
-            $('<td>').append(product.image_url ? $('<img class="image-t-no-hover">').attr('src', product.image_url) : null),
-            $('<td>').append(addButton)
-          );
+            var addButton = (product.quantity > 0) ?
+                $('<button>').addClass('btn btn-success add-btn').text('Add').attr('type', 'button').data('id', product.id).data('price', salePrice).data('image', product.image_url).data('quantity', product.quantity) :
+                $('<button>').addClass('btn btn-secondary').text('Produto não disponível').attr('disabled', 'disabled');
 
-          productRow.data({ id: product.id, price: product.sale_price });
-          productList.append(productRow);
+            var productRow = $('<tr>').append(
+                $('<td>').text(product.id),
+                $('<td>').text(product.name + (product.brand ? ' - ' + product.brand : '')),
+                $('<td>').text('R$ ' + formattedPrice), // Usando a versão formatada do preço
+                $('<td>').append(product.image_url ? $('<img class="image-t-no-hover">').attr('src', product.image_url) : null),
+                $('<td>').append(addButton)
+            );
+
+            productRow.data({ id: product.id, price: salePrice });
+            productList.append(productRow);
         });
       },
       error: function () { }
@@ -66,7 +69,7 @@ $(document).ready(function () {
     }
 
     var productName = $(this).closest('tr').find('td:nth-child(2)').text();
-    var productPrice = $(this).closest('tr').data('price');
+    var productPrice = parseFloat($(this).closest('tr').data('price')).toFixed(2);
     var productImageURL = $(this).data('image');
 
     var cardQuantityInput = $('<input>').prop({
@@ -144,8 +147,8 @@ $(document).ready(function () {
     var totalQuantity = 0;
 
     $('#product-table tbody tr').each(function () {
-      var quantity = parseFloat($(this).find('.quantity').val());
-      var price = parseFloat($(this).find('td:nth-child(4)').text().replace('R$ ', '').replace('.', ',').trim());
+      var quantity = parseInt($(this).find('.quantity').val(), 10);
+      var price = parseFloat($(this).find('td:nth-child(4)').text().replace('R$ ', '').replace(',', '.').trim());
       var subtotal = quantity * price;
 
       if (!isNaN(subtotal)) {
@@ -168,19 +171,20 @@ $(document).ready(function () {
       total += taxesAmount;
     }
 
-    $('#total-price-input').val(total.toFixed(2));
-    $('#customer_value').val(total.toFixed(2));
-    $('tfoot .row-total span').text('R$ ' + total.toFixed(2).replace('.', ','));
+    var formattedTotal = total.toFixed(2);
+    $('#total-price-input').val(formattedTotal);
+    $('#customer_value').val(formattedTotal);
+    $('tfoot .row-total span').text('R$ ' + formattedTotal.replace('.', ','));
 
     $('#change-input').val('0,00');
 
     $('#customer_value').on('input', function () {
-      var customerValue = parseFloat($(this).val());
+      var customerValue = parseFloat($(this).val().replace(',', '.'));
       if (!isNaN(customerValue)) {
         var changeAmount = customerValue - total;
         $('#change-input').val(changeAmount.toFixed(2));
       } else {
-        $('#change-input').val('0.00');
+        $('#change-input').val('0,00');
       }
     });
   }

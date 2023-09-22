@@ -33,7 +33,7 @@
           <div class="icon">
             <i class="ion ion-stats-bars"></i>
           </div>
-          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+          <%= link_to 'Mostrar mais', '#', class: 'small-box-footer', data: { toggle: 'modal', target: '#salesModal2' } %>
         </div>
       </div>
       <!-- ./col -->
@@ -47,21 +47,21 @@
           <div class="icon">
             <i class="ion ion-person-add"></i>
           </div>
-          <%= link_to 'Mostrar clientes',admin_template_customers_path, class: 'small-box-footer' %>
+          <%= link_to 'Mostrar mais', '#', class: 'small-box-footer', data: { toggle: 'modal', target: '#customerModal' } %>
         </div>
       </div>
       <div class="col-lg-3 col-6">
         <!-- small box -->
         <div class="small-box bg-danger">
           <div class="inner">
-            <h3><%= @secondary_products.count %></h3>
+            <h3><%= @products.count %></h3>
 
             <p>Total de produtos<%= @total_text %></p>
           </div>
           <div class="icon">
             <i class="ion ion-pie-graph"></i>
           </div>
-          <%= link_to 'Mostrar produtos',admin_template_secondary_products_path, class: 'small-box-footer' %>
+          <%= link_to 'Mostrar mais', '#', class: 'small-box-footer', data: { toggle: 'modal', target: '#productModal' } %>
         </div>
       </div>
     </div>
@@ -84,6 +84,14 @@
                   <span class="birthday-name"><%= customer.name %></span>
                   <span class="birthday-date">
                     <% if customer.date_of_birth.month == @choose_date.month && customer.date_of_birth.day == Date.today.day %>
+                      <% if customer.phone.present? %>
+                        <% message = "Parabéns, #{customer.name}! Desejamos um dia incrível e cheio de alegria!" %>
+                        <% encoded_message = URI.encode_www_form_component(message) %>
+                        <%= link_to "https://wa.me/55#{customer.phone.gsub(/[\(\)\s-]/, '')}?text=#{encoded_message}",
+                                    class: 'btn btn-danger btn-lg whatsapp-button' do %>
+                          Enviar Mensagem de Parabéns! 🎉
+                        <% end %>
+                      <% end %>
                       <% if customer.email.present? %>
                         <%= link_to "Enviar E-mail de Parabéns!",
                                     send_birthday_email_admin_template_customer_path(customer),
@@ -107,7 +115,7 @@
   </div>
 
   <div class="row">
-    <div class="card bg-gradient-info float-left mr-1" style="width: 53%; height: 50%;">
+    <div class="card bg-gradient-info float-left mr-2" style="width: 53%; height: 50%;">
       <div class="card-header border-0">
         <h3 class="card-title">
           <i class="bi bi-graph-up"></i>
@@ -119,7 +127,7 @@
       </div>
     </div>
 
-    <div class="card float-right" style="width: 45%; height: 50%;">
+    <div class="card float-right" style="width: 46%; height: 50%;">
       <div class="card-header ui-sortable-handle " >
         <h3 class="card-title">
           <i class="bi bi-bar-chart-fill"></i>
@@ -133,4 +141,7 @@
   </div>
   <%= render 'graphics_config' %>
   <%= render 'show_more_modal' %>
+  <%= render 'show_more_modal2' %>
+  <%= render 'show_more_customers' %>
+  <%= render 'show_more_products' %>
 </section>

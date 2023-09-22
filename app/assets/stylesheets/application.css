@@ -15,6 +15,11 @@
  *= require_self
  */
 
+.content-wrapper {
+  padding: 2em 0;
+  background: #f0f0f0;
+}
+
 i {
   font-size: 1.5em;
 }
@@ -148,9 +153,9 @@ i {
   border-radius: 4px;
   font-size: 14px;
   white-space: nowrap;
-  bottom: calc(100% + 5px); /* Ajuste para posicionar abaixo do elemento */
-  left: 50%; /* Centralizar em relação ao elemento */
-  transform: translateX(-50%); /* Centralizar em relação ao elemento */
+  bottom: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .tooltipped:hover::before {

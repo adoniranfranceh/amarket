@@ -16,4 +16,16 @@ module ApplicationHelper
       new_admin_template_company_path
     end
   end
+
+  def company_icon
+    if current_admin.company.try(:persisted?)
+      i_class = 'bi bi-building'
+      span_content = ' Sua empresa'
+    else
+      i_class = 'bi bi-building-add'
+      span_content = ' Registre sua empresa'
+    end
+
+    content_tag(:span, content_tag(:i, '', class: i_class) + span_content)
+  end
 end

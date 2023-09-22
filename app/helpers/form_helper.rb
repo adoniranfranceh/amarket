@@ -6,16 +6,4 @@ module FormHelper
       concat form.number_field(attribute, options.merge(class: 'form-control input-number mr-4'))
     end
   end
-
-  def company_icon
-    if current_admin.company.try(:persisted?)
-      i_class = 'bi bi-building'
-      span_content = ' Sua empresa'
-    else
-      i_class = 'bi bi-building-add'
-      span_content = ' Registre sua empresa'
-    end
-
-    content_tag(:span, content_tag(:i, '', class: i_class) + span_content)
-  end
 end

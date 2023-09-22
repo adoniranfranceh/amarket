@@ -80,7 +80,7 @@ class AdminTemplate::SalesController < AdminTemplateController
         flash[:error] = "O valor da devolução é maior que o total em caixa. Necessário #{format_to_decimal(nested_value)}"
       else
         if @sale.update(status: new_status, total_price: 0)
-          current_cash_register.movements.create(cash_withdrawal: total_devolution, reason: 'Devolução de venda')
+          current_cash_register.movements.create(cash_withdrawal: total_devolution, reason: "Devolução de venda cliente #{@sale.customer.name}" )
           flash[:notice] = 'Status atualizado com sucesso!'
         else
           flash[:error] = 'Erro ao atualizar o status.' + @sale.errors.full_messages.join(', ')
@@ -193,16 +193,13 @@ class AdminTemplate::SalesController < AdminTemplateController
                                   :comments,
                                   :taxes,
                                   :customer_value,
+                                  :change,
                                   :secondaryproduct_ids,
                                   others_for_sales_attributes: [
                                     :id,
                                     :payment_method,
                                     :other_value,
                                     :_destroy
-                                  ],
-                                  secondaryproducts_attributes: [
-                                    :id,
-                                    :quantity,
                                   ]
                                 )
   end

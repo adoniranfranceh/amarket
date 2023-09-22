@@ -4,7 +4,7 @@ module SalesHelper
   end
 
   def available_payment_methods_others
-    ['Pix', 'Dinheiro' ,'Cartão de Dédito', 'Cartão de Crédito','Transferência Bancária']
+    ['Pix', 'Dinheiro' ,'Cartão de Débito', 'Cartão de Crédito','Transferência Bancária']
   end
 
   def pdf_and_devolution_btn(sale)
@@ -64,5 +64,9 @@ module SalesHelper
     else
       wrapped_icon('bi bi-question-circle-fill text-muted')
     end
+  end
+
+  def count_sales_by_payment_method(payment_method)
+    @sales.where(payment_method: payment_method)
   end
 end
