@@ -6,6 +6,11 @@ class Secondaryproduct < ApplicationRecord
   has_and_belongs_to_many :sales
   before_update :update_product_quantity
 
+  scope :search, -> (term) {
+    return all unless term.present?
+    where("LOWER(secondaryproducts.name) LIKE ?", "%#{term.downcase}%")
+  }
+
   def image_url
     if self.variation
       variation.image_url

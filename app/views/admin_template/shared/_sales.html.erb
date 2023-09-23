@@ -1,8 +1,7 @@
 <div class="sales-table-container">
   <div class="actions-container">
-    <%= link_to 'Registrar nova venda', new_admin_template_sale_path, class: 'btn btn-success refresh-link' %>
+    <%= link_to 'Registrar nova venda', new_admin_template_sale_path, class: 'btn btn-success refresh-link mb-2' %>
   </div>
-
   <%= form_tag(admin_template_sales_path, method: :get, class: "form-inline mb-3") do %>
     <div class="form-group mr-2">
       <%= label_tag :search, "Pesquisar por:" %>
@@ -12,9 +11,9 @@
       <%= label_tag :search_date, "Pesquisar por dia:" %>
       <%= date_field_tag :search_date, params[:search_date], class: "form-control" %>
     </div>
-    <%= submit_tag "Pesquisar", class: "btn btn-primary" %>
+    <%= submit_tag "Pesquisar", class: "btn btn-primary mr-2" %>
+    <%= link_to "Limpar", admin_template_sales_path, class: "btn btn-secondary" %>
   <% end %>
-
   <table class="table table-bordered data-table dtr-inline">
     <thead>
       <tr>
@@ -43,10 +42,10 @@
           <td><%= sale.admin.full_name_admin %></td>
           <td>
             <div class="actions-btns">
-              <%= pdf_and_devolution_btns(sale) %>
+              <%= pdf_and_devolution_btn(sale) %>
               <%= cancel_btn(sale) %>
               <% modal_id = "statusModal#{sale.id}" %>
-              <%= render 'admin_template/shared/status_select_modal', sale: sale, modal_id: modal_id %>
+              <%= render 'admin_template/shared/modals/status_select_modal', sale: sale, modal_id: modal_id %>
             </div>
           </td>
         </tr>

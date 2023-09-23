@@ -2,6 +2,7 @@ class AdminTemplate::CashController < AdminTemplateController
    before_action :set_cash_register, only: [:index, :edit, :update]
    include CashRegisterable
   def index
+    @admin = current_admin
   end
 
   def update

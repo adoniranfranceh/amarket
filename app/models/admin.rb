@@ -3,7 +3,7 @@ class Admin < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-  validates :email, presence: true 
+  validates :email, presence: true
   has_many :customers
   has_many :categories
   has_many :products
@@ -12,8 +12,10 @@ class Admin < ApplicationRecord
   has_many :cash
   has_one :profile_admin
   has_one_attached :avatar
+  has_one :company
   accepts_nested_attributes_for :profile_admin
   before_create :create_cash_and_blank_profile
+   after_create :send_welcome_email
 
   def image_url
     if avatar.attached?
@@ -36,5 +38,9 @@ class Admin < ApplicationRecord
       parts = email.split('@')
       self.build_profile_admin(first_name: parts[0], last_name: '')
     end
+  end
+
+  def send_welcome_email
+    AdminMailer.welcome_email(self)
   end
 end

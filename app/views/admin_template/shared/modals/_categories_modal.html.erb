@@ -1,0 +1,51 @@
+<!-- Modal -->
+<div class="modal fade" id="category<%= category.id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Produtos</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-1">Id</th>
+              <th class="col-3">Nome</th>
+              <th class="col-3">Image</th>
+              <th class="col-2">Preço</th>
+              <th class="col-1">Estoque</th>
+              <th class="col-2">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% category.products.each do |product| %>
+            <tr>
+              <td><%= product.id %></td>
+              <td><%= product.full_name %></td>
+              <td class="rounded float-end"><%= link_to(image(product), '#', "data-toggle":"modal", "data-target":"#exampleModal")%></td>
+              <td class="">
+                R$ <%= number_with_precision(product.sale_price, precision: 2, separator: ',', delimiter: '.') %>
+              </td>
+              <td class="number">
+                <%= product.quantity %>
+              </td>
+              <td>
+                  <%= link_to admin_template_product_path(product), class:'btn btn-info' do %>
+                    <i class="bi bi-eye-fill"></i>
+                  <% end %>               
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render partial: 'admin_template/shared/modals/image_modal' %>

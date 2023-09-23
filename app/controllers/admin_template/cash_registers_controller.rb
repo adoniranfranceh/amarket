@@ -5,15 +5,14 @@ class AdminTemplate::CashRegistersController < AdminTemplateController
   include DecimalCoin
 
   def index
-    @date = params[:start_date].present? ? Date.parse(params[:start_date]) : Date.today
+    @date = params[:start_date].present? ? Date.parse(params[:start_date]) : Date.current
     if params[:show_all] == 'true'
       @cash_registers = current_admin.cash.last.cash_registers.order(created_at: :desc).page(params[:page]).per(5)
     else
       @cash_registers = current_admin.cash.last.cash_registers.within_date_range(@date).order(created_at: :desc).page(params[:page]).per(5)
     end
-    @movements = Movement.where(cash_register_id: @cash_registers.pluck(:id)).page(params[:page]).per(2)
+    @movements = Movement.where(cash_register_id: @cash_registers.pluck(:id))
   end
-
 
   def create
     @cash_register = @cash.cash_registers.build(cash_register_params)
@@ -32,16 +31,9 @@ class AdminTemplate::CashRegistersController < AdminTemplateController
   end
 
   def close
-    @cash_register = current_cash_register
-    @cash_register.update(closing_time: Time.now)
+    cash_register = current_cash_register
+    cash_register.update!(closing_time: Time.now)
     open_or_close(false, 'Caixa fechado', 'Não foi possível fechar caixa')
-  end
-
-  def close_if_last_day
-    if current_cash_register && current_cash_register.opening_time.to_day < Date.current
-      current_cash_register.update(closing_time: current_cash_register.opening_time.end_of_day)
-      flash[:notice] = 'Caixa fechado automaticamente.'
-    end
   end
 
   def show_cash_register
@@ -49,10 +41,10 @@ class AdminTemplate::CashRegistersController < AdminTemplateController
     @movements = @cash_register.movements
 
     respond_to do |format|
-      format.html { render body: nil } # Adicione esta linha para o formato HTML
+      format.html { render body: nil }
       format.pdf do
         if @cash_register.closing_time.present?
-          pdf = generate_pdf(@cash_register, @movements, current_admin,)
+          pdf = generate_pdf(@cash_register, @movements, current_admin)
           pdf_filename = "nota_de_caixa_#{@cash_register.id}_#{Time.now.strftime('%Y%m%d%H%M%S')}.pdf"
           send_data pdf, filename: pdf_filename, type: 'application/pdf', disposition: 'inline'
         else
@@ -114,7 +106,6 @@ class AdminTemplate::CashRegistersController < AdminTemplateController
   def open_or_close(boolean, success_message, error_message)
     if @cash.update(is_open: boolean)
       redirect_to admin_template_cash_index_path, notice: success_message
-      generate_pdf(@cash_register) unless boolean
     else
       flash[:error] = error_message
       redirect_to admin_template_cash_index_path

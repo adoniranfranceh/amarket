@@ -40,6 +40,16 @@ class AdminTemplate::CustomersController < AdminTemplateController
     render json: @customers.map { |c| { id: c.id, text: c.name } }
   end
 
+  def send_birthday_email
+    customer = Customer.find(params[:id])
+
+    if customer.present? && customer.email.present?
+      BirthdayMailer.send_birthday_greeting(customer)
+    end
+
+    redirect_to customers_path, notice: 'E-mail de Parabéns enviado com sucesso!'
+  end
+
   private
 
   def customer_params
@@ -59,5 +69,10 @@ class AdminTemplate::CustomersController < AdminTemplateController
       @customer = Customer.find(params[:id])
     end
     @customers = current_admin.customers
+                          .order(created_at: :desc)
+                          .includes(:admin)
+                          .search(params[:search])
+                          .search_by_date(params[:search_date])
+                          .page(params[:page]).per(5)
   end
 end

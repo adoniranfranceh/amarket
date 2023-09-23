@@ -36,6 +36,7 @@ class AdminTemplate::SalesController < AdminTemplateController
 
     respond_to do |format|
       if @sale.save
+        cash_register.cash_sale += @sale.total_price
         create_invoice_products(@sale)
         update_product_quantities(@sale)
          @sale.secondaryproduct_ids.each do |secondaryproduct_id|
@@ -79,7 +80,7 @@ class AdminTemplate::SalesController < AdminTemplateController
         flash[:error] = "O valor da devolução é maior que o total em caixa. Necessário #{format_to_decimal(nested_value)}"
       else
         if @sale.update(status: new_status, total_price: 0)
-          current_cash_register.movements.create(cash_withdrawal: total_devolution, reason: 'Devolução de venda')
+          current_cash_register.movements.create(cash_withdrawal: total_devolution, reason: "Devolução de venda cliente #{@sale.customer.name}" )
           flash[:notice] = 'Status atualizado com sucesso!'
         else
           flash[:error] = 'Erro ao atualizar o status.' + @sale.errors.full_messages.join(', ')
@@ -136,10 +137,10 @@ class AdminTemplate::SalesController < AdminTemplateController
   def generate_invoice_pdf(sale, products, customer, seller, total)
     pdf = Prawn::Document.new(page_size: 'A7', margin: [10, 10, 10, 10])
     line = '--------------------------------------------------------'
-
+    title = current_admin.company.present? ? "#{current_admin.company.name}" : "Nota"
     pdf.font_size 10
 
-    pdf.text 'CUPOM FISCAL', align: :center, style: :bold, size: 14
+    pdf.text title, align: :center, style: :bold, size: 14
     pdf.text line
     pdf.text "COD: #{sale.code}"
 
@@ -150,16 +151,17 @@ class AdminTemplate::SalesController < AdminTemplateController
 
     pdf.text 'Produtos:'
     products_details = products.map do |product|
-      "#{product.id} - #{product.name} #{product.quantity} UN - #{format_to_decimal(product.sale_price * product.quantity)}"
+      "#{product.name} #{product.quantity} UN - #{format_to_decimal(product.sale_price * product.quantity)}"
     end
     pdf.text products_details.join("\n")
+    pdf.text line
     pdf.text "Total de itens #{sale.quantity}"
 
     pdf.text line
     pdf.text "#{sale.payment_method}: #{format_to_decimal(sale.customer_value)}"
-    pdf.text "Troco: #{sale.change}"
-    pdf.text "Desconto: #{sale.discount}"
-    pdf.text "Juros: #{sale.taxes}"
+    pdf.text "Troco: #{format_to_decimal(sale.change.present? ? sale.change: 0.0)}"
+    pdf.text "Desconto: #{sale.discount.present? ? sale.discount: 0}%"
+    pdf.text "Juros: #{sale.taxes.present? ? sale.taxes: 0}%"
     pdf.font_size 11
     pdf.text "TOTAL: #{format_to_decimal(total)}"
 
@@ -191,14 +193,14 @@ class AdminTemplate::SalesController < AdminTemplateController
                                   :comments,
                                   :taxes,
                                   :customer_value,
+                                  :change,
                                   :secondaryproduct_ids,
                                   others_for_sales_attributes: [
                                     :id,
                                     :payment_method,
                                     :other_value,
                                     :_destroy
-                                  ],
-                                  secondaryproduct_ids: [:id, :quantity]
+                                  ]
                                 )
   end
 

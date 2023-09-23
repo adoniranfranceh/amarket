@@ -3,39 +3,40 @@
     <%= simple_form_for [:admin_template, @customer], html: { class: 'customer-form' } do |form| %>
       <div class="<%= fieldset_disabled %>">
         <div class="mb-3">
-          <%= form.input :name, label: 'Nome', class: 'form-control' %>
+          <%= form.input :name, label: I18n.t('activerecord.attributes.customer.name'), class: 'form-control' %>
         </div>
 
         <div class="mb-3">
-          <%= form.input :phone, as: :string, label: 'Telefone', placeholder: '(99) 9 9999-9999', input_html: { class: 'form-control phone' } %>
+          <%= form.input :phone, as: :string, label: I18n.t('activerecord.attributes.customer.phone'), placeholder: '(99) 9 9999-9999', input_html: { class: 'form-control phone' } %>
         </div>
 
         <div class="mb-3">
-          <%= form.input :email, label: 'Email', class: 'form-control' %>
+          <%= form.input :email, label: I18n.t('activerecord.attributes.customer.email'), class: 'form-control' %>
         </div>
 
         <div class="mb-3">
-          <%= form.date_field :date_of_birth, label: 'Data de nascimento', class: 'form-control' %>
+          <%= form.label I18n.t('activerecord.attributes.customer.date_of_birth') %>
+          <%= form.date_field :date_of_birth, class: 'form-control' %>
         </div>
 
         <div class="mb-3">
-          <%= form.input :city, label: 'Cidade', class: 'form-control' %>
+          <%= form.input :city, label: I18n.t('activerecord.attributes.customer.city'), class: 'form-control' %>
         </div>
 
         <div class="mb-3">
-          <%= form.input :neighborhood, label: 'Bairro', class: 'form-control' %>
+          <%= form.input :neighborhood, label: I18n.t('activerecord.attributes.customer.neighborhood'), class: 'form-control' %>
         </div>
 
         <div class="mb-3">
-          <%= form.input :andress, label: 'Endereço', class: 'form-control' %>
+          <%= form.input :andress, label: I18n.t('activerecord.attributes.customer.andress'), class: 'form-control' %>
         </div>
 
         <div class="mb-3">
-          <%= form.input :house_number, label: 'Número da Casa', class: 'form-control' %>
+          <%= form.input :house_number, label: I18n.t('activerecord.attributes.customer.house_number'), class: 'form-control' %>
         </div>
 
         <div class="mb-3">
-          <%= form.input :cpf, as: :string, label: 'CPF', input_html: { class: 'form-control cpf-input'} %>
+          <%= form.input :cpf, as: :string, label: I18n.t('activerecord.attributes.customer.cpf'), input_html: { class: 'form-control cpf-input'} %>
         </div>
       </div>
 

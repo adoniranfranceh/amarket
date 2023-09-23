@@ -4,10 +4,10 @@ module SalesHelper
   end
 
   def available_payment_methods_others
-    ['Pix', 'Dinheiro' ,'Cartão de Dédito', 'Cartão de Crédito','Transferência Bancária']
+    ['Pix', 'Dinheiro' ,'Cartão de Débito', 'Cartão de Crédito','Transferência Bancária']
   end
 
-  def pdf_and_devolution_btns(sale)
+  def pdf_and_devolution_btn(sale)
     return unless sale.status == 'completed'
 
     pdf_btn = link_to invoice_admin_template_sale_path(sale, format: :pdf), class: 'btn btn-primary mr-1' do
@@ -64,5 +64,9 @@ module SalesHelper
     else
       wrapped_icon('bi bi-question-circle-fill text-muted')
     end
+  end
+
+  def count_sales_by_payment_method(payment_method)
+    @sales.where(payment_method: payment_method)
   end
 end

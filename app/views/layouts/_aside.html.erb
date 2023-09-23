@@ -4,20 +4,23 @@
       <li class="nav-item menu-open mb-3">
         <% @admin = current_admin %>
         <%= link_to admin_template_admin_path(@admin), class: 'nav-link dark' do %>
-          <i class="bi bi-speedometer h5 mr-2"></i>
+          <i class="bi bi-person-circle"></i>
           <span class="font-weight-bold">Seu Perfil</span>
         <% end %>
       </li>
-
-      <li class="dropdown-divider"></li>
+       <li class="nav-item menu-open mb-3">
+        <%= link_to dynamic_path_of_the_company(@admin), class: 'nav-link dark' do %>
+          <%= company_icon %>
+        <% end %>
+      </li>
       <li class="nav-item menu-open mb-3">
          <%= link_to admin_template_cash_registers_path, class: 'nav-link dark' do %>
-            <i class="bi bi-box--left"></i>
+            <i class="bi bi-wallet2"></i>
             Registros de caixa
           <% end %>
       </li>
       <li class="nav-item menu-open mb-3">
-        <%= link_to destroy_admin_session_path, class: 'nav-link dark' do %>
+        <%= link_to destroy_admin_session_path, class: 'nav-link dark', method: :delete do %>
           <i class="bi bi-box-arrow-left"></i>
           Sair
         <% end %>

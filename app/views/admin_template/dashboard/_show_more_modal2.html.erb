@@ -1,0 +1,34 @@
+<div class="modal fade" id="salesModal2" tabindex="-1" role="dialog" aria-labelledby="salesModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="salesModalLabel">Informações de Vendas</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5><%= @text.gsub('(', '').gsub(')', '') %></h5>
+        
+        <% payment_methods = ['Cartão de Débito', 'Pix', 'Dinheiro', 'Cartão de Crédito', 'Transferência Bancária'] %>
+        
+        <% payment_methods.each do |method| %>
+          <div class="payment-method-info mb-3">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="payment-method"><%= method %>:</div>
+              </div>
+              <div class="col-md-6">
+                <div class="payment-method-count"><%= format_to_decimal(count_sales_by_payment_method(method).sum(:total_price)) %></div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>

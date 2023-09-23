@@ -6,7 +6,6 @@
       <th class="col-2">Abertura <i class="bi bi-calendar"></i></th>
       <th class="col-2">Valor inicial <i class="bi bi-currency-dollar"></i></th>
       <th class="col-2">Fechamento <i class="bi bi-calendar-x"></i></th>
-      <th class="col-2">Vendidos <i class="bi bi-cart"></i></th>
       <th class="col-1">Total <i class="bi bi-cash"></i></th>
       <th class="col-2">Ações</th>
     </tr>
@@ -18,7 +17,7 @@
         <td><%= cash_register.opening_time.strftime('%d/%m/%Y %H:%M') %></td>
         <td><%= format_to_decimal(cash_register.initial_value) %></td>
         <td><%= cash_register.closing_time.present? ? cash_register.closing_time.strftime('%d/%m/%Y %H:%M') : 'Ainda aberto' %></td>
-        <td><%= format_to_decimal(cash_register.cash_sale) %></td>
+
         <td><%= format_to_decimal(cash_register.cash_total) %></td>
         <td>
           <% if cash_register.closing_time.present? %>

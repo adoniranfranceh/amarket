@@ -1,0 +1,28 @@
+<% if action_name == 'show' %>
+  <div class="container text-center mt-5">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <div class="company-logo">
+          <%= avatar(current_admin.company) %>
+        </div>
+        <div class="company-details mt-4">
+          <h2><%= @company.name %></h2>
+          <p><strong>CNPJ:</strong> <%= @company.cnpj.insert(2, '.').insert(6, '.').insert(10, '/').insert(15, '-') %></p>
+        </div>
+        <div class="mt-4">
+          <%= link_to 'Editar Empresa', edit_admin_template_company_path(@company), class: 'btn btn-primary' %>
+          <%= link_to 'Voltar', admin_template_companies_path, class: 'btn btn-secondary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <%= simple_form_for [:admin_template, @company], html: { multipart: true } do |f| %>
+    <div class="<%= fieldset_disabled %>">
+      <%= f.input :name, label: 'Nome da Empresa' %>
+      <%= f.input :cnpj, as: :string, label: 'CNPJ',  input_html: { class: 'form-control cnpj-input'} %>
+      <%= f.input :logo, as: :file, label: 'Logo' %>
+      <%= f.button :submit, class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+<% end %>

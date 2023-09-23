@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_31_131545) do
+ActiveRecord::Schema.define(version: 2023_09_22_163537) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -53,7 +56,7 @@ ActiveRecord::Schema.define(version: 2023_08_31_131545) do
   end
 
   create_table "cash_registers", force: :cascade do |t|
-    t.integer "cash_id", null: false
+    t.bigint "cash_id", null: false
     t.float "initial_value"
     t.datetime "opening_time"
     t.datetime "closing_time"
@@ -67,7 +70,7 @@ ActiveRecord::Schema.define(version: 2023_08_31_131545) do
   create_table "cashes", force: :cascade do |t|
     t.string "cash_name"
     t.boolean "is_open"
-    t.integer "admin_id", null: false
+    t.bigint "admin_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["admin_id"], name: "index_cashes_on_admin_id"
@@ -76,22 +79,31 @@ ActiveRecord::Schema.define(version: 2023_08_31_131545) do
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.string "descryption"
-    t.integer "admin_id", null: false
+    t.bigint "admin_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["admin_id"], name: "index_categories_on_admin_id"
   end
 
+  create_table "companies", force: :cascade do |t|
+    t.string "name"
+    t.string "cnpj"
+    t.bigint "admin_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["admin_id"], name: "index_companies_on_admin_id"
+  end
+
   create_table "customers", force: :cascade do |t|
     t.string "name"
-    t.integer "phone"
+    t.string "phone"
     t.string "email"
     t.string "city"
     t.string "neighborhood"
     t.string "andress"
     t.string "house_number"
-    t.integer "cpf"
-    t.integer "admin_id", null: false
+    t.string "cpf"
+    t.bigint "admin_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.date "date_of_birth"
@@ -102,7 +114,7 @@ ActiveRecord::Schema.define(version: 2023_08_31_131545) do
     t.string "name"
     t.integer "quantity"
     t.float "sale_price"
-    t.integer "sale_id", null: false
+    t.bigint "sale_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "code"
@@ -113,7 +125,7 @@ ActiveRecord::Schema.define(version: 2023_08_31_131545) do
     t.float "cash_withdrawal"
     t.float "cash_deposit"
     t.string "reason"
-    t.integer "cash_register_id", null: false
+    t.bigint "cash_register_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["cash_register_id"], name: "index_movements_on_cash_register_id"
@@ -122,7 +134,7 @@ ActiveRecord::Schema.define(version: 2023_08_31_131545) do
   create_table "others_for_sales", force: :cascade do |t|
     t.string "payment_method"
     t.float "other_value"
-    t.integer "sale_id", null: false
+    t.bigint "sale_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["sale_id"], name: "index_others_for_sales_on_sale_id"
@@ -131,12 +143,12 @@ ActiveRecord::Schema.define(version: 2023_08_31_131545) do
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.string "descryption"
-    t.integer "category_id"
+    t.bigint "category_id"
     t.string "brand"
     t.float "purchase_price"
     t.float "sale_price"
     t.integer "quantity"
-    t.integer "admin_id", null: false
+    t.bigint "admin_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["admin_id"], name: "index_products_on_admin_id"
@@ -144,8 +156,8 @@ ActiveRecord::Schema.define(version: 2023_08_31_131545) do
   end
 
   create_table "products_sales", id: false, force: :cascade do |t|
-    t.integer "product_id"
-    t.integer "sale_id", null: false
+    t.bigint "product_id"
+    t.bigint "sale_id", null: false
     t.index ["product_id", "sale_id"], name: "index_products_sales_on_product_id_and_sale_id"
     t.index ["sale_id", "product_id"], name: "index_products_sales_on_sale_id_and_product_id"
   end
@@ -153,7 +165,7 @@ ActiveRecord::Schema.define(version: 2023_08_31_131545) do
   create_table "profile_admins", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
-    t.integer "admin_id", null: false
+    t.bigint "admin_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["admin_id"], name: "index_profile_admins_on_admin_id"
@@ -166,12 +178,12 @@ ActiveRecord::Schema.define(version: 2023_08_31_131545) do
     t.datetime "completed_at"
     t.string "status"
     t.string "comments"
-    t.integer "admin_id", null: false
+    t.bigint "admin_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "customer_id", null: false
+    t.bigint "customer_id", null: false
     t.integer "discount"
-    t.integer "cash_register_id", null: false
+    t.bigint "cash_register_id", null: false
     t.string "code"
     t.float "taxes"
     t.float "customer_value"
@@ -182,23 +194,23 @@ ActiveRecord::Schema.define(version: 2023_08_31_131545) do
   end
 
   create_table "sales_secondaryproducts", id: false, force: :cascade do |t|
-    t.integer "secondaryproduct_id", null: false
-    t.integer "sale_id", null: false
-    t.index ["sale_id", "secondaryproduct_id"], name: "index_sales_secondaryproducts_on_sale_id_and_secondaryproduct_id"
-    t.index ["secondaryproduct_id", "sale_id"], name: "index_sales_secondaryproducts_on_secondaryproduct_id_and_sale_id"
+    t.bigint "secondaryproduct_id", null: false
+    t.bigint "sale_id", null: false
+    t.index ["sale_id", "secondaryproduct_id"], name: "index_sales_secondaryproducts"
+    t.index ["secondaryproduct_id", "sale_id"], name: "index_secondaryproducts_sales"
   end
 
   create_table "secondaryproducts", force: :cascade do |t|
     t.string "name"
     t.integer "quantity"
-    t.integer "product_id", null: false
+    t.bigint "product_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "admin_id"
     t.decimal "sale_price", precision: 10, scale: 2
     t.decimal "purchase_price", precision: 10, scale: 2
-    t.integer "variation_id"
-    t.integer "subgroup_id"
+    t.bigint "variation_id"
+    t.bigint "subgroup_id"
     t.index ["product_id"], name: "index_secondaryproducts_on_product_id"
     t.index ["subgroup_id"], name: "index_secondaryproducts_on_subgroup_id"
     t.index ["variation_id"], name: "index_secondaryproducts_on_variation_id"
@@ -208,7 +220,7 @@ ActiveRecord::Schema.define(version: 2023_08_31_131545) do
     t.string "size"
     t.float "number"
     t.integer "quantity"
-    t.integer "variation_id", null: false
+    t.bigint "variation_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["variation_id"], name: "index_subgroups_on_variation_id"
@@ -218,7 +230,7 @@ ActiveRecord::Schema.define(version: 2023_08_31_131545) do
     t.string "name"
     t.string "color"
     t.string "variation_type"
-    t.integer "product_id", null: false
+    t.bigint "product_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "variation_quantity"
@@ -230,6 +242,7 @@ ActiveRecord::Schema.define(version: 2023_08_31_131545) do
   add_foreign_key "cash_registers", "cashes"
   add_foreign_key "cashes", "admins"
   add_foreign_key "categories", "admins"
+  add_foreign_key "companies", "admins"
   add_foreign_key "customers", "admins"
   add_foreign_key "invoice_products", "sales"
   add_foreign_key "movements", "cash_registers"

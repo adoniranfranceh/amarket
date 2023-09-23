@@ -1,0 +1,148 @@
+<h1>Dashboard</h1>
+<section class="content">
+  <div class="container-fluid shadow-sm p-3 mb-5 bg-white rounded">
+    <%= form_tag admin_template_dashboard_index_path, method: :get , class: 'mb-4' do %>
+      <%= label_tag 'choose_date', 'Escolha a data:' %>
+      <div class="row">
+        <%= date_field_tag 'choose_date',  @choose_date.strftime('%Y-%m-%d'), class: 'form-control col-3 mb-2 ml-2' %>
+        <%= submit_tag "Filtrar", class: 'btn btn-dark mr-2'%>
+        <%= link_to "Mostrar recentes", request.params.except(:choose_date), class: 'btn btn-primary' %>
+      </div>
+    <% end %>
+    <div class="row">
+      <div class="col-lg-3 col-6">
+        <div class="small-box bg-info">
+          <div class="inner">
+            <h3><%= @sales.count %></h3>
+            <p>Vendas <%= @text %></p>
+            <br>
+          </div>
+          <div class="icon">
+            <i class="ion ion-bag"></i>
+          </div>
+          <%= link_to 'Mostrar mais', '#', class: 'small-box-footer', data: { toggle: 'modal', target: '#salesModal' } %>
+        </div>
+      </div>
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-success">
+          <div class="inner">
+            <h3><%= format_to_decimal(@total) %><sup style="font-size: 20px"></sup></h3>
+            <p>Vendidos <%= @text %></p>
+            <br>
+          </div>
+          <div class="icon">
+            <i class="ion ion-stats-bars"></i>
+          </div>
+          <%= link_to 'Mostrar mais', '#', class: 'small-box-footer', data: { toggle: 'modal', target: '#salesModal2' } %>
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+          <div class="inner">
+            <h3><%= @customers.count %></h3>
+            <p>Total de clientes<%= @total_text %></p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-person-add"></i>
+          </div>
+          <%= link_to 'Mostrar mais', '#', class: 'small-box-footer', data: { toggle: 'modal', target: '#customerModal' } %>
+        </div>
+      </div>
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+          <div class="inner">
+            <h3><%= @products.count %></h3>
+
+            <p>Total de produtos<%= @total_text %></p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-pie-graph"></i>
+          </div>
+          <%= link_to 'Mostrar mais', '#', class: 'small-box-footer', data: { toggle: 'modal', target: '#productModal' } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="bi bi-calendar-event"></i>
+            Aniversariantes do Mês
+          </h3>
+        </div>
+        <div class="card-body">
+          <% if @birthdays_of_the_month.any? %>
+            <ul class="list-group">
+              <% @birthdays_of_the_month.each do |customer| %>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <span class="birthday-name"><%= customer.name %></span>
+                  <span class="birthday-date">
+                    <% if customer.date_of_birth.month == @choose_date.month && customer.date_of_birth.day == Date.today.day %>
+                      <% if customer.phone.present? %>
+                        <% message = "Parabéns, #{customer.name}! Desejamos um dia incrível e cheio de alegria!" %>
+                        <% encoded_message = URI.encode_www_form_component(message) %>
+                        <%= link_to "https://wa.me/55#{customer.phone.gsub(/[\(\)\s-]/, '')}?text=#{encoded_message}",
+                                    class: 'btn btn-danger btn-lg whatsapp-button' do %>
+                          Enviar Mensagem de Parabéns! 🎉
+                        <% end %>
+                      <% end %>
+                      <% if customer.email.present? %>
+                        <%= link_to "Enviar E-mail de Parabéns!",
+                                    send_birthday_email_admin_template_customer_path(customer),
+                                    class: 'btn btn-success btn-lg email-button' %>
+                      <% end %>
+                      Hoje é aniversário de <%= customer.name %> 🎂
+                    <% else %>
+                      <%= customer.date_of_birth.strftime("%d/%m") %>
+                    <% end %>
+                  </span>
+                </li>
+              <% end %>
+            </ul>
+
+          <% else %>
+            <p class="text-muted">Não há aniversariantes neste mês.</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="card bg-gradient-info float-left mr-2" style="width: 53%; height: 50%;">
+      <div class="card-header border-0">
+        <h3 class="card-title">
+          <i class="bi bi-graph-up"></i>
+          Gráfico de vendas
+        </h3>
+      </div>
+      <div class="chart-container" style="position: relative; margin: auto; height: 15em; width: 100%;">
+        <canvas id="myLineChart"></canvas>
+      </div>
+    </div>
+
+    <div class="card float-right" style="width: 46%; height: 50%;">
+      <div class="card-header ui-sortable-handle " >
+        <h3 class="card-title">
+          <i class="bi bi-bar-chart-fill"></i>
+          Produtos mais vendidos
+        </h3>
+      </div>
+      <div class="chart-container" style="position: relative; margin: auto; height: 15em; width: 100%;">
+        <canvas id="myBarChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <%= render 'graphics_config' %>
+  <%= render 'show_more_modal' %>
+  <%= render 'show_more_modal2' %>
+  <%= render 'show_more_customers' %>
+  <%= render 'show_more_products' %>
+</section>

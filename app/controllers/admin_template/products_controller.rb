@@ -102,8 +102,10 @@ class AdminTemplate::ProductsController < AdminTemplate::InventaryController
                                                 :image_attachment,
                                                 :secondaryproducts,
                                                 variations: [:subgroups]
-                                                ).order(:name)
-
+                                                )
+                                                .order(:name)
+                                                .search(params[:search])
+                                                .page(params[:page]).per(5)
   end
 
   def product_params
