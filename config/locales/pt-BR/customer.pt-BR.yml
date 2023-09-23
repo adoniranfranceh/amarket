@@ -1,0 +1,13 @@
+pt-BR:
+  activerecord:
+    attributes:
+      customer:
+        name: Nome
+        phone: Telefone
+        email: Email
+        date_of_birth: Data de nascimento
+        city: Cidade
+        neighborhood: Bairro
+        andress: Endereço
+        house_number: Número de residência
+        cpf: CPF
